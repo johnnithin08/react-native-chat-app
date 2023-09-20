@@ -54,7 +54,7 @@ export const App = (): JSX.Element => {
         android: (
           <KeyboardAvoidingView behavior="height" style={flexChild}>
             <Authenticator.Provider>
-              <Authenticator signUpAttributes={["phone_number"]}>
+              <Authenticator signUpAttributes={["name", "phone_number"]}>
                 <RootNavigation />
               </Authenticator>
             </Authenticator.Provider>
@@ -63,7 +63,7 @@ export const App = (): JSX.Element => {
         ios: (
           <KeyboardAvoidingView behavior="padding" style={flexChild}>
             <Authenticator.Provider>
-              <Authenticator signUpAttributes={["phone_number"]}>
+              <Authenticator signUpAttributes={["name", "phone_number"]}>
                 <RootNavigation />
               </Authenticator>
             </Authenticator.Provider>
