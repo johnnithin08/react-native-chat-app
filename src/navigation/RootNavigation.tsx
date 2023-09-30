@@ -1,7 +1,7 @@
 import React from 'react'
 import { createStackNavigator } from "@react-navigation/stack"
-import { NavigationContainer } from '@react-navigation/native'
-import { ChatList, ChatRoom } from "../pages"
+import { NavigationContainer, useNavigation } from '@react-navigation/native'
+import { ChatList, ChatRoom, Users } from "../pages"
 import { Image, Text, View, ViewStyle, useWindowDimensions } from 'react-native'
 import { centerHorizontal, centerVertical, colorGray, flexChild, flexRow } from '../styles'
 import Feather from 'react-native-vector-icons/Feather'
@@ -18,6 +18,7 @@ export const RootNavigation = () => {
             <Navigator initialRouteName='Home'>
                 <Screen component={ChatList} name="Home" options={{ headerTitle: HomeHeader, headerBackTitleVisible: false }} />
                 <Screen component={ChatRoom} name="ChatRoom" options={{ headerTitle: ChatRoomHeader, headerBackTitleVisible: false }} />
+                <Screen component={Users} name="Users" options={{ title: "Users" }} />
             </Navigator>
         </NavigationContainer>
     )
@@ -53,11 +54,16 @@ const ChatRoomHeader = (props) => {
 }
 
 const HomeHeader = (props) => {
+    const navigation = useNavigation();
     const icon: ViewStyle = {
         marginHorizontal: 10,
     }
 
-    const { width } = useWindowDimensions()
+    const { width } = useWindowDimensions();
+
+    const handleUsers = () => {
+        navigation.navigate("Users")
+    }
 
     return (
         <View style={{
@@ -76,7 +82,7 @@ const HomeHeader = (props) => {
                 }} />
             <Text style={{ ...flexChild, fontWeight: "bold", marginLeft: 50 }}>Home</Text>
             <Feather name="camera" size={24} color={colorGray._5} style={icon} />
-            <Feather name="edit-2" size={24} color={colorGray._5} style={icon} />
+            <Feather name="edit-2" onPress={handleUsers} size={24} color={colorGray._5} style={icon} />
         </View>
     )
 }

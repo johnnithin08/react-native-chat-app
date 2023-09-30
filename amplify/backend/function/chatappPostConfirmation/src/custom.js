@@ -26,6 +26,7 @@ exports.handler = async (event) => {
     updatedAt: { S: now.toISOString() },
     id: { S: event?.request?.userAttributes.sub },
     name: { S: event?.request?.userAttributes.name },
+    status: { S: "Hey, I am using Chat App." }
   }
 
   const params = { Item: userItem, TableName: tableName }

@@ -1,4 +1,8 @@
-const {getDefaultConfig, mergeConfig} = require('@react-native/metro-config');
+const { getDefaultConfig, mergeConfig } = require('@react-native/metro-config');
+const exclusionList = require('metro-config/src/defaults/exclusionList');
+
+// exclusionList is a function that takes an array of regexes and combines
+// them with the default exclusions to return a single regex.
 
 /**
  * Metro configuration
@@ -6,6 +10,10 @@ const {getDefaultConfig, mergeConfig} = require('@react-native/metro-config');
  *
  * @type {import('metro-config').MetroConfig}
  */
-const config = {};
+const config = {
+    resolver: {
+        blacklistRE: exclusionList([/#current-cloud-backend\/.*/]),
+    },
+};
 
 module.exports = mergeConfig(getDefaultConfig(__dirname), config);
