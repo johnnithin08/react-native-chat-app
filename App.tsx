@@ -5,7 +5,7 @@
  * @format
  */
 
-import React from 'react';
+import React, { useEffect } from 'react';
 import type { PropsWithChildren } from 'react';
 import {
   KeyboardAvoidingView,
@@ -19,7 +19,9 @@ import {
   View,
 } from 'react-native';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
-
+import { Amplify } from "aws-amplify"
+import { Authenticator, useAuthenticator } from '@aws-amplify/ui-react-native';
+import config from "./src/aws-exports"
 
 import {
   Colors,
@@ -31,6 +33,8 @@ import {
 import { colorWhite, flexChild } from "./src/styles"
 import { RootNavigation } from "./src/navigation"
 
+Amplify.configure(config)
+
 
 export const App = (): JSX.Element => {
   const isDarkMode = useColorScheme() === 'dark';
@@ -38,6 +42,7 @@ export const App = (): JSX.Element => {
   const backgroundStyle = {
     backgroundColor: isDarkMode ? Colors.darker : colorWhite._1,
   };
+
 
   return (
     <SafeAreaProvider style={backgroundStyle}>
@@ -48,12 +53,20 @@ export const App = (): JSX.Element => {
       {Platform.select({
         android: (
           <KeyboardAvoidingView behavior="height" style={flexChild}>
-            <RootNavigation />
+            <Authenticator.Provider>
+              <Authenticator signUpAttributes={["name", "phone_number"]}>
+                <RootNavigation />
+              </Authenticator>
+            </Authenticator.Provider>
           </KeyboardAvoidingView>
         ),
         ios: (
           <KeyboardAvoidingView behavior="padding" style={flexChild}>
-            <RootNavigation />
+            <Authenticator.Provider>
+              <Authenticator signUpAttributes={["name", "phone_number"]}>
+                <RootNavigation />
+              </Authenticator>
+            </Authenticator.Provider>
           </KeyboardAvoidingView>
         )
       })}
