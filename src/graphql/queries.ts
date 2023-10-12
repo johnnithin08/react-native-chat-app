@@ -11,6 +11,9 @@ export const getMessage = /* GraphQL */ `
       chatroomID
       createdAt
       updatedAt
+      _version
+      _deleted
+      _lastChangedAt
       __typename
     }
   }
@@ -29,9 +32,44 @@ export const listMessages = /* GraphQL */ `
         chatroomID
         createdAt
         updatedAt
+        _version
+        _deleted
+        _lastChangedAt
         __typename
       }
       nextToken
+      startedAt
+      __typename
+    }
+  }
+`;
+export const syncMessages = /* GraphQL */ `
+  query SyncMessages(
+    $filter: ModelMessageFilterInput
+    $limit: Int
+    $nextToken: String
+    $lastSync: AWSTimestamp
+  ) {
+    syncMessages(
+      filter: $filter
+      limit: $limit
+      nextToken: $nextToken
+      lastSync: $lastSync
+    ) {
+      items {
+        id
+        content
+        userID
+        chatroomID
+        createdAt
+        updatedAt
+        _version
+        _deleted
+        _lastChangedAt
+        __typename
+      }
+      nextToken
+      startedAt
       __typename
     }
   }
@@ -58,9 +96,13 @@ export const messagesByUserID = /* GraphQL */ `
         chatroomID
         createdAt
         updatedAt
+        _version
+        _deleted
+        _lastChangedAt
         __typename
       }
       nextToken
+      startedAt
       __typename
     }
   }
@@ -87,9 +129,13 @@ export const messagesByChatroomID = /* GraphQL */ `
         chatroomID
         createdAt
         updatedAt
+        _version
+        _deleted
+        _lastChangedAt
         __typename
       }
       nextToken
+      startedAt
       __typename
     }
   }
@@ -106,6 +152,9 @@ export const getChatRoom = /* GraphQL */ `
         chatroomID
         createdAt
         updatedAt
+        _version
+        _deleted
+        _lastChangedAt
         __typename
       }
       messages {
@@ -116,9 +165,13 @@ export const getChatRoom = /* GraphQL */ `
           chatroomID
           createdAt
           updatedAt
+          _version
+          _deleted
+          _lastChangedAt
           __typename
         }
         nextToken
+        startedAt
         __typename
       }
       users {
@@ -136,6 +189,9 @@ export const getChatRoom = /* GraphQL */ `
               chatroomID
               createdAt
               updatedAt
+              _version
+              _deleted
+              _lastChangedAt
               __typename
             }
             messages {
@@ -146,9 +202,13 @@ export const getChatRoom = /* GraphQL */ `
                 chatroomID
                 createdAt
                 updatedAt
+                _version
+                _deleted
+                _lastChangedAt
                 __typename
               }
               nextToken
+              startedAt
               __typename
             }
             users {
@@ -161,6 +221,9 @@ export const getChatRoom = /* GraphQL */ `
                   newMessages
                   createdAt
                   updatedAt
+                  _version
+                  _deleted
+                  _lastChangedAt
                   chatRoomLastMessageId
                   __typename
                 }
@@ -171,17 +234,27 @@ export const getChatRoom = /* GraphQL */ `
                   status
                   createdAt
                   updatedAt
+                  _version
+                  _deleted
+                  _lastChangedAt
                   __typename
                 }
                 createdAt
                 updatedAt
+                _version
+                _deleted
+                _lastChangedAt
                 __typename
               }
               nextToken
+              startedAt
               __typename
             }
             createdAt
             updatedAt
+            _version
+            _deleted
+            _lastChangedAt
             chatRoomLastMessageId
             __typename
           }
@@ -198,9 +271,13 @@ export const getChatRoom = /* GraphQL */ `
                 chatroomID
                 createdAt
                 updatedAt
+                _version
+                _deleted
+                _lastChangedAt
                 __typename
               }
               nextToken
+              startedAt
               __typename
             }
             chatrooms {
@@ -213,6 +290,9 @@ export const getChatRoom = /* GraphQL */ `
                   newMessages
                   createdAt
                   updatedAt
+                  _version
+                  _deleted
+                  _lastChangedAt
                   chatRoomLastMessageId
                   __typename
                 }
@@ -223,28 +303,45 @@ export const getChatRoom = /* GraphQL */ `
                   status
                   createdAt
                   updatedAt
+                  _version
+                  _deleted
+                  _lastChangedAt
                   __typename
                 }
                 createdAt
                 updatedAt
+                _version
+                _deleted
+                _lastChangedAt
                 __typename
               }
               nextToken
+              startedAt
               __typename
             }
             createdAt
             updatedAt
+            _version
+            _deleted
+            _lastChangedAt
             __typename
           }
           createdAt
           updatedAt
+          _version
+          _deleted
+          _lastChangedAt
           __typename
         }
         nextToken
+        startedAt
         __typename
       }
       createdAt
       updatedAt
+      _version
+      _deleted
+      _lastChangedAt
       chatRoomLastMessageId
       __typename
     }
@@ -267,6 +364,9 @@ export const listChatRooms = /* GraphQL */ `
           chatroomID
           createdAt
           updatedAt
+          _version
+          _deleted
+          _lastChangedAt
           __typename
         }
         messages {
@@ -277,9 +377,13 @@ export const listChatRooms = /* GraphQL */ `
             chatroomID
             createdAt
             updatedAt
+            _version
+            _deleted
+            _lastChangedAt
             __typename
           }
           nextToken
+          startedAt
           __typename
         }
         users {
@@ -297,6 +401,9 @@ export const listChatRooms = /* GraphQL */ `
                 chatroomID
                 createdAt
                 updatedAt
+                _version
+                _deleted
+                _lastChangedAt
                 __typename
               }
               messages {
@@ -307,9 +414,13 @@ export const listChatRooms = /* GraphQL */ `
                   chatroomID
                   createdAt
                   updatedAt
+                  _version
+                  _deleted
+                  _lastChangedAt
                   __typename
                 }
                 nextToken
+                startedAt
                 __typename
               }
               users {
@@ -319,13 +430,20 @@ export const listChatRooms = /* GraphQL */ `
                   userId
                   createdAt
                   updatedAt
+                  _version
+                  _deleted
+                  _lastChangedAt
                   __typename
                 }
                 nextToken
+                startedAt
                 __typename
               }
               createdAt
               updatedAt
+              _version
+              _deleted
+              _lastChangedAt
               chatRoomLastMessageId
               __typename
             }
@@ -342,9 +460,13 @@ export const listChatRooms = /* GraphQL */ `
                   chatroomID
                   createdAt
                   updatedAt
+                  _version
+                  _deleted
+                  _lastChangedAt
                   __typename
                 }
                 nextToken
+                startedAt
                 __typename
               }
               chatrooms {
@@ -354,28 +476,219 @@ export const listChatRooms = /* GraphQL */ `
                   userId
                   createdAt
                   updatedAt
+                  _version
+                  _deleted
+                  _lastChangedAt
                   __typename
                 }
                 nextToken
+                startedAt
                 __typename
               }
               createdAt
               updatedAt
+              _version
+              _deleted
+              _lastChangedAt
               __typename
             }
             createdAt
             updatedAt
+            _version
+            _deleted
+            _lastChangedAt
             __typename
           }
           nextToken
+          startedAt
           __typename
         }
         createdAt
         updatedAt
+        _version
+        _deleted
+        _lastChangedAt
         chatRoomLastMessageId
         __typename
       }
       nextToken
+      startedAt
+      __typename
+    }
+  }
+`;
+export const syncChatRooms = /* GraphQL */ `
+  query SyncChatRooms(
+    $filter: ModelChatRoomFilterInput
+    $limit: Int
+    $nextToken: String
+    $lastSync: AWSTimestamp
+  ) {
+    syncChatRooms(
+      filter: $filter
+      limit: $limit
+      nextToken: $nextToken
+      lastSync: $lastSync
+    ) {
+      items {
+        id
+        newMessages
+        lastMessage {
+          id
+          content
+          userID
+          chatroomID
+          createdAt
+          updatedAt
+          _version
+          _deleted
+          _lastChangedAt
+          __typename
+        }
+        messages {
+          items {
+            id
+            content
+            userID
+            chatroomID
+            createdAt
+            updatedAt
+            _version
+            _deleted
+            _lastChangedAt
+            __typename
+          }
+          nextToken
+          startedAt
+          __typename
+        }
+        users {
+          items {
+            id
+            chatRoomId
+            userId
+            chatRoom {
+              id
+              newMessages
+              lastMessage {
+                id
+                content
+                userID
+                chatroomID
+                createdAt
+                updatedAt
+                _version
+                _deleted
+                _lastChangedAt
+                __typename
+              }
+              messages {
+                items {
+                  id
+                  content
+                  userID
+                  chatroomID
+                  createdAt
+                  updatedAt
+                  _version
+                  _deleted
+                  _lastChangedAt
+                  __typename
+                }
+                nextToken
+                startedAt
+                __typename
+              }
+              users {
+                items {
+                  id
+                  chatRoomId
+                  userId
+                  createdAt
+                  updatedAt
+                  _version
+                  _deleted
+                  _lastChangedAt
+                  __typename
+                }
+                nextToken
+                startedAt
+                __typename
+              }
+              createdAt
+              updatedAt
+              _version
+              _deleted
+              _lastChangedAt
+              chatRoomLastMessageId
+              __typename
+            }
+            user {
+              id
+              name
+              imageUri
+              status
+              messages {
+                items {
+                  id
+                  content
+                  userID
+                  chatroomID
+                  createdAt
+                  updatedAt
+                  _version
+                  _deleted
+                  _lastChangedAt
+                  __typename
+                }
+                nextToken
+                startedAt
+                __typename
+              }
+              chatrooms {
+                items {
+                  id
+                  chatRoomId
+                  userId
+                  createdAt
+                  updatedAt
+                  _version
+                  _deleted
+                  _lastChangedAt
+                  __typename
+                }
+                nextToken
+                startedAt
+                __typename
+              }
+              createdAt
+              updatedAt
+              _version
+              _deleted
+              _lastChangedAt
+              __typename
+            }
+            createdAt
+            updatedAt
+            _version
+            _deleted
+            _lastChangedAt
+            __typename
+          }
+          nextToken
+          startedAt
+          __typename
+        }
+        createdAt
+        updatedAt
+        _version
+        _deleted
+        _lastChangedAt
+        chatRoomLastMessageId
+        __typename
+      }
+      nextToken
+      startedAt
       __typename
     }
   }
@@ -395,9 +708,13 @@ export const getUser = /* GraphQL */ `
           chatroomID
           createdAt
           updatedAt
+          _version
+          _deleted
+          _lastChangedAt
           __typename
         }
         nextToken
+        startedAt
         __typename
       }
       chatrooms {
@@ -415,6 +732,9 @@ export const getUser = /* GraphQL */ `
               chatroomID
               createdAt
               updatedAt
+              _version
+              _deleted
+              _lastChangedAt
               __typename
             }
             messages {
@@ -425,9 +745,13 @@ export const getUser = /* GraphQL */ `
                 chatroomID
                 createdAt
                 updatedAt
+                _version
+                _deleted
+                _lastChangedAt
                 __typename
               }
               nextToken
+              startedAt
               __typename
             }
             users {
@@ -440,6 +764,9 @@ export const getUser = /* GraphQL */ `
                   newMessages
                   createdAt
                   updatedAt
+                  _version
+                  _deleted
+                  _lastChangedAt
                   chatRoomLastMessageId
                   __typename
                 }
@@ -450,17 +777,27 @@ export const getUser = /* GraphQL */ `
                   status
                   createdAt
                   updatedAt
+                  _version
+                  _deleted
+                  _lastChangedAt
                   __typename
                 }
                 createdAt
                 updatedAt
+                _version
+                _deleted
+                _lastChangedAt
                 __typename
               }
               nextToken
+              startedAt
               __typename
             }
             createdAt
             updatedAt
+            _version
+            _deleted
+            _lastChangedAt
             chatRoomLastMessageId
             __typename
           }
@@ -477,9 +814,13 @@ export const getUser = /* GraphQL */ `
                 chatroomID
                 createdAt
                 updatedAt
+                _version
+                _deleted
+                _lastChangedAt
                 __typename
               }
               nextToken
+              startedAt
               __typename
             }
             chatrooms {
@@ -492,6 +833,9 @@ export const getUser = /* GraphQL */ `
                   newMessages
                   createdAt
                   updatedAt
+                  _version
+                  _deleted
+                  _lastChangedAt
                   chatRoomLastMessageId
                   __typename
                 }
@@ -502,28 +846,45 @@ export const getUser = /* GraphQL */ `
                   status
                   createdAt
                   updatedAt
+                  _version
+                  _deleted
+                  _lastChangedAt
                   __typename
                 }
                 createdAt
                 updatedAt
+                _version
+                _deleted
+                _lastChangedAt
                 __typename
               }
               nextToken
+              startedAt
               __typename
             }
             createdAt
             updatedAt
+            _version
+            _deleted
+            _lastChangedAt
             __typename
           }
           createdAt
           updatedAt
+          _version
+          _deleted
+          _lastChangedAt
           __typename
         }
         nextToken
+        startedAt
         __typename
       }
       createdAt
       updatedAt
+      _version
+      _deleted
+      _lastChangedAt
       __typename
     }
   }
@@ -548,9 +909,12 @@ export const listUsers = /* GraphQL */ `
             chatroomID
             createdAt
             updatedAt
+            _version
+            _deleted
             __typename
           }
           nextToken
+          startedAt
           __typename
         }
         chatrooms {
@@ -568,6 +932,9 @@ export const listUsers = /* GraphQL */ `
                 chatroomID
                 createdAt
                 updatedAt
+                _version
+                _deleted
+                _lastChangedAt
                 __typename
               }
               messages {
@@ -578,9 +945,13 @@ export const listUsers = /* GraphQL */ `
                   chatroomID
                   createdAt
                   updatedAt
+                  _version
+                  _deleted
+                  _lastChangedAt
                   __typename
                 }
                 nextToken
+                startedAt
                 __typename
               }
               users {
@@ -590,13 +961,20 @@ export const listUsers = /* GraphQL */ `
                   userId
                   createdAt
                   updatedAt
+                  _version
+                  _deleted
+                  _lastChangedAt
                   __typename
                 }
                 nextToken
+                startedAt
                 __typename
               }
               createdAt
               updatedAt
+              _version
+              _deleted
+              _lastChangedAt
               chatRoomLastMessageId
               __typename
             }
@@ -613,9 +991,13 @@ export const listUsers = /* GraphQL */ `
                   chatroomID
                   createdAt
                   updatedAt
+                  _version
+                  _deleted
+                  _lastChangedAt
                   __typename
                 }
                 nextToken
+                startedAt
                 __typename
               }
               chatrooms {
@@ -625,27 +1007,207 @@ export const listUsers = /* GraphQL */ `
                   userId
                   createdAt
                   updatedAt
+                  _version
+                  _deleted
+                  _lastChangedAt
                   __typename
                 }
                 nextToken
+                startedAt
                 __typename
               }
               createdAt
               updatedAt
+              _version
+              _deleted
+              _lastChangedAt
               __typename
             }
             createdAt
             updatedAt
+            _version
+            _deleted
+            _lastChangedAt
             __typename
           }
           nextToken
+          startedAt
           __typename
         }
         createdAt
         updatedAt
+        _version
+        _deleted
+        _lastChangedAt
         __typename
       }
       nextToken
+      startedAt
+      __typename
+    }
+  }
+`;
+export const syncUsers = /* GraphQL */ `
+  query SyncUsers(
+    $filter: ModelUserFilterInput
+    $limit: Int
+    $nextToken: String
+    $lastSync: AWSTimestamp
+  ) {
+    syncUsers(
+      filter: $filter
+      limit: $limit
+      nextToken: $nextToken
+      lastSync: $lastSync
+    ) {
+      items {
+        id
+        name
+        imageUri
+        status
+        messages {
+          items {
+            id
+            content
+            userID
+            chatroomID
+            createdAt
+            updatedAt
+            _version
+            _deleted
+            _lastChangedAt
+            __typename
+          }
+          nextToken
+          startedAt
+          __typename
+        }
+        chatrooms {
+          items {
+            id
+            chatRoomId
+            userId
+            chatRoom {
+              id
+              newMessages
+              lastMessage {
+                id
+                content
+                userID
+                chatroomID
+                createdAt
+                updatedAt
+                _version
+                _deleted
+                _lastChangedAt
+                __typename
+              }
+              messages {
+                items {
+                  id
+                  content
+                  userID
+                  chatroomID
+                  createdAt
+                  updatedAt
+                  _version
+                  _deleted
+                  _lastChangedAt
+                  __typename
+                }
+                nextToken
+                startedAt
+                __typename
+              }
+              users {
+                items {
+                  id
+                  chatRoomId
+                  userId
+                  createdAt
+                  updatedAt
+                  _version
+                  _deleted
+                  _lastChangedAt
+                  __typename
+                }
+                nextToken
+                startedAt
+                __typename
+              }
+              createdAt
+              updatedAt
+              _version
+              _deleted
+              _lastChangedAt
+              chatRoomLastMessageId
+              __typename
+            }
+            user {
+              id
+              name
+              imageUri
+              status
+              messages {
+                items {
+                  id
+                  content
+                  userID
+                  chatroomID
+                  createdAt
+                  updatedAt
+                  _version
+                  _deleted
+                  _lastChangedAt
+                  __typename
+                }
+                nextToken
+                startedAt
+                __typename
+              }
+              chatrooms {
+                items {
+                  id
+                  chatRoomId
+                  userId
+                  createdAt
+                  updatedAt
+                  _version
+                  _deleted
+                  _lastChangedAt
+                  __typename
+                }
+                nextToken
+                startedAt
+                __typename
+              }
+              createdAt
+              updatedAt
+              _version
+              _deleted
+              _lastChangedAt
+              __typename
+            }
+            createdAt
+            updatedAt
+            _version
+            _deleted
+            _lastChangedAt
+            __typename
+          }
+          nextToken
+          startedAt
+          __typename
+        }
+        createdAt
+        updatedAt
+        _version
+        _deleted
+        _lastChangedAt
+        __typename
+      }
+      nextToken
+      startedAt
       __typename
     }
   }
@@ -666,6 +1228,9 @@ export const getChatRoomUser = /* GraphQL */ `
           chatroomID
           createdAt
           updatedAt
+          _version
+          _deleted
+          _lastChangedAt
           __typename
         }
         messages {
@@ -676,9 +1241,13 @@ export const getChatRoomUser = /* GraphQL */ `
             chatroomID
             createdAt
             updatedAt
+            _version
+            _deleted
+            _lastChangedAt
             __typename
           }
           nextToken
+          startedAt
           __typename
         }
         users {
@@ -696,6 +1265,9 @@ export const getChatRoomUser = /* GraphQL */ `
                 chatroomID
                 createdAt
                 updatedAt
+                _version
+                _deleted
+                _lastChangedAt
                 __typename
               }
               messages {
@@ -706,9 +1278,13 @@ export const getChatRoomUser = /* GraphQL */ `
                   chatroomID
                   createdAt
                   updatedAt
+                  _version
+                  _deleted
+                  _lastChangedAt
                   __typename
                 }
                 nextToken
+                startedAt
                 __typename
               }
               users {
@@ -718,13 +1294,20 @@ export const getChatRoomUser = /* GraphQL */ `
                   userId
                   createdAt
                   updatedAt
+                  _version
+                  _deleted
+                  _lastChangedAt
                   __typename
                 }
                 nextToken
+                startedAt
                 __typename
               }
               createdAt
               updatedAt
+              _version
+              _deleted
+              _lastChangedAt
               chatRoomLastMessageId
               __typename
             }
@@ -741,9 +1324,13 @@ export const getChatRoomUser = /* GraphQL */ `
                   chatroomID
                   createdAt
                   updatedAt
+                  _version
+                  _deleted
+                  _lastChangedAt
                   __typename
                 }
                 nextToken
+                startedAt
                 __typename
               }
               chatrooms {
@@ -753,24 +1340,38 @@ export const getChatRoomUser = /* GraphQL */ `
                   userId
                   createdAt
                   updatedAt
+                  _version
+                  _deleted
+                  _lastChangedAt
                   __typename
                 }
                 nextToken
+                startedAt
                 __typename
               }
               createdAt
               updatedAt
+              _version
+              _deleted
+              _lastChangedAt
               __typename
             }
             createdAt
             updatedAt
+            _version
+            _deleted
+            _lastChangedAt
             __typename
           }
           nextToken
+          startedAt
           __typename
         }
         createdAt
         updatedAt
+        _version
+        _deleted
+        _lastChangedAt
         chatRoomLastMessageId
         __typename
       }
@@ -787,9 +1388,13 @@ export const getChatRoomUser = /* GraphQL */ `
             chatroomID
             createdAt
             updatedAt
+            _version
+            _deleted
+            _lastChangedAt
             __typename
           }
           nextToken
+          startedAt
           __typename
         }
         chatrooms {
@@ -807,6 +1412,9 @@ export const getChatRoomUser = /* GraphQL */ `
                 chatroomID
                 createdAt
                 updatedAt
+                _version
+                _deleted
+                _lastChangedAt
                 __typename
               }
               messages {
@@ -817,9 +1425,13 @@ export const getChatRoomUser = /* GraphQL */ `
                   chatroomID
                   createdAt
                   updatedAt
+                  _version
+                  _deleted
+                  _lastChangedAt
                   __typename
                 }
                 nextToken
+                startedAt
                 __typename
               }
               users {
@@ -829,13 +1441,20 @@ export const getChatRoomUser = /* GraphQL */ `
                   userId
                   createdAt
                   updatedAt
+                  _version
+                  _deleted
+                  _lastChangedAt
                   __typename
                 }
                 nextToken
+                startedAt
                 __typename
               }
               createdAt
               updatedAt
+              _version
+              _deleted
+              _lastChangedAt
               chatRoomLastMessageId
               __typename
             }
@@ -852,9 +1471,13 @@ export const getChatRoomUser = /* GraphQL */ `
                   chatroomID
                   createdAt
                   updatedAt
+                  _version
+                  _deleted
+                  _lastChangedAt
                   __typename
                 }
                 nextToken
+                startedAt
                 __typename
               }
               chatrooms {
@@ -864,28 +1487,45 @@ export const getChatRoomUser = /* GraphQL */ `
                   userId
                   createdAt
                   updatedAt
+                  _version
+                  _deleted
+                  _lastChangedAt
                   __typename
                 }
                 nextToken
+                startedAt
                 __typename
               }
               createdAt
               updatedAt
+              _version
+              _deleted
+              _lastChangedAt
               __typename
             }
             createdAt
             updatedAt
+            _version
+            _deleted
+            _lastChangedAt
             __typename
           }
           nextToken
+          startedAt
           __typename
         }
         createdAt
         updatedAt
+        _version
+        _deleted
+        _lastChangedAt
         __typename
       }
       createdAt
       updatedAt
+      _version
+      _deleted
+      _lastChangedAt
       __typename
     }
   }
@@ -911,6 +1551,9 @@ export const listChatRoomUsers = /* GraphQL */ `
             chatroomID
             createdAt
             updatedAt
+            _version
+            _deleted
+            _lastChangedAt
             __typename
           }
           messages {
@@ -921,9 +1564,13 @@ export const listChatRoomUsers = /* GraphQL */ `
               chatroomID
               createdAt
               updatedAt
+              _version
+              _deleted
+              _lastChangedAt
               __typename
             }
             nextToken
+            startedAt
             __typename
           }
           users {
@@ -941,18 +1588,26 @@ export const listChatRoomUsers = /* GraphQL */ `
                   chatroomID
                   createdAt
                   updatedAt
+                  _version
+                  _deleted
+                  _lastChangedAt
                   __typename
                 }
                 messages {
                   nextToken
+                  startedAt
                   __typename
                 }
                 users {
                   nextToken
+                  startedAt
                   __typename
                 }
                 createdAt
                 updatedAt
+                _version
+                _deleted
+                _lastChangedAt
                 chatRoomLastMessageId
                 __typename
               }
@@ -963,25 +1618,37 @@ export const listChatRoomUsers = /* GraphQL */ `
                 status
                 messages {
                   nextToken
+                  startedAt
                   __typename
                 }
                 chatrooms {
                   nextToken
+                  startedAt
                   __typename
                 }
                 createdAt
                 updatedAt
+                _version
+                _deleted
+                _lastChangedAt
                 __typename
               }
               createdAt
               updatedAt
+              _version
+              _deleted
+              _lastChangedAt
               __typename
             }
             nextToken
+            startedAt
             __typename
           }
           createdAt
           updatedAt
+          _version
+          _deleted
+          _lastChangedAt
           chatRoomLastMessageId
           __typename
         }
@@ -998,9 +1665,13 @@ export const listChatRoomUsers = /* GraphQL */ `
               chatroomID
               createdAt
               updatedAt
+              _version
+              _deleted
+              _lastChangedAt
               __typename
             }
             nextToken
+            startedAt
             __typename
           }
           chatrooms {
@@ -1018,18 +1689,26 @@ export const listChatRoomUsers = /* GraphQL */ `
                   chatroomID
                   createdAt
                   updatedAt
+                  _version
+                  _deleted
+                  _lastChangedAt
                   __typename
                 }
                 messages {
                   nextToken
+                  startedAt
                   __typename
                 }
                 users {
                   nextToken
+                  startedAt
                   __typename
                 }
                 createdAt
                 updatedAt
+                _version
+                _deleted
+                _lastChangedAt
                 chatRoomLastMessageId
                 __typename
               }
@@ -1040,32 +1719,289 @@ export const listChatRoomUsers = /* GraphQL */ `
                 status
                 messages {
                   nextToken
+                  startedAt
                   __typename
                 }
                 chatrooms {
                   nextToken
+                  startedAt
                   __typename
                 }
                 createdAt
                 updatedAt
+                _version
+                _deleted
+                _lastChangedAt
                 __typename
               }
               createdAt
               updatedAt
+              _version
+              _deleted
+              _lastChangedAt
               __typename
             }
             nextToken
+            startedAt
             __typename
           }
           createdAt
           updatedAt
+          _version
+          _deleted
+          _lastChangedAt
           __typename
         }
         createdAt
         updatedAt
+        _version
+        _deleted
+        _lastChangedAt
         __typename
       }
       nextToken
+      startedAt
+      __typename
+    }
+  }
+`;
+export const syncChatRoomUsers = /* GraphQL */ `
+  query SyncChatRoomUsers(
+    $filter: ModelChatRoomUserFilterInput
+    $limit: Int
+    $nextToken: String
+    $lastSync: AWSTimestamp
+  ) {
+    syncChatRoomUsers(
+      filter: $filter
+      limit: $limit
+      nextToken: $nextToken
+      lastSync: $lastSync
+    ) {
+      items {
+        id
+        chatRoomId
+        userId
+        chatRoom {
+          id
+          newMessages
+          lastMessage {
+            id
+            content
+            userID
+            chatroomID
+            createdAt
+            updatedAt
+            _version
+            _deleted
+            _lastChangedAt
+            __typename
+          }
+          messages {
+            items {
+              id
+              content
+              userID
+              chatroomID
+              createdAt
+              updatedAt
+              _version
+              _deleted
+              _lastChangedAt
+              __typename
+            }
+            nextToken
+            startedAt
+            __typename
+          }
+          users {
+            items {
+              id
+              chatRoomId
+              userId
+              chatRoom {
+                id
+                newMessages
+                lastMessage {
+                  id
+                  content
+                  userID
+                  chatroomID
+                  createdAt
+                  updatedAt
+                  _version
+                  _deleted
+                  _lastChangedAt
+                  __typename
+                }
+                messages {
+                  nextToken
+                  startedAt
+                  __typename
+                }
+                users {
+                  nextToken
+                  startedAt
+                  __typename
+                }
+                createdAt
+                updatedAt
+                _version
+                _deleted
+                _lastChangedAt
+                chatRoomLastMessageId
+                __typename
+              }
+              user {
+                id
+                name
+                imageUri
+                status
+                messages {
+                  nextToken
+                  startedAt
+                  __typename
+                }
+                chatrooms {
+                  nextToken
+                  startedAt
+                  __typename
+                }
+                createdAt
+                updatedAt
+                _version
+                _deleted
+                _lastChangedAt
+                __typename
+              }
+              createdAt
+              updatedAt
+              _version
+              _deleted
+              _lastChangedAt
+              __typename
+            }
+            nextToken
+            startedAt
+            __typename
+          }
+          createdAt
+          updatedAt
+          _version
+          _deleted
+          _lastChangedAt
+          chatRoomLastMessageId
+          __typename
+        }
+        user {
+          id
+          name
+          imageUri
+          status
+          messages {
+            items {
+              id
+              content
+              userID
+              chatroomID
+              createdAt
+              updatedAt
+              _version
+              _deleted
+              _lastChangedAt
+              __typename
+            }
+            nextToken
+            startedAt
+            __typename
+          }
+          chatrooms {
+            items {
+              id
+              chatRoomId
+              userId
+              chatRoom {
+                id
+                newMessages
+                lastMessage {
+                  id
+                  content
+                  userID
+                  chatroomID
+                  createdAt
+                  updatedAt
+                  _version
+                  _deleted
+                  _lastChangedAt
+                  __typename
+                }
+                messages {
+                  nextToken
+                  startedAt
+                  __typename
+                }
+                users {
+                  nextToken
+                  startedAt
+                  __typename
+                }
+                createdAt
+                updatedAt
+                _version
+                _deleted
+                _lastChangedAt
+                chatRoomLastMessageId
+                __typename
+              }
+              user {
+                id
+                name
+                imageUri
+                status
+                messages {
+                  nextToken
+                  startedAt
+                  __typename
+                }
+                chatrooms {
+                  nextToken
+                  startedAt
+                  __typename
+                }
+                createdAt
+                updatedAt
+                _version
+                _deleted
+                _lastChangedAt
+                __typename
+              }
+              createdAt
+              updatedAt
+              _version
+              _deleted
+              _lastChangedAt
+              __typename
+            }
+            nextToken
+            startedAt
+            __typename
+          }
+          createdAt
+          updatedAt
+          _version
+          _deleted
+          _lastChangedAt
+          __typename
+        }
+        createdAt
+        updatedAt
+        _version
+        _deleted
+        _lastChangedAt
+        __typename
+      }
+      nextToken
+      startedAt
       __typename
     }
   }
@@ -1099,6 +2035,9 @@ export const chatRoomUsersByChatRoomId = /* GraphQL */ `
             chatroomID
             createdAt
             updatedAt
+            _version
+            _deleted
+            _lastChangedAt
             __typename
           }
           messages {
@@ -1109,9 +2048,13 @@ export const chatRoomUsersByChatRoomId = /* GraphQL */ `
               chatroomID
               createdAt
               updatedAt
+              _version
+              _deleted
+              _lastChangedAt
               __typename
             }
             nextToken
+            startedAt
             __typename
           }
           users {
@@ -1129,18 +2072,26 @@ export const chatRoomUsersByChatRoomId = /* GraphQL */ `
                   chatroomID
                   createdAt
                   updatedAt
+                  _version
+                  _deleted
+                  _lastChangedAt
                   __typename
                 }
                 messages {
                   nextToken
+                  startedAt
                   __typename
                 }
                 users {
                   nextToken
+                  startedAt
                   __typename
                 }
                 createdAt
                 updatedAt
+                _version
+                _deleted
+                _lastChangedAt
                 chatRoomLastMessageId
                 __typename
               }
@@ -1151,25 +2102,37 @@ export const chatRoomUsersByChatRoomId = /* GraphQL */ `
                 status
                 messages {
                   nextToken
+                  startedAt
                   __typename
                 }
                 chatrooms {
                   nextToken
+                  startedAt
                   __typename
                 }
                 createdAt
                 updatedAt
+                _version
+                _deleted
+                _lastChangedAt
                 __typename
               }
               createdAt
               updatedAt
+              _version
+              _deleted
+              _lastChangedAt
               __typename
             }
             nextToken
+            startedAt
             __typename
           }
           createdAt
           updatedAt
+          _version
+          _deleted
+          _lastChangedAt
           chatRoomLastMessageId
           __typename
         }
@@ -1186,9 +2149,13 @@ export const chatRoomUsersByChatRoomId = /* GraphQL */ `
               chatroomID
               createdAt
               updatedAt
+              _version
+              _deleted
+              _lastChangedAt
               __typename
             }
             nextToken
+            startedAt
             __typename
           }
           chatrooms {
@@ -1206,18 +2173,26 @@ export const chatRoomUsersByChatRoomId = /* GraphQL */ `
                   chatroomID
                   createdAt
                   updatedAt
+                  _version
+                  _deleted
+                  _lastChangedAt
                   __typename
                 }
                 messages {
                   nextToken
+                  startedAt
                   __typename
                 }
                 users {
                   nextToken
+                  startedAt
                   __typename
                 }
                 createdAt
                 updatedAt
+                _version
+                _deleted
+                _lastChangedAt
                 chatRoomLastMessageId
                 __typename
               }
@@ -1228,32 +2203,48 @@ export const chatRoomUsersByChatRoomId = /* GraphQL */ `
                 status
                 messages {
                   nextToken
+                  startedAt
                   __typename
                 }
                 chatrooms {
                   nextToken
+                  startedAt
                   __typename
                 }
                 createdAt
                 updatedAt
+                _version
+                _deleted
+                _lastChangedAt
                 __typename
               }
               createdAt
               updatedAt
+              _version
+              _deleted
+              _lastChangedAt
               __typename
             }
             nextToken
+            startedAt
             __typename
           }
           createdAt
           updatedAt
+          _version
+          _deleted
+          _lastChangedAt
           __typename
         }
         createdAt
         updatedAt
+        _version
+        _deleted
+        _lastChangedAt
         __typename
       }
       nextToken
+      startedAt
       __typename
     }
   }
@@ -1287,6 +2278,9 @@ export const chatRoomUsersByUserId = /* GraphQL */ `
             chatroomID
             createdAt
             updatedAt
+            _version
+            _deleted
+            _lastChangedAt
             __typename
           }
           messages {
@@ -1297,9 +2291,13 @@ export const chatRoomUsersByUserId = /* GraphQL */ `
               chatroomID
               createdAt
               updatedAt
+              _version
+              _deleted
+              _lastChangedAt
               __typename
             }
             nextToken
+            startedAt
             __typename
           }
           users {
@@ -1317,18 +2315,26 @@ export const chatRoomUsersByUserId = /* GraphQL */ `
                   chatroomID
                   createdAt
                   updatedAt
+                  _version
+                  _deleted
+                  _lastChangedAt
                   __typename
                 }
                 messages {
                   nextToken
+                  startedAt
                   __typename
                 }
                 users {
                   nextToken
+                  startedAt
                   __typename
                 }
                 createdAt
                 updatedAt
+                _version
+                _deleted
+                _lastChangedAt
                 chatRoomLastMessageId
                 __typename
               }
@@ -1339,25 +2345,37 @@ export const chatRoomUsersByUserId = /* GraphQL */ `
                 status
                 messages {
                   nextToken
+                  startedAt
                   __typename
                 }
                 chatrooms {
                   nextToken
+                  startedAt
                   __typename
                 }
                 createdAt
                 updatedAt
+                _version
+                _deleted
+                _lastChangedAt
                 __typename
               }
               createdAt
               updatedAt
+              _version
+              _deleted
+              _lastChangedAt
               __typename
             }
             nextToken
+            startedAt
             __typename
           }
           createdAt
           updatedAt
+          _version
+          _deleted
+          _lastChangedAt
           chatRoomLastMessageId
           __typename
         }
@@ -1374,9 +2392,13 @@ export const chatRoomUsersByUserId = /* GraphQL */ `
               chatroomID
               createdAt
               updatedAt
+              _version
+              _deleted
+              _lastChangedAt
               __typename
             }
             nextToken
+            startedAt
             __typename
           }
           chatrooms {
@@ -1394,18 +2416,26 @@ export const chatRoomUsersByUserId = /* GraphQL */ `
                   chatroomID
                   createdAt
                   updatedAt
+                  _version
+                  _deleted
+                  _lastChangedAt
                   __typename
                 }
                 messages {
                   nextToken
+                  startedAt
                   __typename
                 }
                 users {
                   nextToken
+                  startedAt
                   __typename
                 }
                 createdAt
                 updatedAt
+                _version
+                _deleted
+                _lastChangedAt
                 chatRoomLastMessageId
                 __typename
               }
@@ -1416,32 +2446,48 @@ export const chatRoomUsersByUserId = /* GraphQL */ `
                 status
                 messages {
                   nextToken
+                  startedAt
                   __typename
                 }
                 chatrooms {
                   nextToken
+                  startedAt
                   __typename
                 }
                 createdAt
                 updatedAt
+                _version
+                _deleted
+                _lastChangedAt
                 __typename
               }
               createdAt
               updatedAt
+              _version
+              _deleted
+              _lastChangedAt
               __typename
             }
             nextToken
+            startedAt
             __typename
           }
           createdAt
           updatedAt
+          _version
+          _deleted
+          _lastChangedAt
           __typename
         }
         createdAt
         updatedAt
+        _version
+        _deleted
+        _lastChangedAt
         __typename
       }
       nextToken
+      startedAt
       __typename
     }
   }

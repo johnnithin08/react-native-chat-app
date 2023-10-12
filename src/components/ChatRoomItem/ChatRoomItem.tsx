@@ -1,6 +1,7 @@
-import React, { FunctionComponent } from 'react'
+import React, { FunctionComponent, useEffect, useState } from 'react'
 import { View, Image, Text, ViewStyle, ImageStyle } from 'react-native'
 import { flexRow, px, py, absolutePosition, colorBlue, centerHV, colorWhite, fs12BoldWhite1, flexChild, centerHorizontal, spaceBetweenHorizontal, fs18BoldBlack2, fs14RegGray6 } from '../../styles'
+import { Auth } from 'aws-amplify';
 
 interface IChatRoomItem {
     data: IChatList;
@@ -8,8 +9,25 @@ interface IChatRoomItem {
 
 export const ChatRoomItem: FunctionComponent<IChatRoomItem> = ({ data }: IChatRoomItem) => {
 
-    const { lastMessage, newMessages, users } = data
-    const user = users[1]
+    // console.log('data', data)
+
+    const [user, setUser] = useState()
+
+    useEffect(() => {
+        const fetchUser = async () => {
+            const authUser = Auth.currentAuthenticatedUser();
+
+            const userItem = data.users.items.find((eachItem) => item => item.user.id !== authUser.attributes.sub);
+            setUser(userItem.user)
+        }
+        fetchUser();
+    }, [])
+
+    console.log("user", user)
+
+
+
+    // console.log("user", user)
     const imageStyle: ImageStyle = {
         height: 50,
         width: 50,
@@ -26,19 +44,19 @@ export const ChatRoomItem: FunctionComponent<IChatRoomItem> = ({ data }: IChatRo
     return (
         <View style={{ ...flexRow, ...px(10), ...py(10) }}>
             <View>
-                <Image source={{ uri: user.imageUri }} style={imageStyle} />
-                {newMessages && (
+                <Image source={{ uri: user?.imageUri }} style={imageStyle} />
+                {data?.newMessages && (
                     <View style={counterStyle}>
-                        <Text style={{ ...fs12BoldWhite1, lineHeight: 0 }}>{newMessages}</Text>
+                        <Text style={{ ...fs12BoldWhite1, lineHeight: 0 }}>{data?.newMessages}</Text>
                     </View>
                 )}
             </View>
             <View style={containerStyle}>
                 <View style={{ ...flexRow, ...spaceBetweenHorizontal, marginBottom: 5 }}>
-                    <Text style={fs18BoldBlack2}>{user.name}</Text>
-                    <Text style={fs14RegGray6}>{lastMessage.createdAt}</Text>
+                    <Text style={fs18BoldBlack2}>{user?.name}</Text>
+                    <Text style={fs14RegGray6}>{data?.lastMessage?.createdAt}</Text>
                 </View>
-                <Text numberOfLines={1} style={fs14RegGray6}>{lastMessage.content}</Text>
+                <Text numberOfLines={1} style={fs14RegGray6}>{data?.lastMessage?.content}</Text>
             </View>
 
         </View>
