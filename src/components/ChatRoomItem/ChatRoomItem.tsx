@@ -1,7 +1,8 @@
 import React, { FunctionComponent, useEffect, useState } from 'react'
 import { View, Image, Text, ViewStyle, ImageStyle } from 'react-native'
 import { flexRow, px, py, absolutePosition, colorBlue, centerHV, colorWhite, fs12BoldWhite1, flexChild, centerHorizontal, spaceBetweenHorizontal, fs18BoldBlack2, fs14RegGray6 } from '../../styles'
-import { Auth } from 'aws-amplify';
+import { API, Auth, graphqlOperation } from 'aws-amplify';
+import { onUpdateChatRoom } from '../../graphql/subscriptions';
 
 interface IChatRoomItem {
     data: IChatList;
@@ -12,16 +13,33 @@ export const ChatRoomItem: FunctionComponent<IChatRoomItem> = ({ data }: IChatRo
     // console.log('data', data)
 
     const [user, setUser] = useState()
+    const [chatRoom, setChatRoom] = useState(data)
 
     useEffect(() => {
         const fetchUser = async () => {
             const authUser = Auth.currentAuthenticatedUser();
 
-            const userItem = data.users.items.find((eachItem) => item => item.user.id !== authUser.attributes.sub);
+            const userItem = chatRoom.users.items.find((eachItem) => item => item.user.id !== authUser.attributes.sub);
             setUser(userItem.user)
         }
         fetchUser();
     }, [])
+
+    useEffect(() => {
+        const subscribeChatRoom =
+            API.graphql(graphqlOperation(onUpdateChatRoom, { filter: { id: { eq: data.id } } })).subscribe({
+                next: ({ value }) => {
+                    console.log("value", value)
+                    setChatRoom((prev) => ({ ...prev, ...value.data.onUpdateChatRoom }))
+                    // setMessages((current) => [value.data.onCreateMessage, ...current])
+                },
+                error: (err) => console.warn(err)
+            })
+
+        return () => {
+            subscribeChatRoom.unsubscribe();
+        }
+    }, [data.id])
 
     console.log("user", user)
 
@@ -45,18 +63,18 @@ export const ChatRoomItem: FunctionComponent<IChatRoomItem> = ({ data }: IChatRo
         <View style={{ ...flexRow, ...px(10), ...py(10) }}>
             <View>
                 <Image source={{ uri: user?.imageUri }} style={imageStyle} />
-                {data?.newMessages && (
+                {chatRoom?.newMessages && (
                     <View style={counterStyle}>
-                        <Text style={{ ...fs12BoldWhite1, lineHeight: 0 }}>{data?.newMessages}</Text>
+                        <Text style={{ ...fs12BoldWhite1, lineHeight: 0 }}>{chatRoom?.newMessages}</Text>
                     </View>
                 )}
             </View>
             <View style={containerStyle}>
                 <View style={{ ...flexRow, ...spaceBetweenHorizontal, marginBottom: 5 }}>
                     <Text style={fs18BoldBlack2}>{user?.name}</Text>
-                    <Text style={fs14RegGray6}>{data?.lastMessage?.createdAt}</Text>
+                    <Text style={fs14RegGray6}>{chatRoom?.lastMessage?.createdAt}</Text>
                 </View>
-                <Text numberOfLines={1} style={fs14RegGray6}>{data?.lastMessage?.content}</Text>
+                <Text numberOfLines={1} style={fs14RegGray6}>{chatRoom?.lastMessage?.content}</Text>
             </View>
 
         </View>

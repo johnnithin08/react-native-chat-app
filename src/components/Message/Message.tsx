@@ -1,6 +1,7 @@
-import React, { FunctionComponent } from 'react'
+import React, { FunctionComponent, useEffect, useState } from 'react'
 import { View, Text, ViewStyle, TextStyle } from 'react-native'
 import { colorBlack, colorBlue, colorGray, colorWhite } from '../../styles';
+import { Auth } from 'aws-amplify';
 
 interface IMessageProps {
     message: IMessage;
@@ -9,7 +10,18 @@ interface IMessageProps {
 const myId = "u1";
 
 export const Message: FunctionComponent<IMessageProps> = ({ message }: IMessageProps) => {
-    const isOwn = message.user?.id === "u1"
+    const [isOwn, setIsOwn] = useState<boolean>(false)
+
+
+
+    const checkUser = async () => {
+        const authUser = await Auth.currentAuthenticatedUser();
+        setIsOwn(message.userID === authUser.attributes.sub);
+    }
+
+    useEffect(() => {
+        checkUser();
+    }, [])
     const container: ViewStyle = {
         backgroundColor: isOwn ? colorGray._3 : colorBlue._8,
         padding: 10,

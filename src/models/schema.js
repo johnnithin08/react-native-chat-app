@@ -10,6 +10,13 @@ export const schema = {
                     "isRequired": true,
                     "attributes": []
                 },
+                "createdAt": {
+                    "name": "createdAt",
+                    "isArray": false,
+                    "type": "AWSDateTime",
+                    "isRequired": true,
+                    "attributes": []
+                },
                 "content": {
                     "name": "content",
                     "isArray": false,
@@ -30,14 +37,6 @@ export const schema = {
                     "type": "ID",
                     "isRequired": true,
                     "attributes": []
-                },
-                "createdAt": {
-                    "name": "createdAt",
-                    "isArray": false,
-                    "type": "AWSDateTime",
-                    "isRequired": false,
-                    "attributes": [],
-                    "isReadOnly": true
                 },
                 "updatedAt": {
                     "name": "updatedAt",
@@ -68,8 +67,10 @@ export const schema = {
                     "type": "key",
                     "properties": {
                         "name": "byChatRoom",
+                        "queryField": "listMessagesByChatRoom",
                         "fields": [
-                            "chatroomID"
+                            "chatroomID",
+                            "createdAt"
                         ]
                     }
                 },
@@ -99,6 +100,20 @@ export const schema = {
                     "isArray": false,
                     "type": "ID",
                     "isRequired": true,
+                    "attributes": []
+                },
+                "image": {
+                    "name": "image",
+                    "isArray": false,
+                    "type": "String",
+                    "isRequired": false,
+                    "attributes": []
+                },
+                "name": {
+                    "name": "name",
+                    "isArray": false,
+                    "type": "String",
+                    "isRequired": false,
                     "attributes": []
                 },
                 "newMessages": {
@@ -414,5 +429,5 @@ export const schema = {
     "enums": {},
     "nonModels": {},
     "codegenVersion": "3.4.4",
-    "version": "694cb8ba6dcaa5f3559575a9a2097f0a"
+    "version": "05c0e359d8a08f5d33d34b957665a5cf"
 };
