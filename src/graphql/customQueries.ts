@@ -20,6 +20,7 @@ export const listChatRooms = `query GetUser($id: ID!) {
               createdAt
               content
             }
+            updatedAt
           }
         }
       }
