@@ -8,29 +8,29 @@ interface IChatRoomItem {
     data: IChatList;
 }
 
-export const ChatRoomItem: FunctionComponent<IChatRoomItem> = ({ data }: IChatRoomItem) => {
+export const ChatRoomItem: FunctionComponent<IChatRoomItem> = ({ data, handleFetch }: IChatRoomItem) => {
 
-    // console.log('data', data)
 
     const [user, setUser] = useState()
     const [chatRoom, setChatRoom] = useState(data)
 
     useEffect(() => {
         const fetchUser = async () => {
-            const authUser = Auth.currentAuthenticatedUser();
-
-            const userItem = chatRoom.users.items.find((eachItem) => item => item.user.id !== authUser.attributes.sub);
+            const authUser = await Auth.currentAuthenticatedUser();
+            const userItem = chatRoom.users.items.find((eachItem) => eachItem.user.id !== authUser.attributes.sub);
             setUser(userItem.user)
         }
         fetchUser();
     }, [])
 
+    console.log("chat", chatRoom)
+
     useEffect(() => {
         const subscribeChatRoom =
             API.graphql(graphqlOperation(onUpdateChatRoom, { filter: { id: { eq: data.id } } })).subscribe({
                 next: ({ value }) => {
-                    console.log("value", value)
                     setChatRoom((prev) => ({ ...prev, ...value.data.onUpdateChatRoom }))
+                    handleFetch();
                     // setMessages((current) => [value.data.onCreateMessage, ...current])
                 },
                 error: (err) => console.warn(err)
@@ -41,11 +41,9 @@ export const ChatRoomItem: FunctionComponent<IChatRoomItem> = ({ data }: IChatRo
         }
     }, [data.id])
 
-    console.log("user", user)
 
 
 
-    // console.log("user", user)
     const imageStyle: ImageStyle = {
         height: 50,
         width: 50,
@@ -71,7 +69,7 @@ export const ChatRoomItem: FunctionComponent<IChatRoomItem> = ({ data }: IChatRo
             </View>
             <View style={containerStyle}>
                 <View style={{ ...flexRow, ...spaceBetweenHorizontal, marginBottom: 5 }}>
-                    <Text style={fs18BoldBlack2}>{user?.name}</Text>
+                    <Text style={fs18BoldBlack2}>{chatRoom.name ? chatRoom.name : user?.name}</Text>
                     <Text style={fs14RegGray6}>{chatRoom?.lastMessage?.createdAt}</Text>
                 </View>
                 <Text numberOfLines={1} style={fs14RegGray6}>{chatRoom?.lastMessage?.content}</Text>

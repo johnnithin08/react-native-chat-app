@@ -3,9 +3,13 @@ export const listChatRooms = `query GetUser($id: ID!) {
       id
       chatrooms {
         items {
+          _deleted
           chatRoom {
             id
+            name
+            image
             newMessages
+            updatedAt
             users {
               items {
                 user {
@@ -20,7 +24,6 @@ export const listChatRooms = `query GetUser($id: ID!) {
               createdAt
               content
             }
-            updatedAt
           }
         }
       }

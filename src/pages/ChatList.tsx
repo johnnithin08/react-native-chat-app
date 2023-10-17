@@ -16,13 +16,13 @@ export const ChatList = () => {
     const [loading, setLoading] = useState<boolean>(false)
 
     const fetchChatRooms = async () => {
-        console.log("enter")
         try {
             setLoading(true)
             const authUser = await Auth.currentAuthenticatedUser()
             const chatRoomsResponse = await API.graphql(graphqlOperation(listChatRooms, { id: authUser.attributes.sub }))
-            console.log("current chat", chatRoomsResponse)
-            const sortedChatRooms = chatRoomsResponse.data.getUser.chatrooms.items.sort((a, b) => new Date(a.chatRoom.updatedAt) - new Date(b.chatRoom.updatedAt))
+            console.log("chats", chatRoomsResponse)
+            const rooms = chatRoomsResponse.data.getUser.chatrooms.items.filter((room) => !room._deleted)
+            const sortedChatRooms = chatRoomsResponse.data.getUser.chatrooms.items.sort((a, b) => new Date(b.chatRoom.updatedAt) - new Date(a.chatRoom.updatedAt))
             setLoading(false)
             setChatRooms(sortedChatRooms)
         }
@@ -43,14 +43,12 @@ export const ChatList = () => {
                     keyExtractor={item => item.chatRoom.id}
                     renderItem={({ item }) => {
 
-                        console.log("item", item)
-
                         const handleChat = () => {
                             navigation.navigate("ChatRoom", { id: item.chatRoom.id })
                         }
                         return (
                             <Pressable key={item.chatRoom.id} onPress={handleChat}>
-                                <ChatRoomItem data={item.chatRoom} />
+                                <ChatRoomItem data={item.chatRoom} handleFetch={fetchChatRooms} />
                             </Pressable>
                         )
                     }}
