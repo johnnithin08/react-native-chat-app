@@ -1,14 +1,17 @@
 import React, { useEffect, useState } from 'react'
 import { ActivityIndicator, Text, View } from 'react-native'
 import { SafeAreaView } from 'react-native-safe-area-context'
-import { colorWhite, flexChild } from '../styles'
+import { colorBlack, colorWhite, flexChild } from '../styles'
 import { Message, MessageInput } from '../components'
 import { ChatData } from "../dummy-data/Chats"
 import { FlatList } from 'react-native-gesture-handler'
 import { useNavigation, useRoute } from '@react-navigation/native'
-import { API, graphqlOperation } from 'aws-amplify'
+import { API, Auth, graphqlOperation } from 'aws-amplify'
 import { getChatRoom, listMessagesByChatRoom } from '../graphql/queries'
 import { onCreateMessage, onUpdateChatRoom } from '../graphql/subscriptions'
+import Feather from 'react-native-vector-icons/Feather'
+
+Feather.loadFont();
 
 export const ChatRoom = () => {
     const [data, setData] = useState();
@@ -19,15 +22,21 @@ export const ChatRoom = () => {
     const chatRoomId = route.params.id;
     const chatId: string | undefined = (route.params as any).id;
 
+    const handleGroupInfo = () => {
+        navigation.navigate("GroupInfo", { id: chatRoomId })
+    }
+
     useEffect(() => {
         const fetchChatRooms = async () => {
+            const authUser = await Auth.currentAuthenticatedUser();
             const resp = await API.graphql(graphqlOperation(getChatRoom, { id: chatRoomId }))
+            const findUser = resp.data?.getChatRoom.users.items.find((eachItem) => eachItem.user.id !== authUser.attributes.sub)
+            navigation.setOptions({ title: resp.data.getChatRoom.name ? resp.data.getChatRoom.name : findUser.user.name, headerRight: () => <Feather onPress={handleGroupInfo} name="more-vertical" size={20} color={colorBlack._1} /> })
             setData(resp.data?.getChatRoom)
         }
         const subscribeChatRoom =
             API.graphql(graphqlOperation(onUpdateChatRoom, { filter: { id: { eq: chatRoomId } } })).subscribe({
                 next: ({ value }) => {
-                    console.log("value", value)
                     setData((prev) => ({ ...prev, ...value.data.onUpdateChatRoom }))
                     // setMessages((current) => [value.data.onCreateMessage, ...current])
                 },
@@ -41,10 +50,6 @@ export const ChatRoom = () => {
     }, [chatRoomId])
 
     useEffect(() => {
-        navigation.setOptions({ title: route.params.name })
-    }, [route.params.name]);
-
-    useEffect(() => {
         const fetchMessages = async () => {
             const resp = await API.graphql(graphqlOperation(listMessagesByChatRoom, { chatroomID: chatRoomId, sortDirection: "DESC" }))
             setMessages(resp.data?.listMessagesByChatRoom.items)
@@ -52,7 +57,6 @@ export const ChatRoom = () => {
         const subscribeMessages =
             API.graphql(graphqlOperation(onCreateMessage, { filter: { chatroomID: { eq: chatRoomId } } })).subscribe({
                 next: ({ value }) => {
-                    console.log("value", value)
                     setMessages((current) => [value.data.onCreateMessage, ...current])
                 },
                 error: (err) => console.warn(err)
@@ -66,7 +70,6 @@ export const ChatRoom = () => {
 
 
 
-    console.log("data", data)
 
     if (data === undefined) {
         return <ActivityIndicator />

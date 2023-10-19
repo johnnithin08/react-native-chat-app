@@ -16,6 +16,7 @@ export const Message: FunctionComponent<IMessageProps> = ({ message }: IMessageP
 
     const checkUser = async () => {
         const authUser = await Auth.currentAuthenticatedUser();
+        console.log("check", message, authUser);
         setIsOwn(message.userID === authUser.attributes.sub);
     }
 

@@ -7,12 +7,20 @@ import { API, Auth, graphqlOperation } from 'aws-amplify';
 import { createChatRoom, createChatRoomUser } from '../../graphql/mutations';
 import { useNavigation } from '@react-navigation/native';
 import { getCommonChatRooms } from '../../utilities/chatRoom';
+import AntDesign from 'react-native-vector-icons/AntDesign';
+import FontAwesome from 'react-native-vector-icons/FontAwesome';
+
+AntDesign.loadFont();
+FontAwesome.loadFont();
 
 interface IUserItem {
     user: User;
+    handlePress: () => Promise<void>;
+    isSelected?: boolean;
+    selectable?: boolean;
 }
 
-export const UserItem: FunctionComponent<IUserItem> = ({ user }: IUserItem) => {
+export const UserItem: FunctionComponent<IUserItem> = ({ user, handlePress, selectable, isSelected }: IUserItem) => {
     const navigation = useNavigation()
 
     const imageStyle: ImageStyle = {
@@ -27,40 +35,13 @@ export const UserItem: FunctionComponent<IUserItem> = ({ user }: IUserItem) => {
         ...centerHorizontal,
     }
 
-    const handleCreateChatRoom = async () => {
-
-        try {
-
-            const checkExistingChatRooms = await getCommonChatRooms(user.id)
-            console.log("check", checkExistingChatRooms);
-            if (checkExistingChatRooms) {
-                navigation.navigate("ChatRoom", { id: checkExistingChatRooms.id })
-                return;
-            }
-
-            const newChatRoomData = await API.graphql(graphqlOperation(createChatRoom, { input: {} }))
-            console.log("res", newChatRoomData);
-            if (!newChatRoomData.data?.createChatRoom) {
-                console.log("err")
-            }
-            const newChatRoom = newChatRoomData.data?.createChatRoom;
-
-            await API.graphql(graphqlOperation(createChatRoomUser, { input: { chatRoomId: newChatRoom.id, userId: user.id } }))
-            const authUser = await Auth.currentAuthenticatedUser();
-
-            await API.graphql(graphqlOperation(createChatRoomUser, { input: { chatRoomId: newChatRoom.id, userId: authUser.attributes.sub } }))
-
-            navigation.navigate("ChatRoom", { id: newChatRoom.id })
-
-        }
-        catch (err) {
-            console.log("err", err)
-        }
-
-
+    const handleItemPress = async () => {
+        handlePress();
     }
+
+
     return (
-        <Pressable onPress={handleCreateChatRoom} style={{ ...flexRow, ...px(10), ...py(10) }}>
+        <Pressable onPress={handleItemPress} style={{ ...flexRow, ...px(10), ...py(10) }}>
             <Image source={{ uri: user.imageUri }} style={imageStyle} />
             <View style={containerStyle}>
                 <View style={{ ...flexRow, ...spaceBetweenHorizontal, marginBottom: 5 }}>
@@ -68,7 +49,15 @@ export const UserItem: FunctionComponent<IUserItem> = ({ user }: IUserItem) => {
                 </View>
                 <Text style={fs18BoldBlack2}>{user.status}</Text>
             </View>
-
+            {selectable && (
+                <View style={centerHorizontal}>
+                    {isSelected ? (
+                        <AntDesign name="checkcircle" color="royalblue" size={20} />
+                    ) : (
+                        <FontAwesome name="circle-thin" color="lightgray" size={20} />
+                    )}
+                </View>
+            )}
         </Pressable>
     )
 }

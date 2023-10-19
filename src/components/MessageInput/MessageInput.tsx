@@ -17,7 +17,6 @@ import { createMessage, updateChatRoom } from '../../graphql/mutations'
 
 export const MessageInput = ({ chatRoom }) => {
     const [message, setMessage] = useState<string>("")
-    console.log("check", chatRoom)
 
     const handleInput = (text: string) => {
         setMessage(text)
@@ -32,11 +31,10 @@ export const MessageInput = ({ chatRoom }) => {
             userID: authUser.attributes.sub
 
         }
-
+        console.log("message req", newMessage)
         const newMessageResponse = await API.graphql(graphqlOperation(createMessage, { input: newMessage }))
         setMessage("")
         const resp = await API.graphql(graphqlOperation(updateChatRoom, { input: { id: chatRoom.id, chatRoomLastMessageId: newMessageResponse.data.createMessage.id, _version: chatRoom._version } }))
-        console.log("resp", resp, newMessageResponse)
     }
 
     const buttonContainer: ViewStyle = {

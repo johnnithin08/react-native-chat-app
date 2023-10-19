@@ -1,3 +1,6 @@
 export * from "./ChatList"
 export * from "./ChatRoom"
 export * from "./Users"
+export * from "./NewGroup"
+export * from "./GroupInfo"
+export * from "./AddContact"
