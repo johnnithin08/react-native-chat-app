@@ -1,7 +1,7 @@
 import React from 'react'
 import { createStackNavigator } from "@react-navigation/stack"
 import { NavigationContainer, useNavigation } from '@react-navigation/native'
-import { ChatList, ChatRoom, GroupInfo, NewGroup, Users } from "../pages"
+import { AddContact, ChatList, ChatRoom, GroupInfo, NewGroup, Users } from "../pages"
 import { Image, Text, View, ViewStyle, useWindowDimensions } from 'react-native'
 import { centerHorizontal, centerVertical, colorGray, flexChild, flexRow } from '../styles'
 import Feather from 'react-native-vector-icons/Feather'
@@ -21,6 +21,7 @@ export const RootNavigation = () => {
                 <Screen component={Users} name="Users" options={{ title: "Users" }} />
                 <Screen component={NewGroup} name="NewGroup" options={{ title: "Group" }} />
                 <Screen component={GroupInfo} name="GroupInfo" options={{ title: "Group Info" }} />
+                <Screen component={AddContact} name="AddContact" options={{ title: "Add Contact" }} />
             </Navigator>
         </NavigationContainer>
     )

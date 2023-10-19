@@ -5,7 +5,7 @@ import { UserItem } from "../components"
 import { ChatRoomData } from "../dummy-data/ChatRooms"
 import { centerVertical, colorWhite, flexChild, flexRow, fs16BoldBlue1, fs16RegBlue1, fs16RegBlue5 } from '../styles'
 import { FlatList } from 'react-native-gesture-handler'
-import { useNavigation } from '@react-navigation/native'
+import { useNavigation, useRoute } from '@react-navigation/native'
 import MaterialIcons from "react-native-vector-icons/MaterialIcons"
 
 import { User } from "../models"
@@ -16,17 +16,19 @@ import { createChatRoom, createChatRoomUser } from '../graphql/mutations'
 
 MaterialIcons.loadFont();
 
-export const NewGroup = () => {
+export const AddContact = () => {
     const [users, setUsers] = useState<User[]>([])
-    const [name, setName] = useState<string>("")
     const [selectedIds, setSelectedIds] = useState<string[]>([])
     const navigation = useNavigation()
+    const route = useRoute();
+    const chatRoom = route.params.chatRoom;
 
 
     const fetchUsers = async () => {
         try {
             const fetchedUsers = await API.graphql(graphqlOperation(listUsers))
-            setUsers(fetchedUsers.data?.listUsers?.items)
+            setUsers(fetchedUsers.data?.listUsers?.items.filter((eachUser) => !chatRoom.users.items.some((existingUser) => !existingUser._deleted && existingUser.userId === eachUser.id)))
+            console.log("chatromm", fetchedUsers.data?.listUsers?.items, chatRoom)
 
         }
         catch (err) {
@@ -51,35 +53,20 @@ export const NewGroup = () => {
     const handleNewGroup = async () => {
         try {
 
-            const newChatRoomData = await API.graphql(graphqlOperation(createChatRoom, { input: { name: name } }))
-            if (!newChatRoomData.data?.createChatRoom) {
-                console.log("err")
-            }
-            const newChatRoom = newChatRoomData.data?.createChatRoom;
-
-            console.log("check", selectedIds)
-
             const chatRoomUserPromise = selectedIds.map(async (selectedId) => {
-                await API.graphql(graphqlOperation(createChatRoomUser, { input: { chatRoomId: newChatRoom.id, userId: selectedId } }))
+                await API.graphql(graphqlOperation(createChatRoomUser, { input: { chatRoomId: chatRoom.id, userId: selectedId } }))
             })
 
             console.log("resp", chatRoomUserPromise)
 
             await Promise.all(chatRoomUserPromise)
-            const authUser = await Auth.currentAuthenticatedUser();
 
-            await API.graphql(graphqlOperation(createChatRoomUser, { input: { chatRoomId: newChatRoom.id, userId: authUser.attributes.sub } }))
-
-            navigation.navigate("ChatRoom", { id: newChatRoom.id, name: name })
+            navigation.goBack();
 
         }
         catch (err) {
             console.log("err", err)
         }
-    }
-
-    const handleName = (text: string) => {
-        setName(text)
     }
 
     useEffect(() => {
@@ -90,13 +77,13 @@ export const NewGroup = () => {
         navigation.setOptions({
             headerRight: () => (
                 <Button
-                    title="Create"
-                    disabled={!name || selectedIds.length < 1}
+                    title="Add"
+                    disabled={selectedIds.length === 0}
                     onPress={handleNewGroup}
                 />
             ),
         });
-    }, [name, selectedIds]);
+    }, [selectedIds]);
 
     console.log("sele", selectedIds)
 
@@ -109,12 +96,6 @@ export const NewGroup = () => {
 
     return (
         <SafeAreaView style={{ ...flexChild, backgroundColor: colorWhite._1 }}>
-            <TextInput
-                placeholder='Group Name'
-                onChangeText={handleName}
-                value={name}
-                style={inputStyle}
-            />
             <FlatList
                 data={users}
                 keyExtractor={item => item.id}

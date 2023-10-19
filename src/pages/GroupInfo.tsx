@@ -6,6 +6,7 @@ import {
     Text,
     ActivityIndicator,
     Alert,
+    RefreshControl,
 } from "react-native";
 import { useRoute, useNavigation } from "@react-navigation/native";
 
@@ -100,7 +101,7 @@ export const GroupInfo = () => {
             >
                 <Text style={styles.sectionTitle}>{users.length} Participants</Text>
                 <Text
-                    onPress={() => navigation.navigate("Add Contacts", { chatRoom })}
+                    onPress={() => navigation.navigate("AddContact", { chatRoom })}
                     style={{ fontWeight: "bold", color: "royalblue" }}
                 >
                     Invite friends
@@ -112,11 +113,10 @@ export const GroupInfo = () => {
                     renderItem={({ item }) => (
                         <UserItem
                             user={item.user}
-                            onPress={() => onContactPress(item)}
+                            handlePress={() => onContactPress(item)}
                         />
                     )}
-                    onRefresh={fetchChatRoom}
-                    refreshing={loading}
+                    refreshControl={<RefreshControl refreshing={loading} onRefresh={fetchChatRoom} />}
                 />
             </View>
         </View>
