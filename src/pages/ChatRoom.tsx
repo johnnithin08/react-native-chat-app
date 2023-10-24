@@ -1,6 +1,9 @@
 import React, { useEffect, useState } from 'react'
 import { ActivityIndicator, Text, View } from 'react-native'
 import { SafeAreaView } from 'react-native-safe-area-context'
+import Feather from 'react-native-vector-icons/Feather'
+import { Image } from "react-native-image-crop-picker"
+
 import { colorBlack, colorWhite, flexChild } from '../styles'
 import { Message, MessageInput } from '../components'
 import { ChatData } from "../dummy-data/Chats"
@@ -9,7 +12,7 @@ import { useNavigation, useRoute } from '@react-navigation/native'
 import { API, Auth, graphqlOperation } from 'aws-amplify'
 import { getChatRoom, listMessagesByChatRoom } from '../graphql/queries'
 import { onCreateMessage, onUpdateChatRoom } from '../graphql/subscriptions'
-import Feather from 'react-native-vector-icons/Feather'
+import { imageOpenPicker } from '../utils/react-native-image-crop-picker'
 
 Feather.loadFont();
 

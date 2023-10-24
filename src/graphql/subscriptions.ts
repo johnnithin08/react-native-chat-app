@@ -10,6 +10,7 @@ export const onCreateMessage = /* GraphQL */ `
       content
       userID
       chatroomID
+      images
       updatedAt
       _version
       _deleted
@@ -26,6 +27,7 @@ export const onUpdateMessage = /* GraphQL */ `
       content
       userID
       chatroomID
+      images
       updatedAt
       _version
       _deleted
@@ -42,6 +44,7 @@ export const onDeleteMessage = /* GraphQL */ `
       content
       userID
       chatroomID
+      images
       updatedAt
       _version
       _deleted
@@ -63,6 +66,7 @@ export const onCreateChatRoom = /* GraphQL */ `
         content
         userID
         chatroomID
+        images
         updatedAt
         _version
         _deleted
@@ -76,6 +80,7 @@ export const onCreateChatRoom = /* GraphQL */ `
           content
           userID
           chatroomID
+          images
           updatedAt
           _version
           _deleted
@@ -102,6 +107,7 @@ export const onCreateChatRoom = /* GraphQL */ `
               content
               userID
               chatroomID
+              images
               updatedAt
               _version
               _deleted
@@ -115,6 +121,7 @@ export const onCreateChatRoom = /* GraphQL */ `
                 content
                 userID
                 chatroomID
+                images
                 updatedAt
                 _version
                 _deleted
@@ -186,6 +193,7 @@ export const onCreateChatRoom = /* GraphQL */ `
                 content
                 userID
                 chatroomID
+                images
                 updatedAt
                 _version
                 _deleted
@@ -278,6 +286,7 @@ export const onUpdateChatRoom = /* GraphQL */ `
         content
         userID
         chatroomID
+        images
         updatedAt
         _version
         _deleted
@@ -291,6 +300,7 @@ export const onUpdateChatRoom = /* GraphQL */ `
           content
           userID
           chatroomID
+          images
           updatedAt
           _version
           _deleted
@@ -317,6 +327,7 @@ export const onUpdateChatRoom = /* GraphQL */ `
               content
               userID
               chatroomID
+              images
               updatedAt
               _version
               _deleted
@@ -330,6 +341,7 @@ export const onUpdateChatRoom = /* GraphQL */ `
                 content
                 userID
                 chatroomID
+                images
                 updatedAt
                 _version
                 _deleted
@@ -401,6 +413,7 @@ export const onUpdateChatRoom = /* GraphQL */ `
                 content
                 userID
                 chatroomID
+                images
                 updatedAt
                 _version
                 _deleted
@@ -493,6 +506,7 @@ export const onDeleteChatRoom = /* GraphQL */ `
         content
         userID
         chatroomID
+        images
         updatedAt
         _version
         _deleted
@@ -506,6 +520,7 @@ export const onDeleteChatRoom = /* GraphQL */ `
           content
           userID
           chatroomID
+          images
           updatedAt
           _version
           _deleted
@@ -532,6 +547,7 @@ export const onDeleteChatRoom = /* GraphQL */ `
               content
               userID
               chatroomID
+              images
               updatedAt
               _version
               _deleted
@@ -545,6 +561,7 @@ export const onDeleteChatRoom = /* GraphQL */ `
                 content
                 userID
                 chatroomID
+                images
                 updatedAt
                 _version
                 _deleted
@@ -616,6 +633,7 @@ export const onDeleteChatRoom = /* GraphQL */ `
                 content
                 userID
                 chatroomID
+                images
                 updatedAt
                 _version
                 _deleted
@@ -709,6 +727,7 @@ export const onCreateUser = /* GraphQL */ `
           content
           userID
           chatroomID
+          images
           updatedAt
           _version
           _deleted
@@ -735,6 +754,7 @@ export const onCreateUser = /* GraphQL */ `
               content
               userID
               chatroomID
+              images
               updatedAt
               _version
               _deleted
@@ -748,6 +768,7 @@ export const onCreateUser = /* GraphQL */ `
                 content
                 userID
                 chatroomID
+                images
                 updatedAt
                 _version
                 _deleted
@@ -819,6 +840,7 @@ export const onCreateUser = /* GraphQL */ `
                 content
                 userID
                 chatroomID
+                images
                 updatedAt
                 _version
                 _deleted
@@ -911,6 +933,7 @@ export const onUpdateUser = /* GraphQL */ `
           content
           userID
           chatroomID
+          images
           updatedAt
           _version
           _deleted
@@ -937,6 +960,7 @@ export const onUpdateUser = /* GraphQL */ `
               content
               userID
               chatroomID
+              images
               updatedAt
               _version
               _deleted
@@ -950,6 +974,7 @@ export const onUpdateUser = /* GraphQL */ `
                 content
                 userID
                 chatroomID
+                images
                 updatedAt
                 _version
                 _deleted
@@ -1021,6 +1046,7 @@ export const onUpdateUser = /* GraphQL */ `
                 content
                 userID
                 chatroomID
+                images
                 updatedAt
                 _version
                 _deleted
@@ -1113,6 +1139,7 @@ export const onDeleteUser = /* GraphQL */ `
           content
           userID
           chatroomID
+          images
           updatedAt
           _version
           _deleted
@@ -1139,6 +1166,7 @@ export const onDeleteUser = /* GraphQL */ `
               content
               userID
               chatroomID
+              images
               updatedAt
               _version
               _deleted
@@ -1152,6 +1180,7 @@ export const onDeleteUser = /* GraphQL */ `
                 content
                 userID
                 chatroomID
+                images
                 updatedAt
                 _version
                 _deleted
@@ -1223,6 +1252,7 @@ export const onDeleteUser = /* GraphQL */ `
                 content
                 userID
                 chatroomID
+                images
                 updatedAt
                 _version
                 _deleted
@@ -1320,6 +1350,7 @@ export const onCreateChatRoomUser = /* GraphQL */ `
           content
           userID
           chatroomID
+          images
           updatedAt
           _version
           _deleted
@@ -1333,6 +1364,7 @@ export const onCreateChatRoomUser = /* GraphQL */ `
             content
             userID
             chatroomID
+            images
             updatedAt
             _version
             _deleted
@@ -1359,6 +1391,7 @@ export const onCreateChatRoomUser = /* GraphQL */ `
                 content
                 userID
                 chatroomID
+                images
                 updatedAt
                 _version
                 _deleted
@@ -1372,6 +1405,7 @@ export const onCreateChatRoomUser = /* GraphQL */ `
                   content
                   userID
                   chatroomID
+                  images
                   updatedAt
                   _version
                   _deleted
@@ -1418,6 +1452,7 @@ export const onCreateChatRoomUser = /* GraphQL */ `
                   content
                   userID
                   chatroomID
+                  images
                   updatedAt
                   _version
                   _deleted
@@ -1482,6 +1517,7 @@ export const onCreateChatRoomUser = /* GraphQL */ `
             content
             userID
             chatroomID
+            images
             updatedAt
             _version
             _deleted
@@ -1508,6 +1544,7 @@ export const onCreateChatRoomUser = /* GraphQL */ `
                 content
                 userID
                 chatroomID
+                images
                 updatedAt
                 _version
                 _deleted
@@ -1521,6 +1558,7 @@ export const onCreateChatRoomUser = /* GraphQL */ `
                   content
                   userID
                   chatroomID
+                  images
                   updatedAt
                   _version
                   _deleted
@@ -1567,6 +1605,7 @@ export const onCreateChatRoomUser = /* GraphQL */ `
                   content
                   userID
                   chatroomID
+                  images
                   updatedAt
                   _version
                   _deleted
@@ -1646,6 +1685,7 @@ export const onUpdateChatRoomUser = /* GraphQL */ `
           content
           userID
           chatroomID
+          images
           updatedAt
           _version
           _deleted
@@ -1659,6 +1699,7 @@ export const onUpdateChatRoomUser = /* GraphQL */ `
             content
             userID
             chatroomID
+            images
             updatedAt
             _version
             _deleted
@@ -1685,6 +1726,7 @@ export const onUpdateChatRoomUser = /* GraphQL */ `
                 content
                 userID
                 chatroomID
+                images
                 updatedAt
                 _version
                 _deleted
@@ -1698,6 +1740,7 @@ export const onUpdateChatRoomUser = /* GraphQL */ `
                   content
                   userID
                   chatroomID
+                  images
                   updatedAt
                   _version
                   _deleted
@@ -1744,6 +1787,7 @@ export const onUpdateChatRoomUser = /* GraphQL */ `
                   content
                   userID
                   chatroomID
+                  images
                   updatedAt
                   _version
                   _deleted
@@ -1808,6 +1852,7 @@ export const onUpdateChatRoomUser = /* GraphQL */ `
             content
             userID
             chatroomID
+            images
             updatedAt
             _version
             _deleted
@@ -1834,6 +1879,7 @@ export const onUpdateChatRoomUser = /* GraphQL */ `
                 content
                 userID
                 chatroomID
+                images
                 updatedAt
                 _version
                 _deleted
@@ -1847,6 +1893,7 @@ export const onUpdateChatRoomUser = /* GraphQL */ `
                   content
                   userID
                   chatroomID
+                  images
                   updatedAt
                   _version
                   _deleted
@@ -1893,6 +1940,7 @@ export const onUpdateChatRoomUser = /* GraphQL */ `
                   content
                   userID
                   chatroomID
+                  images
                   updatedAt
                   _version
                   _deleted
@@ -1972,6 +2020,7 @@ export const onDeleteChatRoomUser = /* GraphQL */ `
           content
           userID
           chatroomID
+          images
           updatedAt
           _version
           _deleted
@@ -1985,6 +2034,7 @@ export const onDeleteChatRoomUser = /* GraphQL */ `
             content
             userID
             chatroomID
+            images
             updatedAt
             _version
             _deleted
@@ -2011,6 +2061,7 @@ export const onDeleteChatRoomUser = /* GraphQL */ `
                 content
                 userID
                 chatroomID
+                images
                 updatedAt
                 _version
                 _deleted
@@ -2024,6 +2075,7 @@ export const onDeleteChatRoomUser = /* GraphQL */ `
                   content
                   userID
                   chatroomID
+                  images
                   updatedAt
                   _version
                   _deleted
@@ -2070,6 +2122,7 @@ export const onDeleteChatRoomUser = /* GraphQL */ `
                   content
                   userID
                   chatroomID
+                  images
                   updatedAt
                   _version
                   _deleted
@@ -2134,6 +2187,7 @@ export const onDeleteChatRoomUser = /* GraphQL */ `
             content
             userID
             chatroomID
+            images
             updatedAt
             _version
             _deleted
@@ -2160,6 +2214,7 @@ export const onDeleteChatRoomUser = /* GraphQL */ `
                 content
                 userID
                 chatroomID
+                images
                 updatedAt
                 _version
                 _deleted
@@ -2173,6 +2228,7 @@ export const onDeleteChatRoomUser = /* GraphQL */ `
                   content
                   userID
                   chatroomID
+                  images
                   updatedAt
                   _version
                   _deleted
@@ -2219,6 +2275,7 @@ export const onDeleteChatRoomUser = /* GraphQL */ `
                   content
                   userID
                   chatroomID
+                  images
                   updatedAt
                   _version
                   _deleted

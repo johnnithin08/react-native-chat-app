@@ -10,6 +10,7 @@ export const getMessage = /* GraphQL */ `
       content
       userID
       chatroomID
+      images
       updatedAt
       _version
       _deleted
@@ -31,6 +32,7 @@ export const listMessages = /* GraphQL */ `
         content
         userID
         chatroomID
+        images
         updatedAt
         _version
         _deleted
@@ -62,6 +64,7 @@ export const syncMessages = /* GraphQL */ `
         content
         userID
         chatroomID
+        images
         updatedAt
         _version
         _deleted
@@ -95,6 +98,7 @@ export const messagesByUserID = /* GraphQL */ `
         content
         userID
         chatroomID
+        images
         updatedAt
         _version
         _deleted
@@ -130,6 +134,7 @@ export const listMessagesByChatRoom = /* GraphQL */ `
         content
         userID
         chatroomID
+        images
         updatedAt
         _version
         _deleted
@@ -155,6 +160,7 @@ export const getChatRoom = /* GraphQL */ `
         content
         userID
         chatroomID
+        images
         updatedAt
         _version
         _deleted
@@ -168,6 +174,7 @@ export const getChatRoom = /* GraphQL */ `
           content
           userID
           chatroomID
+          images
           updatedAt
           _version
           _deleted
@@ -194,6 +201,7 @@ export const getChatRoom = /* GraphQL */ `
               content
               userID
               chatroomID
+              images
               updatedAt
               _version
               _deleted
@@ -207,6 +215,7 @@ export const getChatRoom = /* GraphQL */ `
                 content
                 userID
                 chatroomID
+                images
                 updatedAt
                 _version
                 _deleted
@@ -278,6 +287,7 @@ export const getChatRoom = /* GraphQL */ `
                 content
                 userID
                 chatroomID
+                images
                 updatedAt
                 _version
                 _deleted
@@ -375,6 +385,7 @@ export const listChatRooms = /* GraphQL */ `
           content
           userID
           chatroomID
+          images
           updatedAt
           _version
           _deleted
@@ -388,6 +399,7 @@ export const listChatRooms = /* GraphQL */ `
             content
             userID
             chatroomID
+            images
             updatedAt
             _version
             _deleted
@@ -414,6 +426,7 @@ export const listChatRooms = /* GraphQL */ `
                 content
                 userID
                 chatroomID
+                images
                 updatedAt
                 _version
                 _deleted
@@ -427,6 +440,7 @@ export const listChatRooms = /* GraphQL */ `
                   content
                   userID
                   chatroomID
+                  images
                   updatedAt
                   _version
                   _deleted
@@ -473,6 +487,7 @@ export const listChatRooms = /* GraphQL */ `
                   content
                   userID
                   chatroomID
+                  images
                   updatedAt
                   _version
                   _deleted
@@ -555,6 +570,7 @@ export const syncChatRooms = /* GraphQL */ `
           content
           userID
           chatroomID
+          images
           updatedAt
           _version
           _deleted
@@ -568,6 +584,7 @@ export const syncChatRooms = /* GraphQL */ `
             content
             userID
             chatroomID
+            images
             updatedAt
             _version
             _deleted
@@ -594,6 +611,7 @@ export const syncChatRooms = /* GraphQL */ `
                 content
                 userID
                 chatroomID
+                images
                 updatedAt
                 _version
                 _deleted
@@ -607,6 +625,7 @@ export const syncChatRooms = /* GraphQL */ `
                   content
                   userID
                   chatroomID
+                  images
                   updatedAt
                   _version
                   _deleted
@@ -653,6 +672,7 @@ export const syncChatRooms = /* GraphQL */ `
                   content
                   userID
                   chatroomID
+                  images
                   updatedAt
                   _version
                   _deleted
@@ -725,6 +745,7 @@ export const getUser = /* GraphQL */ `
           content
           userID
           chatroomID
+          images
           updatedAt
           _version
           _deleted
@@ -751,6 +772,7 @@ export const getUser = /* GraphQL */ `
               content
               userID
               chatroomID
+              images
               updatedAt
               _version
               _deleted
@@ -764,6 +786,7 @@ export const getUser = /* GraphQL */ `
                 content
                 userID
                 chatroomID
+                images
                 updatedAt
                 _version
                 _deleted
@@ -835,6 +858,7 @@ export const getUser = /* GraphQL */ `
                 content
                 userID
                 chatroomID
+                images
                 updatedAt
                 _version
                 _deleted
@@ -932,6 +956,7 @@ export const listUsers = /* GraphQL */ `
             content
             userID
             chatroomID
+            images
             updatedAt
             _version
             _deleted
@@ -958,6 +983,7 @@ export const listUsers = /* GraphQL */ `
                 content
                 userID
                 chatroomID
+                images
                 updatedAt
                 _version
                 _deleted
@@ -971,6 +997,7 @@ export const listUsers = /* GraphQL */ `
                   content
                   userID
                   chatroomID
+                  images
                   updatedAt
                   _version
                   _deleted
@@ -1017,6 +1044,7 @@ export const listUsers = /* GraphQL */ `
                   content
                   userID
                   chatroomID
+                  images
                   updatedAt
                   _version
                   _deleted
@@ -1099,6 +1127,7 @@ export const syncUsers = /* GraphQL */ `
             content
             userID
             chatroomID
+            images
             updatedAt
             _version
             _deleted
@@ -1125,6 +1154,7 @@ export const syncUsers = /* GraphQL */ `
                 content
                 userID
                 chatroomID
+                images
                 updatedAt
                 _version
                 _deleted
@@ -1138,6 +1168,7 @@ export const syncUsers = /* GraphQL */ `
                   content
                   userID
                   chatroomID
+                  images
                   updatedAt
                   _version
                   _deleted
@@ -1184,6 +1215,7 @@ export const syncUsers = /* GraphQL */ `
                   content
                   userID
                   chatroomID
+                  images
                   updatedAt
                   _version
                   _deleted
@@ -1258,6 +1290,7 @@ export const getChatRoomUser = /* GraphQL */ `
           content
           userID
           chatroomID
+          images
           updatedAt
           _version
           _deleted
@@ -1271,6 +1304,7 @@ export const getChatRoomUser = /* GraphQL */ `
             content
             userID
             chatroomID
+            images
             updatedAt
             _version
             _deleted
@@ -1297,6 +1331,7 @@ export const getChatRoomUser = /* GraphQL */ `
                 content
                 userID
                 chatroomID
+                images
                 updatedAt
                 _version
                 _deleted
@@ -1310,6 +1345,7 @@ export const getChatRoomUser = /* GraphQL */ `
                   content
                   userID
                   chatroomID
+                  images
                   updatedAt
                   _version
                   _deleted
@@ -1356,6 +1392,7 @@ export const getChatRoomUser = /* GraphQL */ `
                   content
                   userID
                   chatroomID
+                  images
                   updatedAt
                   _version
                   _deleted
@@ -1420,6 +1457,7 @@ export const getChatRoomUser = /* GraphQL */ `
             content
             userID
             chatroomID
+            images
             updatedAt
             _version
             _deleted
@@ -1446,6 +1484,7 @@ export const getChatRoomUser = /* GraphQL */ `
                 content
                 userID
                 chatroomID
+                images
                 updatedAt
                 _version
                 _deleted
@@ -1459,6 +1498,7 @@ export const getChatRoomUser = /* GraphQL */ `
                   content
                   userID
                   chatroomID
+                  images
                   updatedAt
                   _version
                   _deleted
@@ -1505,6 +1545,7 @@ export const getChatRoomUser = /* GraphQL */ `
                   content
                   userID
                   chatroomID
+                  images
                   updatedAt
                   _version
                   _deleted
@@ -1587,6 +1628,7 @@ export const listChatRoomUsers = /* GraphQL */ `
             content
             userID
             chatroomID
+            images
             updatedAt
             _version
             _deleted
@@ -1600,6 +1642,7 @@ export const listChatRoomUsers = /* GraphQL */ `
               content
               userID
               chatroomID
+              images
               updatedAt
               _version
               _deleted
@@ -1626,6 +1669,7 @@ export const listChatRoomUsers = /* GraphQL */ `
                   content
                   userID
                   chatroomID
+                  images
                   updatedAt
                   _version
                   _deleted
@@ -1703,6 +1747,7 @@ export const listChatRoomUsers = /* GraphQL */ `
               content
               userID
               chatroomID
+              images
               updatedAt
               _version
               _deleted
@@ -1729,6 +1774,7 @@ export const listChatRoomUsers = /* GraphQL */ `
                   content
                   userID
                   chatroomID
+                  images
                   updatedAt
                   _version
                   _deleted
@@ -1834,6 +1880,7 @@ export const syncChatRoomUsers = /* GraphQL */ `
             content
             userID
             chatroomID
+            images
             updatedAt
             _version
             _deleted
@@ -1847,6 +1894,7 @@ export const syncChatRoomUsers = /* GraphQL */ `
               content
               userID
               chatroomID
+              images
               updatedAt
               _version
               _deleted
@@ -1873,6 +1921,7 @@ export const syncChatRoomUsers = /* GraphQL */ `
                   content
                   userID
                   chatroomID
+                  images
                   updatedAt
                   _version
                   _deleted
@@ -1950,6 +1999,7 @@ export const syncChatRoomUsers = /* GraphQL */ `
               content
               userID
               chatroomID
+              images
               updatedAt
               _version
               _deleted
@@ -1976,6 +2026,7 @@ export const syncChatRoomUsers = /* GraphQL */ `
                   content
                   userID
                   chatroomID
+                  images
                   updatedAt
                   _version
                   _deleted
@@ -2083,6 +2134,7 @@ export const chatRoomUsersByChatRoomId = /* GraphQL */ `
             content
             userID
             chatroomID
+            images
             updatedAt
             _version
             _deleted
@@ -2096,6 +2148,7 @@ export const chatRoomUsersByChatRoomId = /* GraphQL */ `
               content
               userID
               chatroomID
+              images
               updatedAt
               _version
               _deleted
@@ -2122,6 +2175,7 @@ export const chatRoomUsersByChatRoomId = /* GraphQL */ `
                   content
                   userID
                   chatroomID
+                  images
                   updatedAt
                   _version
                   _deleted
@@ -2199,6 +2253,7 @@ export const chatRoomUsersByChatRoomId = /* GraphQL */ `
               content
               userID
               chatroomID
+              images
               updatedAt
               _version
               _deleted
@@ -2225,6 +2280,7 @@ export const chatRoomUsersByChatRoomId = /* GraphQL */ `
                   content
                   userID
                   chatroomID
+                  images
                   updatedAt
                   _version
                   _deleted
@@ -2332,6 +2388,7 @@ export const chatRoomUsersByUserId = /* GraphQL */ `
             content
             userID
             chatroomID
+            images
             updatedAt
             _version
             _deleted
@@ -2345,6 +2402,7 @@ export const chatRoomUsersByUserId = /* GraphQL */ `
               content
               userID
               chatroomID
+              images
               updatedAt
               _version
               _deleted
@@ -2371,6 +2429,7 @@ export const chatRoomUsersByUserId = /* GraphQL */ `
                   content
                   userID
                   chatroomID
+                  images
                   updatedAt
                   _version
                   _deleted
@@ -2448,6 +2507,7 @@ export const chatRoomUsersByUserId = /* GraphQL */ `
               content
               userID
               chatroomID
+              images
               updatedAt
               _version
               _deleted
@@ -2474,6 +2534,7 @@ export const chatRoomUsersByUserId = /* GraphQL */ `
                   content
                   userID
                   chatroomID
+                  images
                   updatedAt
                   _version
                   _deleted

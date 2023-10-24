@@ -1,5 +1,9 @@
 import React, { useState } from 'react'
-import { View, Text, ViewStyle, TextInput, Pressable } from 'react-native'
+import { View, Text, ViewStyle, TextInput, Pressable, Image, ImageStyle } from 'react-native'
+import { API, Auth, graphqlOperation } from 'aws-amplify'
+import { Image as ImageCrop } from 'react-native-image-crop-picker'
+import "react-native-get-random-values"
+import { v4 as uuidv4 } from "uuid"
 import Feather from "react-native-vector-icons/Feather"
 import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons"
 import AntDesign from "react-native-vector-icons/AntDesign"
@@ -10,16 +14,41 @@ MaterialCommunityIcons.loadFont();
 AntDesign.loadFont();
 Ionicons.loadFont()
 
-import { centerHV, centerVertical, colorBlue, colorGray, colorWhite, flexChild, flexRow } from '../../styles'
-import { API, Auth, graphqlOperation } from 'aws-amplify'
+import { absolutePosition, alignItemsEnd, centerHV, centerVertical, colorBlack, colorBlue, colorGray, colorWhite, flexChild, flexRow } from '../../styles'
 import { createMessage, updateChatRoom } from '../../graphql/mutations'
+import { imageOpenPicker } from '../../utils/react-native-image-crop-picker'
 
 
 export const MessageInput = ({ chatRoom }) => {
     const [message, setMessage] = useState<string>("")
+    const [image, setImage] = useState<FileBase64 | undefined>()
 
     const handleInput = (text: string) => {
         setMessage(text)
+    }
+
+    const handleImageResult = async (results: ImageCrop | ImageCrop[]) => {
+        if (!Array.isArray(results)) {
+            const { data, filename, size, mime, path } = results;
+
+            const selectedImage: FileBase64 = {
+                base64: data || "",
+                name: filename,
+                size,
+                type: mime,
+                date: new Date().toDateString(),
+                path,
+            };
+
+            console.log("image", selectedImage)
+            setImage(selectedImage)
+
+        }
+        return false;
+    };
+
+    const handlePicker = async () => {
+        imageOpenPicker(handleImageResult, { cropping: false });
     }
 
     const handleSend = async () => {
@@ -69,26 +98,55 @@ export const MessageInput = ({ chatRoom }) => {
         ...flexChild,
         marginHorizontal: 5
     }
+
+    const addIconStyle: ViewStyle = {
+        backgroundColor: colorGray._1,
+        borderRadius: 100,
+        padding: 2,
+    }
+
+    const selectedImage: ImageStyle = {
+        height: 100,
+        width: 200,
+
+    }
+
+    const removeSelectedImage: ViewStyle = {
+        ...absolutePosition,
+        right: 10,
+        top: -5,
+        backgroundColor: colorWhite._1,
+        borderRadius: 10,
+        overflow: "hidden"
+    }
+
     return (
-        <View style={container}>
-            <View style={inputContainer}>
-                <Feather name="smile" size={24} color={colorGray._5} style={icon} />
-                <TextInput
-                    onChangeText={handleInput}
-                    placeholder='Your message..'
-                    style={input}
-                    value={message}
-                />
-                <Feather name="camera" size={24} color={colorGray._5} style={icon} />
-                <MaterialCommunityIcons name="microphone-outline" size={24} color={colorGray._5} style={icon} />
+        <View>
+
+            {image && (
+                <View style={{ ...alignItemsEnd, backgroundColor: "red" }}>
+                    <Image source={{ uri: image.path }} style={selectedImage} resizeMode="contain" />
+                    <MaterialCommunityIcons name="close-circle-outline" onPress={() => setImage(undefined)} size={20} color={colorBlack._1} style={removeSelectedImage} />
+                </View>
+            )}
+            <View style={container}>
+                <View style={inputContainer}>
+                    <Pressable style={addIconStyle}>
+                        <AntDesign name="plus" onPress={handlePicker} size={24} color={colorGray._5} />
+                    </Pressable>
+                    <TextInput
+                        onChangeText={handleInput}
+                        placeholder='Your message..'
+                        style={input}
+                        value={message}
+                    />
+                    <Feather name="camera" size={24} color={colorGray._5} style={icon} />
+                    <MaterialCommunityIcons name="microphone-outline" size={24} color={colorGray._5} style={icon} />
+                </View>
+                <Pressable disabled={message === "" && image !== undefined} onPress={handleSend} style={buttonContainer}>
+                    <Ionicons name="send" onPress={handleSend} size={20} color={colorWhite._1} />
+                </Pressable>
             </View>
-            <Pressable onPress={handleSend} style={buttonContainer}>
-                {message ? (
-                    <Ionicons name="send" size={20} color={colorWhite._1} />
-                ) : (
-                    <AntDesign name="plus" size={24} color={colorWhite._1} />
-                )}
-            </Pressable>
         </View>
     )
 }

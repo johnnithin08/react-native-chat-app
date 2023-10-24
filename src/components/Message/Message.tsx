@@ -2,6 +2,8 @@ import React, { FunctionComponent, useEffect, useState } from 'react'
 import { View, Text, ViewStyle, TextStyle } from 'react-native'
 import { colorBlack, colorBlue, colorGray, colorWhite } from '../../styles';
 import { Auth } from 'aws-amplify';
+import { Image } from 'react-native-image-crop-picker';
+import { imageOpenPicker } from '../../utils/react-native-image-crop-picker';
 
 interface IMessageProps {
     message: IMessage;
