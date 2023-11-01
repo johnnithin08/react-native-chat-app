@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import { View, Text, ViewStyle, TextInput, Pressable, Image, ImageStyle } from 'react-native'
-import { API, Auth, graphqlOperation } from 'aws-amplify'
+import { API, Auth, Storage, graphqlOperation } from 'aws-amplify'
 import { Image as ImageCrop } from 'react-native-image-crop-picker'
 import "react-native-get-random-values"
 import { v4 as uuidv4 } from "uuid"
@@ -26,6 +26,7 @@ export const MessageInput = ({ chatRoom }) => {
     const handleInput = (text: string) => {
         setMessage(text)
     }
+    console.log("imag", message)
 
     const handleImageResult = async (results: ImageCrop | ImageCrop[]) => {
         if (!Array.isArray(results)) {
@@ -40,7 +41,7 @@ export const MessageInput = ({ chatRoom }) => {
                 path,
             };
 
-            console.log("image", selectedImage)
+            console.log("image", results)
             setImage(selectedImage)
 
         }
@@ -51,6 +52,21 @@ export const MessageInput = ({ chatRoom }) => {
         imageOpenPicker(handleImageResult, { cropping: false });
     }
 
+    const handleUpload = async () => {
+        try {
+            const response = await fetch(image?.path);
+            const blob = await response.blob();
+            const key = `${uuidv4()}.png`;
+            await Storage.put(key, blob, {
+                contentType: image?.type
+            })
+            return key;
+        }
+        catch (err) {
+            console.log("err", err)
+        }
+    }
+
     const handleSend = async () => {
         const authUser = await Auth.currentAuthenticatedUser();
 
@@ -59,6 +75,11 @@ export const MessageInput = ({ chatRoom }) => {
             content: message,
             userID: authUser.attributes.sub
 
+        }
+
+        if (image !== undefined) {
+            newMessage.images = [await handleUpload()]
+            setImage(undefined)
         }
         console.log("message req", newMessage)
         const newMessageResponse = await API.graphql(graphqlOperation(createMessage, { input: newMessage }))
