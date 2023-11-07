@@ -17,42 +17,48 @@ Ionicons.loadFont()
 import { absolutePosition, alignItemsEnd, centerHV, centerVertical, colorBlack, colorBlue, colorGray, colorWhite, flexChild, flexRow } from '../../styles'
 import { createMessage, updateChatRoom } from '../../graphql/mutations'
 import { imageOpenPicker } from '../../utils/react-native-image-crop-picker'
+import { FlatList } from 'react-native-gesture-handler'
 
 
 export const MessageInput = ({ chatRoom }) => {
     const [message, setMessage] = useState<string>("")
-    const [image, setImage] = useState<FileBase64 | undefined>()
+    const [images, setImages] = useState<FileBase64[]>([])
 
     const handleInput = (text: string) => {
         setMessage(text)
     }
     console.log("imag", message)
 
-    const handleImageResult = async (results: ImageCrop | ImageCrop[]) => {
-        if (!Array.isArray(results)) {
-            const { data, filename, size, mime, path } = results;
+    const handleImageResult = async (results: ImageCrop[]) => {
+        console.log("results", results)
+        if (results.length > 0) {
 
-            const selectedImage: FileBase64 = {
-                base64: data || "",
-                name: filename,
-                size,
-                type: mime,
-                date: new Date().toDateString(),
-                path,
-            };
+            const imageResults = results.map((eachImage: ImageCrop) => {
+
+                const { data, filename, size, mime, path } = eachImage;
+
+                const selectedImage: FileBase64 = {
+                    base64: data || "",
+                    name: filename,
+                    size,
+                    type: mime,
+                    date: new Date().toDateString(),
+                    path,
+                };
+                return selectedImage;
+            })
 
             console.log("image", results)
-            setImage(selectedImage)
-
+            setImages(imageResults)
         }
         return false;
     };
 
     const handlePicker = async () => {
-        imageOpenPicker(handleImageResult, { cropping: false });
+        imageOpenPicker(handleImageResult, { cropping: false, multiple: true });
     }
 
-    const handleUpload = async () => {
+    const handleUpload = async (image: FileBase64) => {
         try {
             const response = await fetch(image?.path);
             const blob = await response.blob();
@@ -77,14 +83,15 @@ export const MessageInput = ({ chatRoom }) => {
 
         }
 
-        if (image !== undefined) {
-            newMessage.images = [await handleUpload()]
-            setImage(undefined)
+        if (images.length > 0) {
+            const imagesPromiseArray = images.map(handleUpload)
+            newMessage.images = await Promise.all(imagesPromiseArray)
+            setImages([])
         }
         console.log("message req", newMessage)
         const newMessageResponse = await API.graphql(graphqlOperation(createMessage, { input: newMessage }))
         setMessage("")
-        const resp = await API.graphql(graphqlOperation(updateChatRoom, { input: { id: chatRoom.id, chatRoomLastMessageId: newMessageResponse.data.createMessage.id, _version: chatRoom._version } }))
+        await API.graphql(graphqlOperation(updateChatRoom, { input: { id: chatRoom.id, chatRoomLastMessageId: newMessageResponse.data.createMessage.id, _version: chatRoom._version } }))
     }
 
     const buttonContainer: ViewStyle = {
@@ -144,10 +151,22 @@ export const MessageInput = ({ chatRoom }) => {
     return (
         <View>
 
-            {image && (
-                <View style={{ ...alignItemsEnd, backgroundColor: "red" }}>
-                    <Image source={{ uri: image.path }} style={selectedImage} resizeMode="contain" />
-                    <MaterialCommunityIcons name="close-circle-outline" onPress={() => setImage(undefined)} size={20} color={colorBlack._1} style={removeSelectedImage} />
+            {images.length > 0 && (
+                <View style={{ ...alignItemsEnd }}>
+                    <FlatList
+                        data={images}
+                        horizontal={true}
+                        renderItem={({ item }) => {
+                            return (
+                                <>
+                                    <Image source={{ uri: item.path }} style={selectedImage} resizeMode="contain" />
+                                    <MaterialCommunityIcons name="close-circle-outline" onPress={() => setImages((existingImages) => {
+                                        return existingImages.filter((currentImage) => currentImage !== item)
+                                    })} size={20} color={colorBlack._1} style={removeSelectedImage} />
+                                </>
+                            )
+                        }}
+                    />
                 </View>
             )}
             <View style={container}>
@@ -164,7 +183,7 @@ export const MessageInput = ({ chatRoom }) => {
                     <Feather name="camera" size={24} color={colorGray._5} style={icon} />
                     <MaterialCommunityIcons name="microphone-outline" size={24} color={colorGray._5} style={icon} />
                 </View>
-                <Pressable disabled={message === "" && image !== undefined} onPress={handleSend} style={buttonContainer}>
+                <Pressable disabled={message === "" && images.length > 0} onPress={handleSend} style={buttonContainer}>
                     <Ionicons name="send" onPress={handleSend} size={20} color={colorWhite._1} />
                 </Pressable>
             </View>

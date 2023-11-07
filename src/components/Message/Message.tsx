@@ -1,17 +1,22 @@
 import React, { FunctionComponent, useEffect, useState } from 'react'
-import { View, Text, ViewStyle, TextStyle, ImageStyle, Image } from 'react-native'
-import { colorBlack, colorBlue, colorGray, colorWhite } from '../../styles';
+import { View, Text, ViewStyle, TextStyle, ImageStyle, Image, Pressable, useWindowDimensions } from 'react-native'
 import { Auth, Storage } from 'aws-amplify';
+import dayjs from 'dayjs';
+import relativeTime from 'dayjs/plugin/relativeTime'
+import ImageView from "react-native-image-viewing";
+
+import { colorBlack, colorBlue, colorGray, colorWhite, flexRow, flexWrap } from '../../styles';
+
+dayjs.extend(relativeTime)
 
 interface IMessageProps {
     message: IMessage;
 }
 
-const myId = "u1";
-
 export const Message: FunctionComponent<IMessageProps> = ({ message }: IMessageProps) => {
     const [isOwn, setIsOwn] = useState<boolean>(false)
-    const [imageSource, setImageSource] = useState<string | undefined>()
+    const [imageSources, setImageSources] = useState<{ uri: string }[]>([]);
+    const [imageViewVisible, setImageViewVisible] = useState<boolean>(false)
 
 
 
@@ -23,15 +28,20 @@ export const Message: FunctionComponent<IMessageProps> = ({ message }: IMessageP
 
     const getImageSource = async () => {
         if (message.images === null || message.images.length === 0) return;
-        const imageUrls = [await Storage.get(message.images[0])];
-        setImageSource(imageUrls[0])
+        const uris = await Promise.all(message.images.map(Storage.get))
+        setImageSources(uris.map((eachUri) => ({ uri: eachUri })))
 
     }
     console.log('mess', message)
     useEffect(() => {
         checkUser();
-        getImageSource()
     }, [])
+
+    useEffect(() => {
+        getImageSource()
+    }, [message.images])
+
+    const { width } = useWindowDimensions()
     const container: ViewStyle = {
         backgroundColor: isOwn ? colorGray._3 : colorBlue._8,
         padding: 10,
@@ -42,21 +52,44 @@ export const Message: FunctionComponent<IMessageProps> = ({ message }: IMessageP
         marginRight: isOwn ? 10 : "auto",
     }
     const imageStyle: ImageStyle = {
-        height: 100,
-        width: 200,
+        flex: 1,
         borderColor: colorWhite._1,
         borderWidth: 1,
         borderRadius: 5,
     }
+    const imageContainer: ViewStyle = {
+        width: "45%",
+        aspectRatio: 1,
+    }
+
     const textStyle: TextStyle = {
         color: isOwn ? colorBlack._2 : colorWhite._1
+    }
+    const timeText: TextStyle = {
+        color: colorGray._4,
+        alignSelf: "flex-end",
     }
     return (
         <View style={container}>
             {message.images !== null && message.images.length > 0 ? (
-                <Image source={{ uri: imageSource }} style={imageStyle} />
+                <View style={{ width: width * 0.8 - 30 }}>
+                    <View style={{ ...flexRow, ...flexWrap }}>
+                        {imageSources.map((imageSource, index) => (
+                            <Pressable style={[imageContainer, { width: imageSources.length === 1 ? "90%" : "45%" }]} key={index} onPress={() => setImageViewVisible(true)}>
+                                <Image source={imageSource} style={imageStyle} />
+                            </Pressable>
+                        ))}
+                        <ImageView
+                            images={imageSources}
+                            imageIndex={0}
+                            visible={imageViewVisible}
+                            onRequestClose={() => setImageViewVisible(false)}
+                        />
+                    </View>
+                </View>
             ) : null}
             <Text style={textStyle}>{message.content}</Text>
+            <Text style={timeText}>{dayjs(message.createdAt).fromNow(true)}</Text>
         </View>
     )
 }

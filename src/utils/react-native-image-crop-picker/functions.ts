@@ -15,7 +15,7 @@ const SIZES = {
     width: 2000,
 };
 
-type SuccessCallback = (image: Image | Image[]) => void;
+type SuccessCallback = (image: Image[]) => void;
 
 export const imageOpenPicker = async (handleSuccess: SuccessCallback, options?: Options) => {
     try {
@@ -25,7 +25,7 @@ export const imageOpenPicker = async (handleSuccess: SuccessCallback, options?: 
             width: SIZES.width,
             ...options,
         });
-        handleSuccess(image);
+        handleSuccess(image as unknown as Image[]);
     } catch (error) {
         if (JSON.stringify(error).includes("cancelled")) {
             // // eslint-disable-next-line no-console
