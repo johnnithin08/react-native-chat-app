@@ -15,41 +15,39 @@ AntDesign.loadFont();
 Ionicons.loadFont()
 
 import { absolutePosition, alignItemsEnd, centerHV, centerVertical, colorBlack, colorBlue, colorGray, colorWhite, flexChild, flexRow } from '../../styles'
-import { createMessage, updateChatRoom } from '../../graphql/mutations'
+import { createAttachment, createMessage, updateChatRoom } from '../../graphql/mutations'
 import { imageOpenPicker } from '../../utils/react-native-image-crop-picker'
 import { FlatList } from 'react-native-gesture-handler'
 
 
 export const MessageInput = ({ chatRoom }) => {
     const [message, setMessage] = useState<string>("")
-    const [images, setImages] = useState<FileBase64[]>([])
+    const [attachments, setAttachments] = useState<FileBase64[]>([])
 
     const handleInput = (text: string) => {
         setMessage(text)
     }
-    console.log("imag", message)
 
     const handleImageResult = async (results: ImageCrop[]) => {
-        console.log("results", results)
         if (results.length > 0) {
 
             const imageResults = results.map((eachImage: ImageCrop) => {
 
-                const { data, filename, size, mime, path } = eachImage;
-
+                const { data, filename, height, width, size, mime, path } = eachImage;
                 const selectedImage: FileBase64 = {
                     base64: data || "",
+                    date: new Date().toDateString(),
+                    height,
                     name: filename,
+                    path,
                     size,
                     type: mime,
-                    date: new Date().toDateString(),
-                    path,
+                    width
                 };
                 return selectedImage;
             })
 
-            console.log("image", results)
-            setImages(imageResults)
+            setAttachments(imageResults)
         }
         return false;
     };
@@ -58,19 +56,34 @@ export const MessageInput = ({ chatRoom }) => {
         imageOpenPicker(handleImageResult, { cropping: false, multiple: true });
     }
 
-    const handleUpload = async (image: FileBase64) => {
+    const handleUpload = async (file: FileBase64) => {
         try {
-            const response = await fetch(image?.path);
+            const response = await fetch(file?.path);
             const blob = await response.blob();
-            const key = `${uuidv4()}.png`;
+            const key = `${uuidv4()}.${file.type.split("/")[1]}`;
             await Storage.put(key, blob, {
-                contentType: image?.type
+                contentType: file?.type
             })
             return key;
         }
         catch (err) {
             console.log("err", err)
         }
+    }
+
+    const addAttachment = async (file, messageId) => {
+        const newAttachment = {
+            storageKey: await handleUpload(file),
+            type: "IMAGE",
+            width: file.width,
+            height: file.height,
+            duration: file.duration,
+            messageID: messageId,
+            chatroomID: chatRoom.id
+        }
+        const resp = await API.graphql(graphqlOperation(createAttachment, { input: newAttachment }))
+        console.log("check resp", resp)
+        return resp;
     }
 
     const handleSend = async () => {
@@ -83,14 +96,16 @@ export const MessageInput = ({ chatRoom }) => {
 
         }
 
-        if (images.length > 0) {
-            const imagesPromiseArray = images.map(handleUpload)
-            newMessage.images = await Promise.all(imagesPromiseArray)
-            setImages([])
-        }
-        console.log("message req", newMessage)
+        // if (images.length > 0) {
+        //     const imagesPromiseArray = images.map(handleUpload)
+        //     newMessage.images = await Promise.all(imagesPromiseArray)
+        //     setImages([])
+        // }
         const newMessageResponse = await API.graphql(graphqlOperation(createMessage, { input: newMessage }))
         setMessage("")
+
+        await Promise.all(attachments.map((eachAttachment) => addAttachment(eachAttachment, newMessageResponse.data.createMessage.id)))
+        setAttachments([])
         await API.graphql(graphqlOperation(updateChatRoom, { input: { id: chatRoom.id, chatRoomLastMessageId: newMessageResponse.data.createMessage.id, _version: chatRoom._version } }))
     }
 
@@ -151,17 +166,17 @@ export const MessageInput = ({ chatRoom }) => {
     return (
         <View>
 
-            {images.length > 0 && (
+            {attachments.length > 0 && (
                 <View style={{ ...alignItemsEnd }}>
                     <FlatList
-                        data={images}
+                        data={attachments}
                         horizontal={true}
                         renderItem={({ item }) => {
                             return (
                                 <>
                                     <Image source={{ uri: item.path }} style={selectedImage} resizeMode="contain" />
-                                    <MaterialCommunityIcons name="close-circle-outline" onPress={() => setImages((existingImages) => {
-                                        return existingImages.filter((currentImage) => currentImage !== item)
+                                    <MaterialCommunityIcons name="close-circle-outline" onPress={() => setAttachments((existingAttachments) => {
+                                        return existingAttachments.filter((currentAttachment) => currentAttachment !== item)
                                     })} size={20} color={colorBlack._1} style={removeSelectedImage} />
                                 </>
                             )
@@ -183,7 +198,7 @@ export const MessageInput = ({ chatRoom }) => {
                     <Feather name="camera" size={24} color={colorGray._5} style={icon} />
                     <MaterialCommunityIcons name="microphone-outline" size={24} color={colorGray._5} style={icon} />
                 </View>
-                <Pressable disabled={message === "" && images.length > 0} onPress={handleSend} style={buttonContainer}>
+                <Pressable disabled={message === "" && attachments.length > 0} onPress={handleSend} style={buttonContainer}>
                     <Ionicons name="send" onPress={handleSend} size={20} color={colorWhite._1} />
                 </Pressable>
             </View>

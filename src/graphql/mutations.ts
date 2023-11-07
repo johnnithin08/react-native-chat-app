@@ -2,6 +2,75 @@
 /* eslint-disable */
 // this is an auto generated file. This will be overwritten
 
+export const createAttachment = /* GraphQL */ `
+  mutation CreateAttachment(
+    $input: CreateAttachmentInput!
+    $condition: ModelAttachmentConditionInput
+  ) {
+    createAttachment(input: $input, condition: $condition) {
+      id
+      storageKey
+      type
+      width
+      height
+      duration
+      messageID
+      chatroomID
+      createdAt
+      updatedAt
+      _version
+      _deleted
+      _lastChangedAt
+      __typename
+    }
+  }
+`;
+export const updateAttachment = /* GraphQL */ `
+  mutation UpdateAttachment(
+    $input: UpdateAttachmentInput!
+    $condition: ModelAttachmentConditionInput
+  ) {
+    updateAttachment(input: $input, condition: $condition) {
+      id
+      storageKey
+      type
+      width
+      height
+      duration
+      messageID
+      chatroomID
+      createdAt
+      updatedAt
+      _version
+      _deleted
+      _lastChangedAt
+      __typename
+    }
+  }
+`;
+export const deleteAttachment = /* GraphQL */ `
+  mutation DeleteAttachment(
+    $input: DeleteAttachmentInput!
+    $condition: ModelAttachmentConditionInput
+  ) {
+    deleteAttachment(input: $input, condition: $condition) {
+      id
+      storageKey
+      type
+      width
+      height
+      duration
+      messageID
+      chatroomID
+      createdAt
+      updatedAt
+      _version
+      _deleted
+      _lastChangedAt
+      __typename
+    }
+  }
+`;
 export const createMessage = /* GraphQL */ `
   mutation CreateMessage(
     $input: CreateMessageInput!
@@ -13,7 +82,27 @@ export const createMessage = /* GraphQL */ `
       content
       userID
       chatroomID
-      images
+      attachments {
+        items {
+          id
+          storageKey
+          type
+          width
+          height
+          duration
+          messageID
+          chatroomID
+          createdAt
+          updatedAt
+          _version
+          _deleted
+          _lastChangedAt
+          __typename
+        }
+        nextToken
+        startedAt
+        __typename
+      }
       updatedAt
       _version
       _deleted
@@ -33,7 +122,27 @@ export const updateMessage = /* GraphQL */ `
       content
       userID
       chatroomID
-      images
+      attachments {
+        items {
+          id
+          storageKey
+          type
+          width
+          height
+          duration
+          messageID
+          chatroomID
+          createdAt
+          updatedAt
+          _version
+          _deleted
+          _lastChangedAt
+          __typename
+        }
+        nextToken
+        startedAt
+        __typename
+      }
       updatedAt
       _version
       _deleted
@@ -53,7 +162,27 @@ export const deleteMessage = /* GraphQL */ `
       content
       userID
       chatroomID
-      images
+      attachments {
+        items {
+          id
+          storageKey
+          type
+          width
+          height
+          duration
+          messageID
+          chatroomID
+          createdAt
+          updatedAt
+          _version
+          _deleted
+          _lastChangedAt
+          __typename
+        }
+        nextToken
+        startedAt
+        __typename
+      }
       updatedAt
       _version
       _deleted
@@ -78,7 +207,27 @@ export const createChatRoom = /* GraphQL */ `
         content
         userID
         chatroomID
-        images
+        attachments {
+          items {
+            id
+            storageKey
+            type
+            width
+            height
+            duration
+            messageID
+            chatroomID
+            createdAt
+            updatedAt
+            _version
+            _deleted
+            _lastChangedAt
+            __typename
+          }
+          nextToken
+          startedAt
+          __typename
+        }
         updatedAt
         _version
         _deleted
@@ -92,7 +241,27 @@ export const createChatRoom = /* GraphQL */ `
           content
           userID
           chatroomID
-          images
+          attachments {
+            items {
+              id
+              storageKey
+              type
+              width
+              height
+              duration
+              messageID
+              chatroomID
+              createdAt
+              updatedAt
+              _version
+              _deleted
+              _lastChangedAt
+              __typename
+            }
+            nextToken
+            startedAt
+            __typename
+          }
           updatedAt
           _version
           _deleted
@@ -119,7 +288,27 @@ export const createChatRoom = /* GraphQL */ `
               content
               userID
               chatroomID
-              images
+              attachments {
+                items {
+                  id
+                  storageKey
+                  type
+                  width
+                  height
+                  duration
+                  messageID
+                  chatroomID
+                  createdAt
+                  updatedAt
+                  _version
+                  _deleted
+                  _lastChangedAt
+                  __typename
+                }
+                nextToken
+                startedAt
+                __typename
+              }
               updatedAt
               _version
               _deleted
@@ -133,7 +322,11 @@ export const createChatRoom = /* GraphQL */ `
                 content
                 userID
                 chatroomID
-                images
+                attachments {
+                  nextToken
+                  startedAt
+                  __typename
+                }
                 updatedAt
                 _version
                 _deleted
@@ -185,6 +378,27 @@ export const createChatRoom = /* GraphQL */ `
               startedAt
               __typename
             }
+            attachments {
+              items {
+                id
+                storageKey
+                type
+                width
+                height
+                duration
+                messageID
+                chatroomID
+                createdAt
+                updatedAt
+                _version
+                _deleted
+                _lastChangedAt
+                __typename
+              }
+              nextToken
+              startedAt
+              __typename
+            }
             createdAt
             updatedAt
             _version
@@ -205,7 +419,11 @@ export const createChatRoom = /* GraphQL */ `
                 content
                 userID
                 chatroomID
-                images
+                attachments {
+                  nextToken
+                  startedAt
+                  __typename
+                }
                 updatedAt
                 _version
                 _deleted
@@ -264,6 +482,27 @@ export const createChatRoom = /* GraphQL */ `
             _lastChangedAt
             __typename
           }
+          createdAt
+          updatedAt
+          _version
+          _deleted
+          _lastChangedAt
+          __typename
+        }
+        nextToken
+        startedAt
+        __typename
+      }
+      attachments {
+        items {
+          id
+          storageKey
+          type
+          width
+          height
+          duration
+          messageID
+          chatroomID
           createdAt
           updatedAt
           _version
@@ -301,7 +540,27 @@ export const updateChatRoom = /* GraphQL */ `
         content
         userID
         chatroomID
-        images
+        attachments {
+          items {
+            id
+            storageKey
+            type
+            width
+            height
+            duration
+            messageID
+            chatroomID
+            createdAt
+            updatedAt
+            _version
+            _deleted
+            _lastChangedAt
+            __typename
+          }
+          nextToken
+          startedAt
+          __typename
+        }
         updatedAt
         _version
         _deleted
@@ -315,7 +574,27 @@ export const updateChatRoom = /* GraphQL */ `
           content
           userID
           chatroomID
-          images
+          attachments {
+            items {
+              id
+              storageKey
+              type
+              width
+              height
+              duration
+              messageID
+              chatroomID
+              createdAt
+              updatedAt
+              _version
+              _deleted
+              _lastChangedAt
+              __typename
+            }
+            nextToken
+            startedAt
+            __typename
+          }
           updatedAt
           _version
           _deleted
@@ -342,7 +621,27 @@ export const updateChatRoom = /* GraphQL */ `
               content
               userID
               chatroomID
-              images
+              attachments {
+                items {
+                  id
+                  storageKey
+                  type
+                  width
+                  height
+                  duration
+                  messageID
+                  chatroomID
+                  createdAt
+                  updatedAt
+                  _version
+                  _deleted
+                  _lastChangedAt
+                  __typename
+                }
+                nextToken
+                startedAt
+                __typename
+              }
               updatedAt
               _version
               _deleted
@@ -356,7 +655,11 @@ export const updateChatRoom = /* GraphQL */ `
                 content
                 userID
                 chatroomID
-                images
+                attachments {
+                  nextToken
+                  startedAt
+                  __typename
+                }
                 updatedAt
                 _version
                 _deleted
@@ -408,6 +711,27 @@ export const updateChatRoom = /* GraphQL */ `
               startedAt
               __typename
             }
+            attachments {
+              items {
+                id
+                storageKey
+                type
+                width
+                height
+                duration
+                messageID
+                chatroomID
+                createdAt
+                updatedAt
+                _version
+                _deleted
+                _lastChangedAt
+                __typename
+              }
+              nextToken
+              startedAt
+              __typename
+            }
             createdAt
             updatedAt
             _version
@@ -428,7 +752,11 @@ export const updateChatRoom = /* GraphQL */ `
                 content
                 userID
                 chatroomID
-                images
+                attachments {
+                  nextToken
+                  startedAt
+                  __typename
+                }
                 updatedAt
                 _version
                 _deleted
@@ -487,6 +815,27 @@ export const updateChatRoom = /* GraphQL */ `
             _lastChangedAt
             __typename
           }
+          createdAt
+          updatedAt
+          _version
+          _deleted
+          _lastChangedAt
+          __typename
+        }
+        nextToken
+        startedAt
+        __typename
+      }
+      attachments {
+        items {
+          id
+          storageKey
+          type
+          width
+          height
+          duration
+          messageID
+          chatroomID
           createdAt
           updatedAt
           _version
@@ -524,7 +873,27 @@ export const deleteChatRoom = /* GraphQL */ `
         content
         userID
         chatroomID
-        images
+        attachments {
+          items {
+            id
+            storageKey
+            type
+            width
+            height
+            duration
+            messageID
+            chatroomID
+            createdAt
+            updatedAt
+            _version
+            _deleted
+            _lastChangedAt
+            __typename
+          }
+          nextToken
+          startedAt
+          __typename
+        }
         updatedAt
         _version
         _deleted
@@ -538,7 +907,27 @@ export const deleteChatRoom = /* GraphQL */ `
           content
           userID
           chatroomID
-          images
+          attachments {
+            items {
+              id
+              storageKey
+              type
+              width
+              height
+              duration
+              messageID
+              chatroomID
+              createdAt
+              updatedAt
+              _version
+              _deleted
+              _lastChangedAt
+              __typename
+            }
+            nextToken
+            startedAt
+            __typename
+          }
           updatedAt
           _version
           _deleted
@@ -565,7 +954,27 @@ export const deleteChatRoom = /* GraphQL */ `
               content
               userID
               chatroomID
-              images
+              attachments {
+                items {
+                  id
+                  storageKey
+                  type
+                  width
+                  height
+                  duration
+                  messageID
+                  chatroomID
+                  createdAt
+                  updatedAt
+                  _version
+                  _deleted
+                  _lastChangedAt
+                  __typename
+                }
+                nextToken
+                startedAt
+                __typename
+              }
               updatedAt
               _version
               _deleted
@@ -579,7 +988,11 @@ export const deleteChatRoom = /* GraphQL */ `
                 content
                 userID
                 chatroomID
-                images
+                attachments {
+                  nextToken
+                  startedAt
+                  __typename
+                }
                 updatedAt
                 _version
                 _deleted
@@ -631,6 +1044,27 @@ export const deleteChatRoom = /* GraphQL */ `
               startedAt
               __typename
             }
+            attachments {
+              items {
+                id
+                storageKey
+                type
+                width
+                height
+                duration
+                messageID
+                chatroomID
+                createdAt
+                updatedAt
+                _version
+                _deleted
+                _lastChangedAt
+                __typename
+              }
+              nextToken
+              startedAt
+              __typename
+            }
             createdAt
             updatedAt
             _version
@@ -651,7 +1085,11 @@ export const deleteChatRoom = /* GraphQL */ `
                 content
                 userID
                 chatroomID
-                images
+                attachments {
+                  nextToken
+                  startedAt
+                  __typename
+                }
                 updatedAt
                 _version
                 _deleted
@@ -710,6 +1148,27 @@ export const deleteChatRoom = /* GraphQL */ `
             _lastChangedAt
             __typename
           }
+          createdAt
+          updatedAt
+          _version
+          _deleted
+          _lastChangedAt
+          __typename
+        }
+        nextToken
+        startedAt
+        __typename
+      }
+      attachments {
+        items {
+          id
+          storageKey
+          type
+          width
+          height
+          duration
+          messageID
+          chatroomID
           createdAt
           updatedAt
           _version
@@ -748,7 +1207,27 @@ export const createUser = /* GraphQL */ `
           content
           userID
           chatroomID
-          images
+          attachments {
+            items {
+              id
+              storageKey
+              type
+              width
+              height
+              duration
+              messageID
+              chatroomID
+              createdAt
+              updatedAt
+              _version
+              _deleted
+              _lastChangedAt
+              __typename
+            }
+            nextToken
+            startedAt
+            __typename
+          }
           updatedAt
           _version
           _deleted
@@ -775,7 +1254,27 @@ export const createUser = /* GraphQL */ `
               content
               userID
               chatroomID
-              images
+              attachments {
+                items {
+                  id
+                  storageKey
+                  type
+                  width
+                  height
+                  duration
+                  messageID
+                  chatroomID
+                  createdAt
+                  updatedAt
+                  _version
+                  _deleted
+                  _lastChangedAt
+                  __typename
+                }
+                nextToken
+                startedAt
+                __typename
+              }
               updatedAt
               _version
               _deleted
@@ -789,7 +1288,11 @@ export const createUser = /* GraphQL */ `
                 content
                 userID
                 chatroomID
-                images
+                attachments {
+                  nextToken
+                  startedAt
+                  __typename
+                }
                 updatedAt
                 _version
                 _deleted
@@ -841,6 +1344,27 @@ export const createUser = /* GraphQL */ `
               startedAt
               __typename
             }
+            attachments {
+              items {
+                id
+                storageKey
+                type
+                width
+                height
+                duration
+                messageID
+                chatroomID
+                createdAt
+                updatedAt
+                _version
+                _deleted
+                _lastChangedAt
+                __typename
+              }
+              nextToken
+              startedAt
+              __typename
+            }
             createdAt
             updatedAt
             _version
@@ -861,7 +1385,11 @@ export const createUser = /* GraphQL */ `
                 content
                 userID
                 chatroomID
-                images
+                attachments {
+                  nextToken
+                  startedAt
+                  __typename
+                }
                 updatedAt
                 _version
                 _deleted
@@ -957,7 +1485,27 @@ export const updateUser = /* GraphQL */ `
           content
           userID
           chatroomID
-          images
+          attachments {
+            items {
+              id
+              storageKey
+              type
+              width
+              height
+              duration
+              messageID
+              chatroomID
+              createdAt
+              updatedAt
+              _version
+              _deleted
+              _lastChangedAt
+              __typename
+            }
+            nextToken
+            startedAt
+            __typename
+          }
           updatedAt
           _version
           _deleted
@@ -984,7 +1532,27 @@ export const updateUser = /* GraphQL */ `
               content
               userID
               chatroomID
-              images
+              attachments {
+                items {
+                  id
+                  storageKey
+                  type
+                  width
+                  height
+                  duration
+                  messageID
+                  chatroomID
+                  createdAt
+                  updatedAt
+                  _version
+                  _deleted
+                  _lastChangedAt
+                  __typename
+                }
+                nextToken
+                startedAt
+                __typename
+              }
               updatedAt
               _version
               _deleted
@@ -998,7 +1566,11 @@ export const updateUser = /* GraphQL */ `
                 content
                 userID
                 chatroomID
-                images
+                attachments {
+                  nextToken
+                  startedAt
+                  __typename
+                }
                 updatedAt
                 _version
                 _deleted
@@ -1050,6 +1622,27 @@ export const updateUser = /* GraphQL */ `
               startedAt
               __typename
             }
+            attachments {
+              items {
+                id
+                storageKey
+                type
+                width
+                height
+                duration
+                messageID
+                chatroomID
+                createdAt
+                updatedAt
+                _version
+                _deleted
+                _lastChangedAt
+                __typename
+              }
+              nextToken
+              startedAt
+              __typename
+            }
             createdAt
             updatedAt
             _version
@@ -1070,7 +1663,11 @@ export const updateUser = /* GraphQL */ `
                 content
                 userID
                 chatroomID
-                images
+                attachments {
+                  nextToken
+                  startedAt
+                  __typename
+                }
                 updatedAt
                 _version
                 _deleted
@@ -1166,7 +1763,27 @@ export const deleteUser = /* GraphQL */ `
           content
           userID
           chatroomID
-          images
+          attachments {
+            items {
+              id
+              storageKey
+              type
+              width
+              height
+              duration
+              messageID
+              chatroomID
+              createdAt
+              updatedAt
+              _version
+              _deleted
+              _lastChangedAt
+              __typename
+            }
+            nextToken
+            startedAt
+            __typename
+          }
           updatedAt
           _version
           _deleted
@@ -1193,7 +1810,27 @@ export const deleteUser = /* GraphQL */ `
               content
               userID
               chatroomID
-              images
+              attachments {
+                items {
+                  id
+                  storageKey
+                  type
+                  width
+                  height
+                  duration
+                  messageID
+                  chatroomID
+                  createdAt
+                  updatedAt
+                  _version
+                  _deleted
+                  _lastChangedAt
+                  __typename
+                }
+                nextToken
+                startedAt
+                __typename
+              }
               updatedAt
               _version
               _deleted
@@ -1207,7 +1844,11 @@ export const deleteUser = /* GraphQL */ `
                 content
                 userID
                 chatroomID
-                images
+                attachments {
+                  nextToken
+                  startedAt
+                  __typename
+                }
                 updatedAt
                 _version
                 _deleted
@@ -1259,6 +1900,27 @@ export const deleteUser = /* GraphQL */ `
               startedAt
               __typename
             }
+            attachments {
+              items {
+                id
+                storageKey
+                type
+                width
+                height
+                duration
+                messageID
+                chatroomID
+                createdAt
+                updatedAt
+                _version
+                _deleted
+                _lastChangedAt
+                __typename
+              }
+              nextToken
+              startedAt
+              __typename
+            }
             createdAt
             updatedAt
             _version
@@ -1279,7 +1941,11 @@ export const deleteUser = /* GraphQL */ `
                 content
                 userID
                 chatroomID
-                images
+                attachments {
+                  nextToken
+                  startedAt
+                  __typename
+                }
                 updatedAt
                 _version
                 _deleted
@@ -1378,7 +2044,27 @@ export const createChatRoomUser = /* GraphQL */ `
           content
           userID
           chatroomID
-          images
+          attachments {
+            items {
+              id
+              storageKey
+              type
+              width
+              height
+              duration
+              messageID
+              chatroomID
+              createdAt
+              updatedAt
+              _version
+              _deleted
+              _lastChangedAt
+              __typename
+            }
+            nextToken
+            startedAt
+            __typename
+          }
           updatedAt
           _version
           _deleted
@@ -1392,7 +2078,27 @@ export const createChatRoomUser = /* GraphQL */ `
             content
             userID
             chatroomID
-            images
+            attachments {
+              items {
+                id
+                storageKey
+                type
+                width
+                height
+                duration
+                messageID
+                chatroomID
+                createdAt
+                updatedAt
+                _version
+                _deleted
+                _lastChangedAt
+                __typename
+              }
+              nextToken
+              startedAt
+              __typename
+            }
             updatedAt
             _version
             _deleted
@@ -1419,7 +2125,11 @@ export const createChatRoomUser = /* GraphQL */ `
                 content
                 userID
                 chatroomID
-                images
+                attachments {
+                  nextToken
+                  startedAt
+                  __typename
+                }
                 updatedAt
                 _version
                 _deleted
@@ -1433,7 +2143,6 @@ export const createChatRoomUser = /* GraphQL */ `
                   content
                   userID
                   chatroomID
-                  images
                   updatedAt
                   _version
                   _deleted
@@ -1449,6 +2158,27 @@ export const createChatRoomUser = /* GraphQL */ `
                   id
                   chatRoomId
                   userId
+                  createdAt
+                  updatedAt
+                  _version
+                  _deleted
+                  _lastChangedAt
+                  __typename
+                }
+                nextToken
+                startedAt
+                __typename
+              }
+              attachments {
+                items {
+                  id
+                  storageKey
+                  type
+                  width
+                  height
+                  duration
+                  messageID
+                  chatroomID
                   createdAt
                   updatedAt
                   _version
@@ -1480,7 +2210,6 @@ export const createChatRoomUser = /* GraphQL */ `
                   content
                   userID
                   chatroomID
-                  images
                   updatedAt
                   _version
                   _deleted
@@ -1525,6 +2254,27 @@ export const createChatRoomUser = /* GraphQL */ `
           startedAt
           __typename
         }
+        attachments {
+          items {
+            id
+            storageKey
+            type
+            width
+            height
+            duration
+            messageID
+            chatroomID
+            createdAt
+            updatedAt
+            _version
+            _deleted
+            _lastChangedAt
+            __typename
+          }
+          nextToken
+          startedAt
+          __typename
+        }
         createdAt
         updatedAt
         _version
@@ -1545,7 +2295,27 @@ export const createChatRoomUser = /* GraphQL */ `
             content
             userID
             chatroomID
-            images
+            attachments {
+              items {
+                id
+                storageKey
+                type
+                width
+                height
+                duration
+                messageID
+                chatroomID
+                createdAt
+                updatedAt
+                _version
+                _deleted
+                _lastChangedAt
+                __typename
+              }
+              nextToken
+              startedAt
+              __typename
+            }
             updatedAt
             _version
             _deleted
@@ -1572,7 +2342,11 @@ export const createChatRoomUser = /* GraphQL */ `
                 content
                 userID
                 chatroomID
-                images
+                attachments {
+                  nextToken
+                  startedAt
+                  __typename
+                }
                 updatedAt
                 _version
                 _deleted
@@ -1586,7 +2360,6 @@ export const createChatRoomUser = /* GraphQL */ `
                   content
                   userID
                   chatroomID
-                  images
                   updatedAt
                   _version
                   _deleted
@@ -1602,6 +2375,27 @@ export const createChatRoomUser = /* GraphQL */ `
                   id
                   chatRoomId
                   userId
+                  createdAt
+                  updatedAt
+                  _version
+                  _deleted
+                  _lastChangedAt
+                  __typename
+                }
+                nextToken
+                startedAt
+                __typename
+              }
+              attachments {
+                items {
+                  id
+                  storageKey
+                  type
+                  width
+                  height
+                  duration
+                  messageID
+                  chatroomID
                   createdAt
                   updatedAt
                   _version
@@ -1633,7 +2427,6 @@ export const createChatRoomUser = /* GraphQL */ `
                   content
                   userID
                   chatroomID
-                  images
                   updatedAt
                   _version
                   _deleted
@@ -1714,7 +2507,27 @@ export const updateChatRoomUser = /* GraphQL */ `
           content
           userID
           chatroomID
-          images
+          attachments {
+            items {
+              id
+              storageKey
+              type
+              width
+              height
+              duration
+              messageID
+              chatroomID
+              createdAt
+              updatedAt
+              _version
+              _deleted
+              _lastChangedAt
+              __typename
+            }
+            nextToken
+            startedAt
+            __typename
+          }
           updatedAt
           _version
           _deleted
@@ -1728,7 +2541,27 @@ export const updateChatRoomUser = /* GraphQL */ `
             content
             userID
             chatroomID
-            images
+            attachments {
+              items {
+                id
+                storageKey
+                type
+                width
+                height
+                duration
+                messageID
+                chatroomID
+                createdAt
+                updatedAt
+                _version
+                _deleted
+                _lastChangedAt
+                __typename
+              }
+              nextToken
+              startedAt
+              __typename
+            }
             updatedAt
             _version
             _deleted
@@ -1755,7 +2588,11 @@ export const updateChatRoomUser = /* GraphQL */ `
                 content
                 userID
                 chatroomID
-                images
+                attachments {
+                  nextToken
+                  startedAt
+                  __typename
+                }
                 updatedAt
                 _version
                 _deleted
@@ -1769,7 +2606,6 @@ export const updateChatRoomUser = /* GraphQL */ `
                   content
                   userID
                   chatroomID
-                  images
                   updatedAt
                   _version
                   _deleted
@@ -1785,6 +2621,27 @@ export const updateChatRoomUser = /* GraphQL */ `
                   id
                   chatRoomId
                   userId
+                  createdAt
+                  updatedAt
+                  _version
+                  _deleted
+                  _lastChangedAt
+                  __typename
+                }
+                nextToken
+                startedAt
+                __typename
+              }
+              attachments {
+                items {
+                  id
+                  storageKey
+                  type
+                  width
+                  height
+                  duration
+                  messageID
+                  chatroomID
                   createdAt
                   updatedAt
                   _version
@@ -1816,7 +2673,6 @@ export const updateChatRoomUser = /* GraphQL */ `
                   content
                   userID
                   chatroomID
-                  images
                   updatedAt
                   _version
                   _deleted
@@ -1861,6 +2717,27 @@ export const updateChatRoomUser = /* GraphQL */ `
           startedAt
           __typename
         }
+        attachments {
+          items {
+            id
+            storageKey
+            type
+            width
+            height
+            duration
+            messageID
+            chatroomID
+            createdAt
+            updatedAt
+            _version
+            _deleted
+            _lastChangedAt
+            __typename
+          }
+          nextToken
+          startedAt
+          __typename
+        }
         createdAt
         updatedAt
         _version
@@ -1881,7 +2758,27 @@ export const updateChatRoomUser = /* GraphQL */ `
             content
             userID
             chatroomID
-            images
+            attachments {
+              items {
+                id
+                storageKey
+                type
+                width
+                height
+                duration
+                messageID
+                chatroomID
+                createdAt
+                updatedAt
+                _version
+                _deleted
+                _lastChangedAt
+                __typename
+              }
+              nextToken
+              startedAt
+              __typename
+            }
             updatedAt
             _version
             _deleted
@@ -1908,7 +2805,11 @@ export const updateChatRoomUser = /* GraphQL */ `
                 content
                 userID
                 chatroomID
-                images
+                attachments {
+                  nextToken
+                  startedAt
+                  __typename
+                }
                 updatedAt
                 _version
                 _deleted
@@ -1922,7 +2823,6 @@ export const updateChatRoomUser = /* GraphQL */ `
                   content
                   userID
                   chatroomID
-                  images
                   updatedAt
                   _version
                   _deleted
@@ -1938,6 +2838,27 @@ export const updateChatRoomUser = /* GraphQL */ `
                   id
                   chatRoomId
                   userId
+                  createdAt
+                  updatedAt
+                  _version
+                  _deleted
+                  _lastChangedAt
+                  __typename
+                }
+                nextToken
+                startedAt
+                __typename
+              }
+              attachments {
+                items {
+                  id
+                  storageKey
+                  type
+                  width
+                  height
+                  duration
+                  messageID
+                  chatroomID
                   createdAt
                   updatedAt
                   _version
@@ -1969,7 +2890,6 @@ export const updateChatRoomUser = /* GraphQL */ `
                   content
                   userID
                   chatroomID
-                  images
                   updatedAt
                   _version
                   _deleted
@@ -2050,7 +2970,27 @@ export const deleteChatRoomUser = /* GraphQL */ `
           content
           userID
           chatroomID
-          images
+          attachments {
+            items {
+              id
+              storageKey
+              type
+              width
+              height
+              duration
+              messageID
+              chatroomID
+              createdAt
+              updatedAt
+              _version
+              _deleted
+              _lastChangedAt
+              __typename
+            }
+            nextToken
+            startedAt
+            __typename
+          }
           updatedAt
           _version
           _deleted
@@ -2064,7 +3004,27 @@ export const deleteChatRoomUser = /* GraphQL */ `
             content
             userID
             chatroomID
-            images
+            attachments {
+              items {
+                id
+                storageKey
+                type
+                width
+                height
+                duration
+                messageID
+                chatroomID
+                createdAt
+                updatedAt
+                _version
+                _deleted
+                _lastChangedAt
+                __typename
+              }
+              nextToken
+              startedAt
+              __typename
+            }
             updatedAt
             _version
             _deleted
@@ -2091,7 +3051,11 @@ export const deleteChatRoomUser = /* GraphQL */ `
                 content
                 userID
                 chatroomID
-                images
+                attachments {
+                  nextToken
+                  startedAt
+                  __typename
+                }
                 updatedAt
                 _version
                 _deleted
@@ -2105,7 +3069,6 @@ export const deleteChatRoomUser = /* GraphQL */ `
                   content
                   userID
                   chatroomID
-                  images
                   updatedAt
                   _version
                   _deleted
@@ -2121,6 +3084,27 @@ export const deleteChatRoomUser = /* GraphQL */ `
                   id
                   chatRoomId
                   userId
+                  createdAt
+                  updatedAt
+                  _version
+                  _deleted
+                  _lastChangedAt
+                  __typename
+                }
+                nextToken
+                startedAt
+                __typename
+              }
+              attachments {
+                items {
+                  id
+                  storageKey
+                  type
+                  width
+                  height
+                  duration
+                  messageID
+                  chatroomID
                   createdAt
                   updatedAt
                   _version
@@ -2152,7 +3136,6 @@ export const deleteChatRoomUser = /* GraphQL */ `
                   content
                   userID
                   chatroomID
-                  images
                   updatedAt
                   _version
                   _deleted
@@ -2197,6 +3180,27 @@ export const deleteChatRoomUser = /* GraphQL */ `
           startedAt
           __typename
         }
+        attachments {
+          items {
+            id
+            storageKey
+            type
+            width
+            height
+            duration
+            messageID
+            chatroomID
+            createdAt
+            updatedAt
+            _version
+            _deleted
+            _lastChangedAt
+            __typename
+          }
+          nextToken
+          startedAt
+          __typename
+        }
         createdAt
         updatedAt
         _version
@@ -2217,7 +3221,27 @@ export const deleteChatRoomUser = /* GraphQL */ `
             content
             userID
             chatroomID
-            images
+            attachments {
+              items {
+                id
+                storageKey
+                type
+                width
+                height
+                duration
+                messageID
+                chatroomID
+                createdAt
+                updatedAt
+                _version
+                _deleted
+                _lastChangedAt
+                __typename
+              }
+              nextToken
+              startedAt
+              __typename
+            }
             updatedAt
             _version
             _deleted
@@ -2244,7 +3268,11 @@ export const deleteChatRoomUser = /* GraphQL */ `
                 content
                 userID
                 chatroomID
-                images
+                attachments {
+                  nextToken
+                  startedAt
+                  __typename
+                }
                 updatedAt
                 _version
                 _deleted
@@ -2258,7 +3286,6 @@ export const deleteChatRoomUser = /* GraphQL */ `
                   content
                   userID
                   chatroomID
-                  images
                   updatedAt
                   _version
                   _deleted
@@ -2274,6 +3301,27 @@ export const deleteChatRoomUser = /* GraphQL */ `
                   id
                   chatRoomId
                   userId
+                  createdAt
+                  updatedAt
+                  _version
+                  _deleted
+                  _lastChangedAt
+                  __typename
+                }
+                nextToken
+                startedAt
+                __typename
+              }
+              attachments {
+                items {
+                  id
+                  storageKey
+                  type
+                  width
+                  height
+                  duration
+                  messageID
+                  chatroomID
                   createdAt
                   updatedAt
                   _version
@@ -2305,7 +3353,6 @@ export const deleteChatRoomUser = /* GraphQL */ `
                   content
                   userID
                   chatroomID
-                  images
                   updatedAt
                   _version
                   _deleted

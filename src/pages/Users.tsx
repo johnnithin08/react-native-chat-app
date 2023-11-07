@@ -26,7 +26,6 @@ export const Users = () => {
 
             const checkExistingChatRooms = await getCommonChatRooms(item.id)
             if (checkExistingChatRooms) {
-                console.log("exi", checkExistingChatRooms)
                 navigation.navigate("ChatRoom", { id: checkExistingChatRooms.chatRoom.id })
                 return;
             }

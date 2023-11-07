@@ -28,7 +28,6 @@ export const AddContact = () => {
         try {
             const fetchedUsers = await API.graphql(graphqlOperation(listUsers))
             setUsers(fetchedUsers.data?.listUsers?.items.filter((eachUser) => !chatRoom.users.items.some((existingUser) => !existingUser._deleted && existingUser.userId === eachUser.id)))
-            console.log("chatromm", fetchedUsers.data?.listUsers?.items, chatRoom)
 
         }
         catch (err) {
@@ -57,8 +56,6 @@ export const AddContact = () => {
                 await API.graphql(graphqlOperation(createChatRoomUser, { input: { chatRoomId: chatRoom.id, userId: selectedId } }))
             })
 
-            console.log("resp", chatRoomUserPromise)
-
             await Promise.all(chatRoomUserPromise)
 
             navigation.goBack();
@@ -85,7 +82,6 @@ export const AddContact = () => {
         });
     }, [selectedIds]);
 
-    console.log("sele", selectedIds)
 
     const inputStyle: ViewStyle = {
         borderColor: "lightgray",

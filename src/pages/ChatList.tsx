@@ -20,7 +20,6 @@ export const ChatList = () => {
             setLoading(true)
             const authUser = await Auth.currentAuthenticatedUser()
             const chatRoomsResponse = await API.graphql(graphqlOperation(listChatRooms, { id: authUser.attributes.sub }))
-            console.log("chats", chatRoomsResponse)
             const rooms = chatRoomsResponse.data?.getUser?.chatrooms?.items.filter((room) => !room._deleted)
             const sortedChatRooms = rooms.sort((a, b) => new Date(b.chatRoom.updatedAt) - new Date(a.chatRoom.updatedAt))
             setLoading(false)

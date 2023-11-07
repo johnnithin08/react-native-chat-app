@@ -15,31 +15,31 @@ interface IMessageProps {
 
 export const Message: FunctionComponent<IMessageProps> = ({ message }: IMessageProps) => {
     const [isOwn, setIsOwn] = useState<boolean>(false)
-    const [imageSources, setImageSources] = useState<{ uri: string }[]>([]);
+    const [attachments, setAttachments] = useState<{ uri: string }[]>([]);
     const [imageViewVisible, setImageViewVisible] = useState<boolean>(false)
 
-
+    console.log("mess", message)
 
     const checkUser = async () => {
         const authUser = await Auth.currentAuthenticatedUser();
-        console.log("check", message, authUser);
         setIsOwn(message.userID === authUser.attributes.sub);
     }
 
-    const getImageSource = async () => {
-        if (message.images === null || message.images.length === 0) return;
-        const uris = await Promise.all(message.images.map(Storage.get))
-        setImageSources(uris.map((eachUri) => ({ uri: eachUri })))
+    const getAttachmentSource = async () => {
+        if (message.attachments.items === null || message.attachments.items.length === 0) return;
+        const allAttachments = await Promise.all(message.attachments.items.map((eachAttachment) => Storage.get(eachAttachment.storageKey).then((uri) => {
+            return { ...eachAttachment, uri }
+        })))
+        setAttachments(allAttachments)
 
     }
-    console.log('mess', message)
     useEffect(() => {
         checkUser();
     }, [])
 
     useEffect(() => {
-        getImageSource()
-    }, [message.images])
+        getAttachmentSource()
+    }, [message.attachments.items])
 
     const { width } = useWindowDimensions()
     const container: ViewStyle = {
@@ -71,16 +71,16 @@ export const Message: FunctionComponent<IMessageProps> = ({ message }: IMessageP
     }
     return (
         <View style={container}>
-            {message.images !== null && message.images.length > 0 ? (
+            {message.attachments.items !== null && message.attachments.items.length > 0 ? (
                 <View style={{ width: width * 0.8 - 30 }}>
                     <View style={{ ...flexRow, ...flexWrap }}>
-                        {imageSources.map((imageSource, index) => (
-                            <Pressable style={[imageContainer, { width: imageSources.length === 1 ? "90%" : "45%" }]} key={index} onPress={() => setImageViewVisible(true)}>
-                                <Image source={imageSource} style={imageStyle} />
+                        {attachments.map((eachAttachment, index) => (
+                            <Pressable style={[imageContainer, { width: attachments.length === 1 ? "90%" : "45%" }]} key={index} onPress={() => setImageViewVisible(true)}>
+                                <Image source={{ uri: eachAttachment.uri }} style={imageStyle} />
                             </Pressable>
                         ))}
                         <ImageView
-                            images={imageSources}
+                            images={attachments}
                             imageIndex={0}
                             visible={imageViewVisible}
                             onRequestClose={() => setImageViewVisible(false)}

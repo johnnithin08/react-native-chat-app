@@ -23,14 +23,11 @@ export const GroupInfo = () => {
 
     const chatroomID = route.params.id;
 
-    console.log("id", chatroomID)
-
     const fetchChatRoom = async () => {
         setLoading(true);
         const result = await API.graphql(
             graphqlOperation(getChatRoom, { id: chatroomID })
         );
-        console.log("checkres", result)
         setChatRoom(result.data?.getChatRoom);
         setLoading(false);
     };
