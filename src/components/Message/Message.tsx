@@ -4,6 +4,8 @@ import { Auth, Storage } from 'aws-amplify';
 import dayjs from 'dayjs';
 import relativeTime from 'dayjs/plugin/relativeTime'
 import ImageView from "react-native-image-viewing";
+import Video from 'react-native-video';
+
 
 import { colorBlack, colorBlue, colorGray, colorWhite, flexRow, flexWrap } from '../../styles';
 
@@ -18,8 +20,6 @@ export const Message: FunctionComponent<IMessageProps> = ({ message }: IMessageP
     const [attachments, setAttachments] = useState<{ uri: string }[]>([]);
     const [imageViewVisible, setImageViewVisible] = useState<boolean>(false)
 
-    console.log("mess", message)
-
     const checkUser = async () => {
         const authUser = await Auth.currentAuthenticatedUser();
         setIsOwn(message.userID === authUser.attributes.sub);
@@ -33,6 +33,7 @@ export const Message: FunctionComponent<IMessageProps> = ({ message }: IMessageP
         setAttachments(allAttachments)
 
     }
+
     useEffect(() => {
         checkUser();
     }, [])
@@ -69,14 +70,29 @@ export const Message: FunctionComponent<IMessageProps> = ({ message }: IMessageP
         color: colorGray._4,
         alignSelf: "flex-end",
     }
+
     return (
         <View style={container}>
             {message.attachments.items !== null && message.attachments.items.length > 0 ? (
                 <View style={{ width: width * 0.8 - 30 }}>
                     <View style={{ ...flexRow, ...flexWrap }}>
                         {attachments.map((eachAttachment, index) => (
-                            <Pressable style={[imageContainer, { width: attachments.length === 1 ? "90%" : "45%" }]} key={index} onPress={() => setImageViewVisible(true)}>
-                                <Image source={{ uri: eachAttachment.uri }} style={imageStyle} />
+                            <Pressable
+                                style={[imageContainer, { width: attachments.length === 1 ? "90%" : "45%" }]} key={index} onPress={() => {
+                                    if (eachAttachment.type === "IMAGE") {
+                                        setImageViewVisible(true)
+                                    }
+                                }}>
+                                {eachAttachment.type === "IMAGE" ? (
+                                    <Image source={{ uri: eachAttachment.uri }} style={imageStyle} />
+                                ) : (
+                                    <Video source={{ uri: eachAttachment.uri }}
+                                        style={imageStyle}
+                                        controls={true}
+                                        repeat={false}
+                                        paused={true}
+                                    />
+                                )}
                             </Pressable>
                         ))}
                         <ImageView

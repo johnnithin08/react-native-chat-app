@@ -8,6 +8,8 @@ import Feather from "react-native-vector-icons/Feather"
 import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons"
 import AntDesign from "react-native-vector-icons/AntDesign"
 import Ionicons from "react-native-vector-icons/Ionicons"
+import { Asset, ImagePickerResponse, launchCamera, launchImageLibrary } from 'react-native-image-picker';
+import Video from 'react-native-video';
 
 Feather.loadFont();
 MaterialCommunityIcons.loadFont();
@@ -28,22 +30,25 @@ export const MessageInput = ({ chatRoom }) => {
         setMessage(text)
     }
 
-    const handleImageResult = async (results: ImageCrop[]) => {
-        if (results.length > 0) {
+    const handleImageResult = async (results: ImagePickerResponse) => {
+        console.log("res", results)
+        if (results.assets !== undefined && results.assets.length > 0) {
 
-            const imageResults = results.map((eachImage: ImageCrop) => {
+            const imageResults = results.assets.map((eachImage: Asset) => {
 
-                const { data, filename, height, width, size, mime, path } = eachImage;
+                const { base64, fileName, height, width, fileSize, duration, type, uri } = eachImage;
                 const selectedImage: FileBase64 = {
-                    base64: data || "",
+                    base64: base64 || "",
                     date: new Date().toDateString(),
+                    duration,
                     height,
-                    name: filename,
-                    path,
-                    size,
-                    type: mime,
-                    width
+                    name: fileName,
+                    size: fileSize,
+                    type: type,
+                    width,
+                    url: uri?.split("file://")[1]
                 };
+                console.log("selected", selectedImage)
                 return selectedImage;
             })
 
@@ -53,12 +58,14 @@ export const MessageInput = ({ chatRoom }) => {
     };
 
     const handlePicker = async () => {
-        imageOpenPicker(handleImageResult, { cropping: false, multiple: true });
+        const result = await launchImageLibrary({ mediaType: "mixed", videoQuality: "medium", quality: 0.5, presentationStyle: "fullScreen" });
+        handleImageResult(result)
+        // imageOpenPicker(handleImageResult, { cropping: false, multiple: true });
     }
 
     const handleUpload = async (file: FileBase64) => {
         try {
-            const response = await fetch(file?.path);
+            const response = await fetch(file.url);
             const blob = await response.blob();
             const key = `${uuidv4()}.${file.type.split("/")[1]}`;
             await Storage.put(key, blob, {
@@ -67,23 +74,29 @@ export const MessageInput = ({ chatRoom }) => {
             return key;
         }
         catch (err) {
-            console.log("err", err)
+            console.log("err in upload", err)
         }
     }
 
     const addAttachment = async (file, messageId) => {
-        const newAttachment = {
-            storageKey: await handleUpload(file),
-            type: "IMAGE",
-            width: file.width,
-            height: file.height,
-            duration: file.duration,
-            messageID: messageId,
-            chatroomID: chatRoom.id
+        try {
+
+            const newAttachment = {
+                storageKey: await handleUpload(file),
+                type: file.duration === undefined ? "IMAGE" : "VIDEO",
+                width: file.width,
+                height: file.height,
+                duration: file.duration !== undefined ? file.duration * 1000 : null,
+                messageID: messageId,
+                chatroomID: chatRoom.id
+            }
+            const resp = await API.graphql(graphqlOperation(createAttachment, { input: newAttachment }))
+            console.log("check resp", resp)
+            return resp;
         }
-        const resp = await API.graphql(graphqlOperation(createAttachment, { input: newAttachment }))
-        console.log("check resp", resp)
-        return resp;
+        catch (err) {
+            console.log("err in graph", err)
+        }
     }
 
     const handleSend = async () => {
@@ -172,9 +185,19 @@ export const MessageInput = ({ chatRoom }) => {
                         data={attachments}
                         horizontal={true}
                         renderItem={({ item }) => {
+                            console.log("atta", item)
                             return (
                                 <>
-                                    <Image source={{ uri: item.path }} style={selectedImage} resizeMode="contain" />
+                                    {item.duration !== undefined ? (
+                                        <Video source={{ uri: item.url }}
+                                            style={selectedImage}
+                                            controls={true}
+                                            repeat={false}
+                                            paused={true}
+                                        />
+                                    ) : (
+                                        <Image source={{ uri: item.url }} style={selectedImage} resizeMode="contain" />
+                                    )}
                                     <MaterialCommunityIcons name="close-circle-outline" onPress={() => setAttachments((existingAttachments) => {
                                         return existingAttachments.filter((currentAttachment) => currentAttachment !== item)
                                     })} size={20} color={colorBlack._1} style={removeSelectedImage} />

@@ -4,7 +4,7 @@ const defaultOptions: Options = {
     cropping: false,
     forceJpg: true,
     includeBase64: true,
-    mediaType: "photo",
+    mediaType: "any",
     multiple: false,
     // android
     freeStyleCropEnabled: true,
