@@ -16,7 +16,7 @@ MaterialCommunityIcons.loadFont();
 AntDesign.loadFont();
 Ionicons.loadFont()
 
-import { absolutePosition, alignItemsEnd, centerHV, centerVertical, colorBlack, colorBlue, colorGray, colorWhite, flexChild, flexRow } from '../../styles'
+import { absolutePosition, alignItemsEnd, centerHV, centerVertical, colorBlack, colorBlue, colorGray, colorWhite, flexChild, flexRow, fs12RegBlack2, fs12RegWhite1 } from '../../styles'
 import { createAttachment, createMessage, updateChatRoom } from '../../graphql/mutations'
 import { imageOpenPicker } from '../../utils/react-native-image-crop-picker'
 import { FlatList } from 'react-native-gesture-handler'
@@ -25,6 +25,7 @@ import { FlatList } from 'react-native-gesture-handler'
 export const MessageInput = ({ chatRoom }) => {
     const [message, setMessage] = useState<string>("")
     const [attachments, setAttachments] = useState<FileBase64[]>([])
+    const [progresses, setProgresses] = useState({})
 
     const handleInput = (text: string) => {
         setMessage(text)
@@ -69,7 +70,10 @@ export const MessageInput = ({ chatRoom }) => {
             const blob = await response.blob();
             const key = `${uuidv4()}.${file.type.split("/")[1]}`;
             await Storage.put(key, blob, {
-                contentType: file?.type
+                contentType: file?.type,
+                progressCallback: (progress) => {
+                    setProgresses((currentProgress) => ({ ...currentProgress, [file.url]: progress.loaded / progress.total }))
+                },
             })
             return key;
         }
@@ -109,16 +113,12 @@ export const MessageInput = ({ chatRoom }) => {
 
         }
 
-        // if (images.length > 0) {
-        //     const imagesPromiseArray = images.map(handleUpload)
-        //     newMessage.images = await Promise.all(imagesPromiseArray)
-        //     setImages([])
-        // }
         const newMessageResponse = await API.graphql(graphqlOperation(createMessage, { input: newMessage }))
         setMessage("")
 
         await Promise.all(attachments.map((eachAttachment) => addAttachment(eachAttachment, newMessageResponse.data.createMessage.id)))
         setAttachments([])
+        setProgresses({})
         await API.graphql(graphqlOperation(updateChatRoom, { input: { id: chatRoom.id, chatRoomLastMessageId: newMessageResponse.data.createMessage.id, _version: chatRoom._version } }))
     }
 
@@ -176,6 +176,8 @@ export const MessageInput = ({ chatRoom }) => {
         overflow: "hidden"
     }
 
+    console.log('pro', progresses)
+
     return (
         <View>
 
@@ -189,14 +191,28 @@ export const MessageInput = ({ chatRoom }) => {
                             return (
                                 <>
                                     {item.duration !== undefined ? (
-                                        <Video source={{ uri: item.url }}
-                                            style={selectedImage}
-                                            controls={true}
-                                            repeat={false}
-                                            paused={true}
-                                        />
+                                        <>
+                                            <Video source={{ uri: item.url }}
+                                                style={selectedImage}
+                                                controls={true}
+                                                repeat={false}
+                                                paused={true}
+                                            />
+                                            {progresses[item.url] ? (
+                                                <View style={{ ...absolutePosition, top: "40%", left: "40%", backgroundColor: colorGray._2, padding: 10, borderRadius: 50, }}>
+                                                    <Text style={fs12RegBlack2}>{(progresses[item.url] * 100).toFixed(2)} %</Text>
+                                                </View>
+                                            ) : null}
+                                        </>
                                     ) : (
-                                        <Image source={{ uri: item.url }} style={selectedImage} resizeMode="contain" />
+                                        <>
+                                            <Image source={{ uri: item.url }} style={selectedImage} resizeMode="contain" />
+                                            {progresses[item.url] ? (
+                                                <View style={{ ...absolutePosition, top: "40%", left: "40%", backgroundColor: colorGray._2, padding: 10, borderRadius: 50, }}>
+                                                    <Text style={fs12RegBlack2}>{(progresses[item.url] * 100).toFixed(2)} %</Text>
+                                                </View>
+                                            ) : null}
+                                        </>
                                     )}
                                     <MaterialCommunityIcons name="close-circle-outline" onPress={() => setAttachments((existingAttachments) => {
                                         return existingAttachments.filter((currentAttachment) => currentAttachment !== item)

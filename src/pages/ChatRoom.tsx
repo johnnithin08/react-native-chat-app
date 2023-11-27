@@ -11,7 +11,7 @@ import { FlatList } from 'react-native-gesture-handler'
 import { useNavigation, useRoute } from '@react-navigation/native'
 import { API, Auth, graphqlOperation } from 'aws-amplify'
 import { getChatRoom, listMessagesByChatRoom } from '../graphql/queries'
-import { onCreateMessage, onUpdateChatRoom } from '../graphql/subscriptions'
+import { onCreateAttachment, onCreateMessage, onUpdateChatRoom } from '../graphql/subscriptions'
 import { imageOpenPicker } from '../utils/react-native-image-crop-picker'
 
 Feather.loadFont();
@@ -64,10 +64,28 @@ export const ChatRoom = () => {
                 },
                 error: (err) => console.warn(err)
             })
+        const subscribeAttachment =
+            API.graphql(graphqlOperation(onCreateAttachment, { filter: { chatroomID: { eq: chatRoomId } } })).subscribe({
+                next: ({ value }) => {
+                    console.log('value', value)
+                    const newAttachment = value.data.onCreateAttachment;
+                    setMessages((existingMessages) => {
+                        const messageIndex = existingMessages.findIndex((eachMessage) => eachMessage.id === newAttachment.messageID)
+                        console.log("index", messageIndex)
+                        if (messageIndex === -1) return existingMessages;
+                        const currentMessages = [...existingMessages];
+                        currentMessages[messageIndex] = { ...existingMessages[messageIndex], attachments: { items: [newAttachment] } }
+                        console.log("curr", currentMessages)
+                        return currentMessages;
+                    })
+                },
+                error: (err) => console.warn(err)
+            })
         fetchMessages();
 
         return () => {
             subscribeMessages.unsubscribe();
+            subscribeAttachment.unsubscribe();
         }
     }, [chatRoomId])
 

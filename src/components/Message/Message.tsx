@@ -38,6 +38,8 @@ export const Message: FunctionComponent<IMessageProps> = ({ message }: IMessageP
         checkUser();
     }, [])
 
+    console.log("mess", message)
+
     useEffect(() => {
         getAttachmentSource()
     }, [message.attachments.items])
