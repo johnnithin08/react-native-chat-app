@@ -9,8 +9,8 @@ import { useNavigation } from '@react-navigation/native'
 import MaterialIcons from "react-native-vector-icons/MaterialIcons"
 
 import { User } from "../models"
-import { DataStore } from '@aws-amplify/datastore'
-import { API, Auth, graphqlOperation } from 'aws-amplify'
+import { generateClient } from 'aws-amplify/api';
+import { getCurrentUser } from 'aws-amplify/auth';
 import { listUsers } from '../graphql/queries'
 import { createChatRoom, createChatRoomUser } from '../graphql/mutations'
 
@@ -20,12 +20,15 @@ export const NewGroup = () => {
     const [users, setUsers] = useState<User[]>([])
     const [name, setName] = useState<string>("")
     const [selectedIds, setSelectedIds] = useState<string[]>([])
-    const navigation = useNavigation()
+    const navigation = useNavigation();
+    const client = generateClient();
 
 
     const fetchUsers = async () => {
         try {
-            const fetchedUsers = await API.graphql(graphqlOperation(listUsers))
+            const fetchedUsers = await client.graphql({
+                query: listUsers
+            })
             setUsers(fetchedUsers.data?.listUsers?.items)
 
         }
@@ -51,7 +54,10 @@ export const NewGroup = () => {
     const handleNewGroup = async () => {
         try {
 
-            const newChatRoomData = await API.graphql(graphqlOperation(createChatRoom, { input: { name: name } }))
+            const newChatRoomData = await client.graphql({
+                query: createChatRoom,
+                variables: { input: { name: name } }
+            })
             if (!newChatRoomData.data?.createChatRoom) {
                 console.log("err")
             }
@@ -59,13 +65,19 @@ export const NewGroup = () => {
 
 
             const chatRoomUserPromise = selectedIds.map(async (selectedId) => {
-                await API.graphql(graphqlOperation(createChatRoomUser, { input: { chatRoomId: newChatRoom.id, userId: selectedId } }))
+                await client.graphql({
+                    query: createChatRoomUser,
+                    variables: { input: { chatRoomId: newChatRoom.id, userId: selectedId } }
+                })
             })
 
             await Promise.all(chatRoomUserPromise)
-            const authUser = await Auth.currentAuthenticatedUser();
+            const authUser = await getCurrentUser();
 
-            await API.graphql(graphqlOperation(createChatRoomUser, { input: { chatRoomId: newChatRoom.id, userId: authUser.attributes.sub } }))
+            await client.graphql({
+                query: createChatRoomUser,
+                variables: { input: { chatRoomId: newChatRoom.id, userId: authUser.userId } }
+            })
 
             navigation.navigate("ChatRoom", { id: newChatRoom.id, name: name })
 

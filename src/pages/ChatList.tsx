@@ -6,7 +6,8 @@ import { colorWhite, flexChild } from '../styles'
 import { FlatList } from 'react-native-gesture-handler'
 import { useNavigation } from '@react-navigation/native'
 import { useAuthenticator } from '@aws-amplify/ui-react-native'
-import { API, Auth, graphqlOperation } from 'aws-amplify'
+import { generateClient } from 'aws-amplify/api';
+import { getCurrentUser } from 'aws-amplify/auth';
 import { listChatRooms } from '../graphql/customQueries'
 
 export const ChatList = () => {
@@ -14,12 +15,16 @@ export const ChatList = () => {
     const { signOut } = useAuthenticator();
     const [chatRooms, setChatRooms] = useState([])
     const [loading, setLoading] = useState<boolean>(false)
+    const client = generateClient()
 
     const fetchChatRooms = async () => {
         try {
             setLoading(true)
-            const authUser = await Auth.currentAuthenticatedUser()
-            const chatRoomsResponse = await API.graphql(graphqlOperation(listChatRooms, { id: authUser.attributes.sub }))
+            const authUser = await getCurrentUser()
+            const chatRoomsResponse = await client.graphql({
+                query: listChatRooms,
+                variables: { id: authUser.userId }
+            })
             const rooms = chatRoomsResponse.data?.getUser?.chatrooms?.items.filter((room) => !room._deleted)
             const sortedChatRooms = rooms.sort((a, b) => new Date(b.chatRoom.updatedAt) - new Date(a.chatRoom.updatedAt))
             setLoading(false)

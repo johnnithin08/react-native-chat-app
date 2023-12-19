@@ -1,6 +1,8 @@
 import React, { useState } from 'react'
 import { View, Text, ViewStyle, TextInput, Pressable, Image, ImageStyle } from 'react-native'
-import { API, Auth, Storage, graphqlOperation } from 'aws-amplify'
+import { generateClient } from 'aws-amplify/api';
+import { getCurrentUser } from 'aws-amplify/auth';
+import { uploadData } from 'aws-amplify/storage';
 import { Image as ImageCrop } from 'react-native-image-crop-picker'
 import "react-native-get-random-values"
 import { v4 as uuidv4 } from "uuid"
@@ -26,6 +28,8 @@ export const MessageInput = ({ chatRoom }) => {
     const [message, setMessage] = useState<string>("")
     const [attachments, setAttachments] = useState<FileBase64[]>([])
     const [progresses, setProgresses] = useState({})
+
+    const client = generateClient();
 
     const handleInput = (text: string) => {
         setMessage(text)
@@ -69,11 +73,15 @@ export const MessageInput = ({ chatRoom }) => {
             const response = await fetch(file.url);
             const blob = await response.blob();
             const key = `${uuidv4()}.${file.type.split("/")[1]}`;
-            await Storage.put(key, blob, {
-                contentType: file?.type,
-                progressCallback: (progress) => {
-                    setProgresses((currentProgress) => ({ ...currentProgress, [file.url]: progress.loaded / progress.total }))
-                },
+            await uploadData({
+                key: key,
+                data: blob,
+                options: {
+                    contentType: file?.type,
+                    onProgress: (progress) => {
+                        setProgresses((currentProgress) => ({ ...currentProgress, [file.url]: progress.transferredBytes / progress.totalBytes }))
+                    },
+                }
             })
             return key;
         }
@@ -94,7 +102,10 @@ export const MessageInput = ({ chatRoom }) => {
                 messageID: messageId,
                 chatroomID: chatRoom.id
             }
-            const resp = await API.graphql(graphqlOperation(createAttachment, { input: newAttachment }))
+            const resp = await client.graphql({
+                query: createAttachment,
+                variables: { input: newAttachment }
+            })
             console.log("check resp", resp)
             return resp;
         }
@@ -104,22 +115,28 @@ export const MessageInput = ({ chatRoom }) => {
     }
 
     const handleSend = async () => {
-        const authUser = await Auth.currentAuthenticatedUser();
+        const authUser = await getCurrentUser();
 
         const newMessage = {
             chatroomID: chatRoom.id,
             content: message,
-            userID: authUser.attributes.sub
+            userID: authUser.userId
 
         }
 
-        const newMessageResponse = await API.graphql(graphqlOperation(createMessage, { input: newMessage }))
+        const newMessageResponse = await client.graphql({
+            query: createMessage,
+            variables: { input: newMessage }
+        })
         setMessage("")
 
         await Promise.all(attachments.map((eachAttachment) => addAttachment(eachAttachment, newMessageResponse.data.createMessage.id)))
         setAttachments([])
         setProgresses({})
-        await API.graphql(graphqlOperation(updateChatRoom, { input: { id: chatRoom.id, chatRoomLastMessageId: newMessageResponse.data.createMessage.id, _version: chatRoom._version } }))
+        await client.graphql({
+            query: updateChatRoom,
+            variables: { input: { id: chatRoom.id, chatRoomLastMessageId: newMessageResponse.data.createMessage.id, _version: chatRoom._version } }
+        })
     }
 
     const buttonContainer: ViewStyle = {

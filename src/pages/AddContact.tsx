@@ -9,8 +9,8 @@ import { useNavigation, useRoute } from '@react-navigation/native'
 import MaterialIcons from "react-native-vector-icons/MaterialIcons"
 
 import { User } from "../models"
-import { DataStore } from '@aws-amplify/datastore'
-import { API, Auth, graphqlOperation } from 'aws-amplify'
+import { generateClient } from 'aws-amplify/api';
+import { getCurrentUser } from 'aws-amplify/auth';
 import { listUsers } from '../graphql/queries'
 import { createChatRoom, createChatRoomUser } from '../graphql/mutations'
 
@@ -21,12 +21,15 @@ export const AddContact = () => {
     const [selectedIds, setSelectedIds] = useState<string[]>([])
     const navigation = useNavigation()
     const route = useRoute();
+    const client = generateClient();
     const chatRoom = route.params.chatRoom;
 
 
     const fetchUsers = async () => {
         try {
-            const fetchedUsers = await API.graphql(graphqlOperation(listUsers))
+            const fetchedUsers = await client.graphql({
+                query: listUsers
+            })
             setUsers(fetchedUsers.data?.listUsers?.items.filter((eachUser) => !chatRoom.users.items.some((existingUser) => !existingUser._deleted && existingUser.userId === eachUser.id)))
 
         }
@@ -53,7 +56,10 @@ export const AddContact = () => {
         try {
 
             const chatRoomUserPromise = selectedIds.map(async (selectedId) => {
-                await API.graphql(graphqlOperation(createChatRoomUser, { input: { chatRoomId: chatRoom.id, userId: selectedId } }))
+                await client.graphql({
+                    query: createChatRoomUser,
+                    variables: { input: { chatRoomId: chatRoom.id, userId: selectedId } }
+                })
             })
 
             await Promise.all(chatRoomUserPromise)

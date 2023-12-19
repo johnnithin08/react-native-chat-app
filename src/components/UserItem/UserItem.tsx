@@ -3,7 +3,6 @@ import { View, Image, Text, ViewStyle, ImageStyle, Pressable } from 'react-nativ
 
 import { flexRow, px, py, absolutePosition, colorBlue, centerHV, colorWhite, fs12BoldWhite1, flexChild, centerHorizontal, spaceBetweenHorizontal, fs18BoldBlack2, fs14RegGray6 } from '../../styles'
 import { User } from '../../models';
-import { API, Auth, graphqlOperation } from 'aws-amplify';
 import { createChatRoom, createChatRoomUser } from '../../graphql/mutations';
 import { useNavigation } from '@react-navigation/native';
 import { getCommonChatRooms } from '../../utilities/chatRoom';
@@ -21,7 +20,7 @@ interface IUserItem {
 }
 
 export const UserItem: FunctionComponent<IUserItem> = ({ user, handlePress, selectable, isSelected }: IUserItem) => {
-    const navigation = useNavigation()
+    const navigation = useNavigation();
 
     const imageStyle: ImageStyle = {
         height: 50,

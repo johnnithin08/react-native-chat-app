@@ -9,7 +9,8 @@ import { useNavigation } from '@react-navigation/native'
 import MaterialIcons from "react-native-vector-icons/MaterialIcons"
 
 import { User } from "../models"
-import { API, Auth, graphqlOperation } from 'aws-amplify'
+import { generateClient } from 'aws-amplify/api';
+import { getCurrentUser } from 'aws-amplify/auth';
 import { listUsers } from '../graphql/queries'
 import { createChatRoom, createChatRoomUser } from '../graphql/mutations'
 import { getCommonChatRooms } from '../utilities/chatRoom'
@@ -20,26 +21,38 @@ export const Users = () => {
     const [users, setUsers] = useState<User[]>([])
     const navigation = useNavigation();
 
+    const client = generateClient()
+
     const handleCreateChatRoom = async (item) => {
 
         try {
 
             const checkExistingChatRooms = await getCommonChatRooms(item.id)
+            console.log("enter", checkExistingChatRooms, item)
             if (checkExistingChatRooms) {
                 navigation.navigate("ChatRoom", { id: checkExistingChatRooms.chatRoom.id })
                 return;
             }
 
-            const newChatRoomData = await API.graphql(graphqlOperation(createChatRoom, { input: {} }))
+            const newChatRoomData = await client.graphql({
+                query: createChatRoom,
+                variables: { input: {} }
+            })
             if (!newChatRoomData.data?.createChatRoom) {
                 console.log("err")
             }
             const newChatRoom = newChatRoomData.data?.createChatRoom;
 
-            await API.graphql(graphqlOperation(createChatRoomUser, { input: { chatRoomId: newChatRoom.id, userId: item.id } }))
-            const authUser = await Auth.currentAuthenticatedUser();
+            await client.graphql({
+                query: createChatRoomUser,
+                variables: { input: { chatRoomId: newChatRoom.id, userId: item.id } }
+            })
+            const authUser = await getCurrentUser();
 
-            await API.graphql(graphqlOperation(createChatRoomUser, { input: { chatRoomId: newChatRoom.id, userId: authUser.attributes.sub } }))
+            await client.graphql({
+                query: createChatRoomUser,
+                variables: { input: { chatRoomId: newChatRoom.id, userId: authUser.userId } }
+            })
 
             navigation.navigate("ChatRoom", { id: newChatRoom.id, name: item.name })
 
@@ -54,7 +67,9 @@ export const Users = () => {
 
     const fetchUsers = async () => {
         try {
-            const fetchedUsers = await API.graphql(graphqlOperation(listUsers))
+            const fetchedUsers = await client.graphql({
+                query: listUsers
+            })
             setUsers(fetchedUsers.data?.listUsers?.items)
 
         }
@@ -87,6 +102,8 @@ export const Users = () => {
     const handleNewGroup = () => {
         navigation.navigate("NewGroup")
     }
+
+    console.log("users", users)
 
     return (
         <SafeAreaView style={{ ...flexChild, backgroundColor: colorWhite._1 }}>

@@ -10,7 +10,8 @@ import {
 } from "react-native";
 import { useRoute, useNavigation } from "@react-navigation/native";
 
-import { API, graphqlOperation } from "aws-amplify";
+import { generateClient } from 'aws-amplify/api';
+import { getCurrentUser } from 'aws-amplify/auth';
 import { onUpdateChatRoom } from "../graphql/subscriptions";
 import { deleteChatRoomUser } from "../graphql/mutations";
 import { UserItem } from "../components";
@@ -20,14 +21,16 @@ export const GroupInfo = () => {
     const [loading, setLoading] = useState(false);
     const route = useRoute();
     const navigation = useNavigation();
+    const client = generateClient()
 
     const chatroomID = route.params.id;
 
     const fetchChatRoom = async () => {
         setLoading(true);
-        const result = await API.graphql(
-            graphqlOperation(getChatRoom, { id: chatroomID })
-        );
+        const result = await client.graphql({
+            query: getChatRoom,
+            variables: { id: chatroomID }
+        });
         setChatRoom(result.data?.getChatRoom);
         setLoading(false);
     };
@@ -36,15 +39,16 @@ export const GroupInfo = () => {
         fetchChatRoom();
 
         // Subscribe to onUpdateChatRoom
-        const subscription = API.graphql(
-            graphqlOperation(onUpdateChatRoom, {
+        const subscription = client.graphql({
+            query: onUpdateChatRoom,
+            variables: {
                 filter: { id: { eq: chatroomID } },
-            })
-        ).subscribe({
-            next: ({ value }) => {
+            }
+        }).subscribe({
+            next: ({ data }) => {
                 setChatRoom((cr) => ({
                     ...(cr || {}),
-                    ...value.data.onUpdateChatRoom,
+                    ...data.onUpdateChatRoom,
                 }));
             },
             error: (error) => console.warn(error),
@@ -55,11 +59,12 @@ export const GroupInfo = () => {
     }, [chatroomID]);
 
     const removeChatRoomUser = async (chatRoomUser) => {
-        await API.graphql(
-            graphqlOperation(deleteChatRoomUser, {
+        await client.graphql({
+            query: deleteChatRoomUser,
+            variables: {
                 input: { _version: chatRoomUser._version, id: chatRoomUser.id },
-            })
-        );
+            }
+        });
     };
 
     const onContactPress = (chatRoomUser) => {
