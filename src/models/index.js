@@ -2,13 +2,18 @@
 import { initSchema } from '@aws-amplify/datastore';
 import { schema } from './schema';
 
+const AttachmentType = {
+  "IMAGE": "IMAGE",
+  "VIDEO": "VIDEO"
+};
 
-
-const { Message, ChatRoom, User, ChatRoomUser } = initSchema(schema);
+const { Attachment, Message, ChatRoom, User, ChatRoomUser } = initSchema(schema);
 
 export {
+  Attachment,
   Message,
   ChatRoom,
   User,
-  ChatRoomUser
+  ChatRoomUser,
+  AttachmentType
 };

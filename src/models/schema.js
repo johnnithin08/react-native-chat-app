@@ -1,5 +1,126 @@
 export const schema = {
     "models": {
+        "Attachment": {
+            "name": "Attachment",
+            "fields": {
+                "id": {
+                    "name": "id",
+                    "isArray": false,
+                    "type": "ID",
+                    "isRequired": true,
+                    "attributes": []
+                },
+                "storageKey": {
+                    "name": "storageKey",
+                    "isArray": false,
+                    "type": "String",
+                    "isRequired": true,
+                    "attributes": []
+                },
+                "type": {
+                    "name": "type",
+                    "isArray": false,
+                    "type": {
+                        "enum": "AttachmentType"
+                    },
+                    "isRequired": true,
+                    "attributes": []
+                },
+                "width": {
+                    "name": "width",
+                    "isArray": false,
+                    "type": "Int",
+                    "isRequired": false,
+                    "attributes": []
+                },
+                "height": {
+                    "name": "height",
+                    "isArray": false,
+                    "type": "Int",
+                    "isRequired": false,
+                    "attributes": []
+                },
+                "duration": {
+                    "name": "duration",
+                    "isArray": false,
+                    "type": "Int",
+                    "isRequired": false,
+                    "attributes": []
+                },
+                "messageID": {
+                    "name": "messageID",
+                    "isArray": false,
+                    "type": "ID",
+                    "isRequired": true,
+                    "attributes": []
+                },
+                "chatroomID": {
+                    "name": "chatroomID",
+                    "isArray": false,
+                    "type": "ID",
+                    "isRequired": true,
+                    "attributes": []
+                },
+                "createdAt": {
+                    "name": "createdAt",
+                    "isArray": false,
+                    "type": "AWSDateTime",
+                    "isRequired": false,
+                    "attributes": [],
+                    "isReadOnly": true
+                },
+                "updatedAt": {
+                    "name": "updatedAt",
+                    "isArray": false,
+                    "type": "AWSDateTime",
+                    "isRequired": false,
+                    "attributes": [],
+                    "isReadOnly": true
+                }
+            },
+            "syncable": true,
+            "pluralName": "Attachments",
+            "attributes": [
+                {
+                    "type": "model",
+                    "properties": {}
+                },
+                {
+                    "type": "key",
+                    "properties": {
+                        "name": "byMessage",
+                        "fields": [
+                            "messageID"
+                        ]
+                    }
+                },
+                {
+                    "type": "key",
+                    "properties": {
+                        "name": "byChatRoom",
+                        "fields": [
+                            "chatroomID"
+                        ]
+                    }
+                },
+                {
+                    "type": "auth",
+                    "properties": {
+                        "rules": [
+                            {
+                                "allow": "public",
+                                "operations": [
+                                    "create",
+                                    "update",
+                                    "delete",
+                                    "read"
+                                ]
+                            }
+                        ]
+                    }
+                }
+            ]
+        },
         "Message": {
             "name": "Message",
             "fields": {
@@ -37,6 +158,22 @@ export const schema = {
                     "type": "ID",
                     "isRequired": true,
                     "attributes": []
+                },
+                "attachments": {
+                    "name": "attachments",
+                    "isArray": true,
+                    "type": {
+                        "model": "Attachment"
+                    },
+                    "isRequired": false,
+                    "attributes": [],
+                    "isArrayNullable": true,
+                    "association": {
+                        "connectionType": "HAS_MANY",
+                        "associatedWith": [
+                            "messageID"
+                        ]
+                    }
                 },
                 "updatedAt": {
                     "name": "updatedAt",
@@ -170,6 +307,22 @@ export const schema = {
                         "connectionType": "HAS_MANY",
                         "associatedWith": [
                             "chatRoom"
+                        ]
+                    }
+                },
+                "attachments": {
+                    "name": "attachments",
+                    "isArray": true,
+                    "type": {
+                        "model": "Attachment"
+                    },
+                    "isRequired": false,
+                    "attributes": [],
+                    "isArrayNullable": true,
+                    "association": {
+                        "connectionType": "HAS_MANY",
+                        "associatedWith": [
+                            "chatroomID"
                         ]
                     }
                 },
@@ -426,8 +579,16 @@ export const schema = {
             ]
         }
     },
-    "enums": {},
+    "enums": {
+        "AttachmentType": {
+            "name": "AttachmentType",
+            "values": [
+                "IMAGE",
+                "VIDEO"
+            ]
+        }
+    },
     "nonModels": {},
     "codegenVersion": "3.4.4",
-    "version": "05c0e359d8a08f5d33d34b957665a5cf"
+    "version": "c205a7e25e49f505403b3c97efdb04c0"
 };

@@ -25,5 +25,11 @@ export type AmplifyDependentResourcesAttributes = {
       "Name": "string",
       "Region": "string"
     }
+  },
+  "storage": {
+    "s3chatappstorage66f31c68": {
+      "BucketName": "string",
+      "Region": "string"
+    }
   }
 }

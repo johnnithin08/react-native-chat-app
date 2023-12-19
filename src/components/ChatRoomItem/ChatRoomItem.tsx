@@ -23,7 +23,6 @@ export const ChatRoomItem: FunctionComponent<IChatRoomItem> = ({ data, handleFet
         fetchUser();
     }, [])
 
-    console.log("chat", chatRoom)
 
     useEffect(() => {
         const subscribeChatRoom =

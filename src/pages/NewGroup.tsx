@@ -57,13 +57,10 @@ export const NewGroup = () => {
             }
             const newChatRoom = newChatRoomData.data?.createChatRoom;
 
-            console.log("check", selectedIds)
 
             const chatRoomUserPromise = selectedIds.map(async (selectedId) => {
                 await API.graphql(graphqlOperation(createChatRoomUser, { input: { chatRoomId: newChatRoom.id, userId: selectedId } }))
             })
-
-            console.log("resp", chatRoomUserPromise)
 
             await Promise.all(chatRoomUserPromise)
             const authUser = await Auth.currentAuthenticatedUser();
@@ -97,8 +94,6 @@ export const NewGroup = () => {
             ),
         });
     }, [name, selectedIds]);
-
-    console.log("sele", selectedIds)
 
     const inputStyle: ViewStyle = {
         borderColor: "lightgray",
