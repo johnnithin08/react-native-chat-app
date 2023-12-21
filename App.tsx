@@ -37,7 +37,7 @@ Amplify.configure(config)
 
 
 export const App = (): JSX.Element => {
-  const isDarkMode = useColorScheme() === 'dark';
+  const isDarkMode = useColorScheme() === "dark";
 
   const backgroundStyle = {
     backgroundColor: isDarkMode ? Colors.darker : colorWhite._1,
