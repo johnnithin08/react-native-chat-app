@@ -1,8 +1,10 @@
 import React, { FunctionComponent, useEffect, useState } from 'react'
 import { View, Image, Text, ViewStyle, ImageStyle } from 'react-native'
 import { flexRow, px, py, absolutePosition, colorBlue, centerHV, colorWhite, fs12BoldWhite1, flexChild, centerHorizontal, spaceBetweenHorizontal, fs18BoldBlack2, fs14RegGray6 } from '../../styles'
-import { API, Auth, graphqlOperation } from 'aws-amplify';
+import { generateClient } from 'aws-amplify/api';
+import { getCurrentUser } from 'aws-amplify/auth';
 import { onUpdateChatRoom } from '../../graphql/subscriptions';
+import dayjs from 'dayjs';
 
 interface IChatRoomItem {
     data: IChatList;
@@ -14,10 +16,12 @@ export const ChatRoomItem: FunctionComponent<IChatRoomItem> = ({ data, handleFet
     const [user, setUser] = useState()
     const [chatRoom, setChatRoom] = useState(data)
 
+    const client = generateClient();
+
     useEffect(() => {
         const fetchUser = async () => {
-            const authUser = await Auth.currentAuthenticatedUser();
-            const userItem = chatRoom.users.items.find((eachItem) => eachItem.user.id !== authUser.attributes.sub);
+            const authUser = await getCurrentUser();
+            const userItem = chatRoom.users.items.find((eachItem) => eachItem.user.id !== authUser.userId);
             setUser(userItem.user)
         }
         fetchUser();
@@ -26,9 +30,12 @@ export const ChatRoomItem: FunctionComponent<IChatRoomItem> = ({ data, handleFet
 
     useEffect(() => {
         const subscribeChatRoom =
-            API.graphql(graphqlOperation(onUpdateChatRoom, { filter: { id: { eq: data.id } } })).subscribe({
-                next: ({ value }) => {
-                    setChatRoom((prev) => ({ ...prev, ...value.data.onUpdateChatRoom }))
+            client.graphql({
+                query: onUpdateChatRoom,
+                variables: { filter: { id: { eq: data.id } } },
+            }).subscribe({
+                next: ({ data }) => {
+                    setChatRoom((prev) => ({ ...prev, ...data.onUpdateChatRoom }))
                     handleFetch();
                     // setMessages((current) => [value.data.onCreateMessage, ...current])
                 },
@@ -69,7 +76,7 @@ export const ChatRoomItem: FunctionComponent<IChatRoomItem> = ({ data, handleFet
             <View style={containerStyle}>
                 <View style={{ ...flexRow, ...spaceBetweenHorizontal, marginBottom: 5 }}>
                     <Text style={fs18BoldBlack2}>{chatRoom.name ? chatRoom.name : user?.name}</Text>
-                    <Text style={fs14RegGray6}>{chatRoom?.lastMessage?.createdAt}</Text>
+                    <Text style={fs14RegGray6}>{dayjs(chatRoom?.lastMessage?.createdAt).fromNow()}</Text>
                 </View>
                 <Text numberOfLines={1} style={fs14RegGray6}>{chatRoom?.lastMessage?.content}</Text>
             </View>

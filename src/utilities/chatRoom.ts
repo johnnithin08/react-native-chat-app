@@ -1,4 +1,5 @@
-import { API, Auth, graphqlOperation } from 'aws-amplify';
+import { generateClient } from "aws-amplify/api";
+import { getCurrentUser } from "aws-amplify/auth";
 
 const listChatRooms = `query GetUser($id: ID!) {
     getUser(id: $id) {
@@ -19,17 +20,23 @@ const listChatRooms = `query GetUser($id: ID!) {
       }
     }
   }
-  `
+  `;
 
 export const getCommonChatRooms = async (userId) => {
-  const authUser = await Auth.currentAuthenticatedUser();
+  const client = generateClient();
+  const authUser = await getCurrentUser();
 
-  const response = await API.graphql(graphqlOperation(listChatRooms, { id: authUser.attributes.sub }))
+  const response = await client.graphql({
+    query: listChatRooms,
+    variables: { id: authUser.userId },
+  });
 
   const chatRooms = response.data?.getUser?.chatrooms?.items || [];
 
-  const chatRoom = chatRooms.find((eachChatRoom) => eachChatRoom.chatRoom.users.length === 2 && eachChatRoom.chatRoom.users.items.some((eachUser) => eachUser.user.id === userId))
-
+  const chatRoom = chatRooms.find(
+    (eachChatRoom) =>
+      eachChatRoom.chatRoom.users.items.length === 2 && eachChatRoom.chatRoom.users.items.some((eachUser) => eachUser.user.id === userId),
+  );
+  
   return chatRoom;
-
-}
+};

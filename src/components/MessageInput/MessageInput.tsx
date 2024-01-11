@@ -1,6 +1,8 @@
 import React, { useState } from 'react'
-import { View, Text, ViewStyle, TextInput, Pressable, Image, ImageStyle } from 'react-native'
-import { API, Auth, Storage, graphqlOperation } from 'aws-amplify'
+import { View, Text, ViewStyle, TextInput, Pressable, Image, ImageStyle, Platform } from 'react-native'
+import { generateClient } from 'aws-amplify/api';
+import { getCurrentUser } from 'aws-amplify/auth';
+import { uploadData } from 'aws-amplify/storage';
 import { Image as ImageCrop } from 'react-native-image-crop-picker'
 import "react-native-get-random-values"
 import { v4 as uuidv4 } from "uuid"
@@ -9,7 +11,7 @@ import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityI
 import AntDesign from "react-native-vector-icons/AntDesign"
 import Ionicons from "react-native-vector-icons/Ionicons"
 import { Asset, ImagePickerResponse, launchCamera, launchImageLibrary } from 'react-native-image-picker';
-import Video from 'react-native-video';
+import VideoPlayer from 'react-native-video-controls';
 
 Feather.loadFont();
 MaterialCommunityIcons.loadFont();
@@ -27,17 +29,18 @@ export const MessageInput = ({ chatRoom }) => {
     const [attachments, setAttachments] = useState<FileBase64[]>([])
     const [progresses, setProgresses] = useState({})
 
+    const client = generateClient();
+
     const handleInput = (text: string) => {
         setMessage(text)
     }
 
     const handleImageResult = async (results: ImagePickerResponse) => {
-        console.log("res", results)
         if (results.assets !== undefined && results.assets.length > 0) {
 
             const imageResults = results.assets.map((eachImage: Asset) => {
 
-                const { base64, fileName, height, width, fileSize, duration, type, uri } = eachImage;
+                const { base64, fileName, height, width, fileSize, duration, type, uri, originalPath } = eachImage;
                 const selectedImage: FileBase64 = {
                     base64: base64 || "",
                     date: new Date().toDateString(),
@@ -47,9 +50,8 @@ export const MessageInput = ({ chatRoom }) => {
                     size: fileSize,
                     type: type,
                     width,
-                    url: uri?.split("file://")[1]
+                    url: uri
                 };
-                console.log("selected", selectedImage)
                 return selectedImage;
             })
 
@@ -59,7 +61,7 @@ export const MessageInput = ({ chatRoom }) => {
     };
 
     const handlePicker = async () => {
-        const result = await launchImageLibrary({ mediaType: "mixed", videoQuality: "medium", quality: 0.5, presentationStyle: "fullScreen" });
+        const result = await launchImageLibrary({ mediaType: "mixed", videoQuality: "medium", quality: 0.4, presentationStyle: "fullScreen" });
         handleImageResult(result)
         // imageOpenPicker(handleImageResult, { cropping: false, multiple: true });
     }
@@ -69,11 +71,15 @@ export const MessageInput = ({ chatRoom }) => {
             const response = await fetch(file.url);
             const blob = await response.blob();
             const key = `${uuidv4()}.${file.type.split("/")[1]}`;
-            await Storage.put(key, blob, {
-                contentType: file?.type,
-                progressCallback: (progress) => {
-                    setProgresses((currentProgress) => ({ ...currentProgress, [file.url]: progress.loaded / progress.total }))
-                },
+            await uploadData({
+                key: key,
+                data: blob,
+                options: {
+                    contentType: file?.type,
+                    onProgress: (progress) => {
+                        setProgresses((currentProgress) => ({ ...currentProgress, [file.url]: progress.transferredBytes / progress.totalBytes }))
+                    },
+                }
             })
             return key;
         }
@@ -94,8 +100,10 @@ export const MessageInput = ({ chatRoom }) => {
                 messageID: messageId,
                 chatroomID: chatRoom.id
             }
-            const resp = await API.graphql(graphqlOperation(createAttachment, { input: newAttachment }))
-            console.log("check resp", resp)
+            const resp = await client.graphql({
+                query: createAttachment,
+                variables: { input: newAttachment }
+            })
             return resp;
         }
         catch (err) {
@@ -104,22 +112,28 @@ export const MessageInput = ({ chatRoom }) => {
     }
 
     const handleSend = async () => {
-        const authUser = await Auth.currentAuthenticatedUser();
+        const authUser = await getCurrentUser();
 
         const newMessage = {
             chatroomID: chatRoom.id,
             content: message,
-            userID: authUser.attributes.sub
+            userID: authUser.userId
 
         }
 
-        const newMessageResponse = await API.graphql(graphqlOperation(createMessage, { input: newMessage }))
+        const newMessageResponse = await client.graphql({
+            query: createMessage,
+            variables: { input: newMessage }
+        })
         setMessage("")
 
         await Promise.all(attachments.map((eachAttachment) => addAttachment(eachAttachment, newMessageResponse.data.createMessage.id)))
         setAttachments([])
         setProgresses({})
-        await API.graphql(graphqlOperation(updateChatRoom, { input: { id: chatRoom.id, chatRoomLastMessageId: newMessageResponse.data.createMessage.id, _version: chatRoom._version } }))
+        await client.graphql({
+            query: updateChatRoom,
+            variables: { input: { id: chatRoom.id, chatRoomLastMessageId: newMessageResponse.data.createMessage.id, _version: chatRoom._version } }
+        })
     }
 
     const buttonContainer: ViewStyle = {
@@ -176,8 +190,6 @@ export const MessageInput = ({ chatRoom }) => {
         overflow: "hidden"
     }
 
-    console.log('pro', progresses)
-
     return (
         <View>
 
@@ -187,16 +199,23 @@ export const MessageInput = ({ chatRoom }) => {
                         data={attachments}
                         horizontal={true}
                         renderItem={({ item }) => {
-                            console.log("atta", item)
                             return (
                                 <>
                                     {item.duration !== undefined ? (
                                         <>
-                                            <Video source={{ uri: item.url }}
+                                            <VideoPlayer 
+                                                source={{ uri: item.url }}
+                                                disableSeekbar={true}
+                                                disableFullscreen={true}
+                                                disableBack={true}
+                                                disablePlayPause={true}
+                                                disableVolume={true}
+                                                disableTimer={true}
                                                 style={selectedImage}
-                                                controls={true}
+                                                controls={false}
                                                 repeat={false}
                                                 paused={true}
+                                                showOnStart={false}
                                             />
                                             {progresses[item.url] ? (
                                                 <View style={{ ...absolutePosition, top: "40%", left: "40%", backgroundColor: colorGray._2, padding: 10, borderRadius: 50, }}>

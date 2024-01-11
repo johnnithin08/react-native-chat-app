@@ -7,27 +7,38 @@ import {
     ActivityIndicator,
     Alert,
     RefreshControl,
+    Pressable,
 } from "react-native";
 import { useRoute, useNavigation } from "@react-navigation/native";
 
-import { API, graphqlOperation } from "aws-amplify";
+import { generateClient } from 'aws-amplify/api';
+import { getCurrentUser } from 'aws-amplify/auth';
 import { onUpdateChatRoom } from "../graphql/subscriptions";
 import { deleteChatRoomUser } from "../graphql/mutations";
 import { UserItem } from "../components";
+import Ionicons from "react-native-vector-icons/Ionicons";
+import { flexRow, fullWidth, centerVertical, fs24BoldBlack2, borderBottomGray2, colorWhite, flexChild } from "../styles";
+import { SafeAreaView } from "react-native-safe-area-context";
 
 export const GroupInfo = () => {
     const [chatRoom, setChatRoom] = useState(null);
     const [loading, setLoading] = useState(false);
     const route = useRoute();
     const navigation = useNavigation();
+    const client = generateClient()
 
     const chatroomID = route.params.id;
 
+    const handleBack = () => {
+        navigation.goBack();
+    }
+
     const fetchChatRoom = async () => {
         setLoading(true);
-        const result = await API.graphql(
-            graphqlOperation(getChatRoom, { id: chatroomID })
-        );
+        const result = await client.graphql({
+            query: getChatRoom,
+            variables: { id: chatroomID }
+        });
         setChatRoom(result.data?.getChatRoom);
         setLoading(false);
     };
@@ -36,15 +47,16 @@ export const GroupInfo = () => {
         fetchChatRoom();
 
         // Subscribe to onUpdateChatRoom
-        const subscription = API.graphql(
-            graphqlOperation(onUpdateChatRoom, {
+        const subscription = client.graphql({
+            query: onUpdateChatRoom,
+            variables: {
                 filter: { id: { eq: chatroomID } },
-            })
-        ).subscribe({
-            next: ({ value }) => {
+            }
+        }).subscribe({
+            next: ({ data }) => {
                 setChatRoom((cr) => ({
                     ...(cr || {}),
-                    ...value.data.onUpdateChatRoom,
+                    ...data.onUpdateChatRoom,
                 }));
             },
             error: (error) => console.warn(error),
@@ -55,11 +67,12 @@ export const GroupInfo = () => {
     }, [chatroomID]);
 
     const removeChatRoomUser = async (chatRoomUser) => {
-        await API.graphql(
-            graphqlOperation(deleteChatRoomUser, {
+        await client.graphql({
+            query: deleteChatRoomUser,
+            variables: {
                 input: { _version: chatRoomUser._version, id: chatRoomUser.id },
-            })
-        );
+            }
+        });
     };
 
     const onContactPress = (chatRoomUser) => {
@@ -87,36 +100,56 @@ export const GroupInfo = () => {
     const users = chatRoom.users.items.filter((item) => !item._deleted);
 
     return (
-        <View style={styles.container}>
-            <Text style={styles.title}>{chatRoom.name}</Text>
-            <View
-                style={{
-                    flexDirection: "row",
-                    justifyContent: "space-between",
-                    alignItems: "center",
-                }}
-            >
-                <Text style={styles.sectionTitle}>{users.length} Participants</Text>
-                <Text
-                    onPress={() => navigation.navigate("AddContact", { chatRoom })}
-                    style={{ fontWeight: "bold", color: "royalblue" }}
+        <SafeAreaView style={{ ...flexChild, backgroundColor: colorWhite._1 }}>
+
+        <View style={flexChild}>
+            <View>
+                    <View style={{
+                    ...flexRow,
+                    ...fullWidth,
+                    padding: 10,
+                    ...centerVertical,
+                    backgroundColor: colorWhite._1
+                }}>
+                    <Pressable onPress={handleBack} style={flexRow}>
+                        <Ionicons name="arrow-back" size={20} style={{ marginRight: "30%" }} />
+                    </Pressable>
+                    <Text style={{ ...fs24BoldBlack2}}>Group Info</Text>
+                </View>
+                    <View style={borderBottomGray2} />
+                </View>
+            <View style={styles.container}>
+                <Text style={styles.title}>{chatRoom.name}</Text>
+                <View
+                    style={{
+                        flexDirection: "row",
+                        justifyContent: "space-between",
+                        alignItems: "center",
+                    }}
                 >
-                    Invite friends
-                </Text>
-            </View>
-            <View style={styles.section}>
-                <FlatList
-                    data={users}
-                    renderItem={({ item }) => (
-                        <UserItem
-                            user={item.user}
-                            handlePress={() => onContactPress(item)}
-                        />
-                    )}
-                    refreshControl={<RefreshControl refreshing={loading} onRefresh={fetchChatRoom} />}
-                />
+                    <Text style={styles.sectionTitle}>{users.length} Participants</Text>
+                    <Text
+                        onPress={() => navigation.navigate("AddContact", { chatRoom })}
+                        style={{ fontWeight: "bold", color: "royalblue" }}
+                    >
+                        Invite friends
+                    </Text>
+                </View>
+                <View style={styles.section}>
+                    <FlatList
+                        data={users}
+                        renderItem={({ item }) => (
+                            <UserItem
+                                user={item.user}
+                                handlePress={() => onContactPress(item)}
+                            />
+                        )}
+                        refreshControl={<RefreshControl refreshing={loading} onRefresh={fetchChatRoom} />}
+                    />
+                </View>
             </View>
         </View>
+        </SafeAreaView>
     );
 };
 

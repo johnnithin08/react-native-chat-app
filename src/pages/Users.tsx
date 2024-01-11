@@ -1,24 +1,30 @@
 import React, { Fragment, useEffect, useState } from 'react'
-import { Button, Image, Pressable, Text, View, ViewStyle } from 'react-native'
+import { Button, Image, Pressable, Text, View, ViewStyle, useWindowDimensions } from 'react-native'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import { UserItem } from "../components"
 import { ChatRoomData } from "../dummy-data/ChatRooms"
-import { centerVertical, colorWhite, flexChild, flexRow, fs16BoldBlue1, fs16RegBlue1, fs16RegBlue5 } from '../styles'
+import { borderBottomGray2, centerHorizontal, centerVertical, colorWhite, flexChild, flexRow, fs14BoldBlack2, fs16BoldBlack2, fs16BoldBlue1, fs16RegBlue1, fs16RegBlue5, fs24BoldBlack2, fullWidth } from '../styles'
 import { FlatList } from 'react-native-gesture-handler'
 import { useNavigation } from '@react-navigation/native'
 import MaterialIcons from "react-native-vector-icons/MaterialIcons"
 
 import { User } from "../models"
-import { API, Auth, graphqlOperation } from 'aws-amplify'
+import { generateClient } from 'aws-amplify/api';
+import { getCurrentUser } from 'aws-amplify/auth';
 import { listUsers } from '../graphql/queries'
 import { createChatRoom, createChatRoomUser } from '../graphql/mutations'
 import { getCommonChatRooms } from '../utilities/chatRoom'
+import { IconButton } from '@aws-amplify/ui-react-native/dist/primitives'
+import Ionicons from 'react-native-vector-icons/Ionicons'
 
 MaterialIcons.loadFont();
 
 export const Users = () => {
+    const { width } = useWindowDimensions();
     const [users, setUsers] = useState<User[]>([])
     const navigation = useNavigation();
+
+    const client = generateClient()
 
     const handleCreateChatRoom = async (item) => {
 
@@ -30,16 +36,25 @@ export const Users = () => {
                 return;
             }
 
-            const newChatRoomData = await API.graphql(graphqlOperation(createChatRoom, { input: {} }))
+            const newChatRoomData = await client.graphql({
+                query: createChatRoom,
+                variables: { input: {} }
+            })
             if (!newChatRoomData.data?.createChatRoom) {
                 console.log("err")
             }
             const newChatRoom = newChatRoomData.data?.createChatRoom;
 
-            await API.graphql(graphqlOperation(createChatRoomUser, { input: { chatRoomId: newChatRoom.id, userId: item.id } }))
-            const authUser = await Auth.currentAuthenticatedUser();
+            await client.graphql({
+                query: createChatRoomUser,
+                variables: { input: { chatRoomId: newChatRoom.id, userId: item.id } }
+            })
+            const authUser = await getCurrentUser();
 
-            await API.graphql(graphqlOperation(createChatRoomUser, { input: { chatRoomId: newChatRoom.id, userId: authUser.attributes.sub } }))
+            await client.graphql({
+                query: createChatRoomUser,
+                variables: { input: { chatRoomId: newChatRoom.id, userId: authUser.userId } }
+            })
 
             navigation.navigate("ChatRoom", { id: newChatRoom.id, name: item.name })
 
@@ -54,7 +69,9 @@ export const Users = () => {
 
     const fetchUsers = async () => {
         try {
-            const fetchedUsers = await API.graphql(graphqlOperation(listUsers))
+            const fetchedUsers = await client.graphql({
+                query: listUsers
+            })
             setUsers(fetchedUsers.data?.listUsers?.items)
 
         }
@@ -88,8 +105,27 @@ export const Users = () => {
         navigation.navigate("NewGroup")
     }
 
+    const handleBack = () => {
+        navigation.navigate("Home")
+    }
+
+
     return (
         <SafeAreaView style={{ ...flexChild, backgroundColor: colorWhite._1 }}>
+            <View>
+                <View style={{
+                ...flexRow,
+                ...fullWidth,
+                padding: 10,
+                ...centerVertical,
+            }}>
+                <Pressable onPress={handleBack} style={flexRow}>
+                    <Ionicons name="arrow-back" size={20} style={{ marginRight: "35%" }} />
+                </Pressable>
+                <Text style={fs24BoldBlack2}>Users</Text>
+            </View>
+                <View style={borderBottomGray2} />
+            </View>
             <FlatList
                 data={users}
                 keyExtractor={item => item.id}
