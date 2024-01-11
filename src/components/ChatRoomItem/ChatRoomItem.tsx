@@ -4,6 +4,7 @@ import { flexRow, px, py, absolutePosition, colorBlue, centerHV, colorWhite, fs1
 import { generateClient } from 'aws-amplify/api';
 import { getCurrentUser } from 'aws-amplify/auth';
 import { onUpdateChatRoom } from '../../graphql/subscriptions';
+import dayjs from 'dayjs';
 
 interface IChatRoomItem {
     data: IChatList;
@@ -75,7 +76,7 @@ export const ChatRoomItem: FunctionComponent<IChatRoomItem> = ({ data, handleFet
             <View style={containerStyle}>
                 <View style={{ ...flexRow, ...spaceBetweenHorizontal, marginBottom: 5 }}>
                     <Text style={fs18BoldBlack2}>{chatRoom.name ? chatRoom.name : user?.name}</Text>
-                    <Text style={fs14RegGray6}>{chatRoom?.lastMessage?.createdAt}</Text>
+                    <Text style={fs14RegGray6}>{dayjs(chatRoom?.lastMessage?.createdAt).fromNow()}</Text>
                 </View>
                 <Text numberOfLines={1} style={fs14RegGray6}>{chatRoom?.lastMessage?.content}</Text>
             </View>

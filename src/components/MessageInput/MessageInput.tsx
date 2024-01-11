@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { View, Text, ViewStyle, TextInput, Pressable, Image, ImageStyle } from 'react-native'
+import { View, Text, ViewStyle, TextInput, Pressable, Image, ImageStyle, Platform } from 'react-native'
 import { generateClient } from 'aws-amplify/api';
 import { getCurrentUser } from 'aws-amplify/auth';
 import { uploadData } from 'aws-amplify/storage';
@@ -11,7 +11,7 @@ import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityI
 import AntDesign from "react-native-vector-icons/AntDesign"
 import Ionicons from "react-native-vector-icons/Ionicons"
 import { Asset, ImagePickerResponse, launchCamera, launchImageLibrary } from 'react-native-image-picker';
-import Video from 'react-native-video';
+import VideoPlayer from 'react-native-video-controls';
 
 Feather.loadFont();
 MaterialCommunityIcons.loadFont();
@@ -36,12 +36,11 @@ export const MessageInput = ({ chatRoom }) => {
     }
 
     const handleImageResult = async (results: ImagePickerResponse) => {
-        console.log("res", results)
         if (results.assets !== undefined && results.assets.length > 0) {
 
             const imageResults = results.assets.map((eachImage: Asset) => {
 
-                const { base64, fileName, height, width, fileSize, duration, type, uri } = eachImage;
+                const { base64, fileName, height, width, fileSize, duration, type, uri, originalPath } = eachImage;
                 const selectedImage: FileBase64 = {
                     base64: base64 || "",
                     date: new Date().toDateString(),
@@ -51,9 +50,8 @@ export const MessageInput = ({ chatRoom }) => {
                     size: fileSize,
                     type: type,
                     width,
-                    url: uri?.split("file://")[1]
+                    url: uri
                 };
-                console.log("selected", selectedImage)
                 return selectedImage;
             })
 
@@ -63,7 +61,7 @@ export const MessageInput = ({ chatRoom }) => {
     };
 
     const handlePicker = async () => {
-        const result = await launchImageLibrary({ mediaType: "mixed", videoQuality: "medium", quality: 0.5, presentationStyle: "fullScreen" });
+        const result = await launchImageLibrary({ mediaType: "mixed", videoQuality: "medium", quality: 0.4, presentationStyle: "fullScreen" });
         handleImageResult(result)
         // imageOpenPicker(handleImageResult, { cropping: false, multiple: true });
     }
@@ -106,7 +104,6 @@ export const MessageInput = ({ chatRoom }) => {
                 query: createAttachment,
                 variables: { input: newAttachment }
             })
-            console.log("check resp", resp)
             return resp;
         }
         catch (err) {
@@ -193,8 +190,6 @@ export const MessageInput = ({ chatRoom }) => {
         overflow: "hidden"
     }
 
-    console.log('pro', progresses)
-
     return (
         <View>
 
@@ -204,16 +199,23 @@ export const MessageInput = ({ chatRoom }) => {
                         data={attachments}
                         horizontal={true}
                         renderItem={({ item }) => {
-                            console.log("atta", item)
                             return (
                                 <>
                                     {item.duration !== undefined ? (
                                         <>
-                                            <Video source={{ uri: item.url }}
+                                            <VideoPlayer 
+                                                source={{ uri: item.url }}
+                                                disableSeekbar={true}
+                                                disableFullscreen={true}
+                                                disableBack={true}
+                                                disablePlayPause={true}
+                                                disableVolume={true}
+                                                disableTimer={true}
                                                 style={selectedImage}
-                                                controls={true}
+                                                controls={false}
                                                 repeat={false}
                                                 paused={true}
+                                                showOnStart={false}
                                             />
                                             {progresses[item.url] ? (
                                                 <View style={{ ...absolutePosition, top: "40%", left: "40%", backgroundColor: colorGray._2, padding: 10, borderRadius: 50, }}>

@@ -3,7 +3,7 @@ import { Button, Image, Pressable, Text, TextInput, View, ViewStyle } from 'reac
 import { SafeAreaView } from 'react-native-safe-area-context'
 import { UserItem } from "../components"
 import { ChatRoomData } from "../dummy-data/ChatRooms"
-import { centerVertical, colorWhite, flexChild, flexRow, fs16BoldBlue1, fs16RegBlue1, fs16RegBlue5 } from '../styles'
+import { borderBottomGray2, centerVertical, colorWhite, flexChild, flexRow, fs16BoldBlue1, fs16RegBlue1, fs16RegBlue5, fs24BoldBlack2, fullWidth } from '../styles'
 import { FlatList } from 'react-native-gesture-handler'
 import { useNavigation, useRoute } from '@react-navigation/native'
 import MaterialIcons from "react-native-vector-icons/MaterialIcons"
@@ -13,6 +13,7 @@ import { generateClient } from 'aws-amplify/api';
 import { getCurrentUser } from 'aws-amplify/auth';
 import { listUsers } from '../graphql/queries'
 import { createChatRoom, createChatRoomUser } from '../graphql/mutations'
+import Ionicons from 'react-native-vector-icons/Ionicons'
 
 MaterialIcons.loadFont();
 
@@ -23,6 +24,10 @@ export const AddContact = () => {
     const route = useRoute();
     const client = generateClient();
     const chatRoom = route.params.chatRoom;
+
+    const handleBack = () => {
+        navigation.goBack();
+    }
 
 
     const fetchUsers = async () => {
@@ -98,6 +103,24 @@ export const AddContact = () => {
 
     return (
         <SafeAreaView style={{ ...flexChild, backgroundColor: colorWhite._1 }}>
+            <View style={{
+                    ...flexRow,
+                    ...fullWidth,
+                    padding: 10,
+                    ...centerVertical,
+                    backgroundColor: colorWhite._1
+                }}>
+                    <Pressable onPress={handleBack} style={flexRow}>
+                        <Ionicons name="arrow-back" size={20} style={{ marginRight: "30%" }} />
+                    </Pressable>
+                    <Text style={{ ...fs24BoldBlack2, marginRight: "20%"}}>Add Contact</Text>
+                    <Button
+                        title="Add"
+                        disabled={selectedIds.length === 0}
+                        onPress={handleNewGroup}
+                    />  
+                </View>
+                    <View style={borderBottomGray2} />
             <FlatList
                 data={users}
                 keyExtractor={item => item.id}

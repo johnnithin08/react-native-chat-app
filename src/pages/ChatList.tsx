@@ -1,8 +1,15 @@
 import React, { Fragment, useEffect, useState } from 'react'
 import { Button, Image, Pressable, RefreshControl, Text, View, ViewStyle, useWindowDimensions } from 'react-native'
 import { SafeAreaView } from 'react-native-safe-area-context'
+import {
+    Menu,
+    MenuOptions,
+    MenuOption,
+    MenuTrigger,
+    renderers,
+  } from 'react-native-popup-menu';
 import { ChatRoomItem } from "../components"
-import { centerVertical, colorGray, colorWhite, flexChild, flexRow } from '../styles'
+import { absolutePosition, borderBottomBlue5, borderBottomGray2, borderBottomGray4, borderBottomGray6, centerVertical, colorGray, colorWhite, flexChild, flexRow, flexRowCC, fs14BoldBlack2, fs24BoldBlack2, spaceBetweenHorizontal } from '../styles'
 import { FlatList } from 'react-native-gesture-handler'
 import { useNavigation } from '@react-navigation/native'
 import { useAuthenticator } from '@aws-amplify/ui-react-native'
@@ -10,17 +17,20 @@ import { generateClient } from 'aws-amplify/api';
 import { getCurrentUser } from 'aws-amplify/auth';
 import { listChatRooms } from '../graphql/customQueries'
 import Feather from 'react-native-vector-icons/Feather'
+import AntDesign from 'react-native-vector-icons/AntDesign';
+import FontAwesome from 'react-native-vector-icons/FontAwesome';
+import { getUser } from '../graphql/queries';
 
 export const ChatList = () => {
     const navigation = useNavigation()
     const { width } = useWindowDimensions();
     const { signOut } = useAuthenticator();
+    const [user, setUser] = useState()
     const [chatRooms, setChatRooms] = useState([])
     const [loading, setLoading] = useState<boolean>(false)
+    const [showMenu, setShowMenu] = useState<boolean>(false)
     const client = generateClient()
-    const icon: ViewStyle = {
-        marginHorizontal: 20,
-    }
+    const { Popover } = renderers
 
 
     const handleUsers = () => {
@@ -45,9 +55,37 @@ export const ChatList = () => {
         }
     }
 
+    const fetchUser = async () => {
+        try
+         {
+
+             const authUser = await getCurrentUser();
+             const userResponse = await client.graphql({
+                 query: getUser,
+                 variables: { id: authUser.userId}
+             })
+             setUser(userResponse.data.getUser);
+         }
+        catch(err)
+         {
+            console.log("err", err)
+         }
+
+    }
+
     useEffect(() => {
         fetchChatRooms();
+        fetchUser()
     }, [])
+
+    const optionsStyles = {
+        optionsContainer: {
+          width: 120,
+          padding: 5,
+          borderRadius: 12,
+        },
+      };
+
     return (
         <SafeAreaView style={{ ...flexChild, backgroundColor: colorWhite._1 }}>
             <View>
@@ -55,18 +93,40 @@ export const ChatList = () => {
                 ...flexRow,
                 width: width,
                 padding: 10,
-                ...centerVertical
+                ...centerVertical,
             }}>
                 <Image
-                    source={{ uri: "https://notjustdev-dummy.s3.us-east-2.amazonaws.com/avatars/vadim.jpg" }}
+                    source={{ uri: user?.imageUri }}
                     style={{
-                        height: 30,
-                        width: 30,
+                        height: 40,
+                        width: 40,
                         borderRadius: 30
                     }} />
-                <Text style={{ ...flexChild, fontWeight: "bold", marginLeft: 20 }}>Home</Text>
-                <Feather name="edit-2" onPress={handleUsers} size={24} color={colorGray._5} style={icon} />
+                <Text style={{ ...fs24BoldBlack2, marginLeft: "30%" }}>Home</Text>
+                <View style={flexChild} />
+                <Menu renderer={Popover} rendererProps={{ placement: "bottom"}}>
+                    <MenuTrigger>
+                        <Feather name="more-vertical" size={24} color={colorGray._5}/>
+                    </MenuTrigger>
+                    <MenuOptions customStyles={optionsStyles}>
+                        <MenuOption onSelect={handleUsers}>
+                            <View style={{...flexRow, ...centerVertical, }}>
+                                <AntDesign name="adduser" size={20} style={{marginRight: "20%"}}/>
+                                <Text style={fs14BoldBlack2}>New Chat</Text>
+                            </View>
+                        </MenuOption>
+                        <MenuOption onSelect={() => navigation.navigate("Profile")}>
+                            <View style={{...flexRow, ...centerVertical, }}>
+                                <FontAwesome name="user" size={20} style={{marginRight: "26%"}}/>
+                                <Text style={fs14BoldBlack2}>Profile</Text>
+                            </View>
+                        </MenuOption>
+                    </MenuOptions>
+                </Menu> 
+                <View>
+                </View>
             </View>
+                <View style={borderBottomGray2} />
             </View>
             {chatRooms.length > 0 ? (
 
@@ -89,9 +149,6 @@ export const ChatList = () => {
                     }
                 />
             ) : null}
-
-            <Button title="Sign Out" onPress={signOut} />
-
 
         </SafeAreaView>
     )
