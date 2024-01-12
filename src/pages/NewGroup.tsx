@@ -1,5 +1,5 @@
 import React, { Fragment, useEffect, useState } from 'react'
-import { Button, Image, Pressable, Text, TextInput, View, ViewStyle } from 'react-native'
+import { Button, Image, PermissionsAndroid, Platform, Pressable, Text, TextInput, View, ViewStyle } from 'react-native'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import { UserItem } from "../components"
 import { ChatRoomData } from "../dummy-data/ChatRooms"
@@ -11,9 +11,11 @@ import MaterialIcons from "react-native-vector-icons/MaterialIcons"
 import { User } from "../models"
 import { generateClient } from 'aws-amplify/api';
 import { getCurrentUser } from 'aws-amplify/auth';
+import Contacts from 'react-native-contacts';
+import Ionicons from 'react-native-vector-icons/Ionicons'
+
 import { listUsers } from '../graphql/queries'
 import { createChatRoom, createChatRoomUser } from '../graphql/mutations'
-import Ionicons from 'react-native-vector-icons/Ionicons'
 
 MaterialIcons.loadFont();
 
@@ -30,7 +32,21 @@ export const NewGroup = () => {
             const fetchedUsers = await client.graphql({
                 query: listUsers
             })
-            setUsers(fetchedUsers.data?.listUsers?.items)
+            if(Platform.OS === "android")
+             {
+                const permission = await PermissionsAndroid.request(PermissionsAndroid.PERMISSIONS.READ_CONTACTS, {
+                    title: 'Contacts',
+                    message: 'This app would like to view your contacts.',
+                    buttonPositive: 'Please accept bare mortal',
+                })
+             }
+            const contacts = await Contacts.getAll();
+            const filteredContacts = fetchedUsers.data?.listUsers?.items.filter((eachUser) => {
+                return contacts.some((contactUser) => {
+                    return contactUser.phoneNumbers.some((eachPhoneNumber) => eachPhoneNumber.number.replace(/\s/g, "") === eachUser.phoneNo.replace(/\s/g,""))
+                })
+            })
+            setUsers(filteredContacts)
 
         }
         catch (err) {

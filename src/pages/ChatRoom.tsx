@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { ActivityIndicator, Image, Pressable, Text, View, useWindowDimensions } from 'react-native'
 import { SafeAreaView } from 'react-native-safe-area-context'
+import {widthPercentageToDP as wp, heightPercentageToDP as hp} from 'react-native-responsive-screen';
 import Feather from 'react-native-vector-icons/Feather'
 
 import { borderBottomGray2, centerVertical, colorBlack, colorGray, colorWhite, flexChild, flexRow, fs16BoldBlack2, fs24BoldBlack2 } from '../styles'
@@ -18,6 +19,7 @@ import Ionicons from 'react-native-vector-icons/Ionicons'
 Feather.loadFont();
 
 export const ChatRoom = () => {
+    const [user, setUser] = useState()
     const [data, setData] = useState();
     const [name, setName] = useState<string>("")
     const [messages, setMessages] = useState([])
@@ -27,7 +29,6 @@ export const ChatRoom = () => {
     const client = generateClient()
 
     const chatRoomId = route.params.id;
-    const chatId: string | undefined = (route.params as any).id;
 
     const handleGroupInfo = () => {
         navigation.navigate("GroupInfo", { id: chatRoomId })
@@ -45,9 +46,9 @@ export const ChatRoom = () => {
                 query: getChatRoom,
                 variables: { id: chatRoomId }
             })
+            console.log("user", resp)
             const findUser = resp.data?.getChatRoom.users.items.find((eachItem) => eachItem.user.id !== authUser.userId)
-            setName(resp.data.getChatRoom.name ? resp.data.getChatRoom.name : findUser.user.name)
-            navigation.setOptions({ title: resp.data.getChatRoom.name ? resp.data.getChatRoom.name : findUser.user.name, headerRight: () => <Feather onPress={handleGroupInfo} name="more-vertical" size={20} color={colorBlack._1} /> })
+            setUser({ type: resp.data.getChatRoom.name ? "group" : "single", data: findUser.user, name: resp.data.getChatRoom.name ? resp.data.getChatRoom.name : findUser.user.name})
             setData(resp.data?.getChatRoom)
         }
         const subscribeChatRoom =
@@ -119,28 +120,27 @@ export const ChatRoom = () => {
     }
 
 
-
     return (
         <SafeAreaView style={{ ...flexChild, backgroundColor: colorWhite._1 }}>
             <View>
                 <View style={{
                 ...flexRow,
                 width: width,
-                padding: 10,
+                padding: wp(2),
                 ...centerVertical
             }}>
                 <Pressable onPress={handleBack} style={flexRow}>
-                    <Ionicons name="arrow-back" size={20} style={{ marginRight: 4 }} />
+                    <Ionicons name="arrow-back" size={wp(6)} style={{ marginRight: 4 }} />
                 </Pressable>
                 <Image
-                    source={{ uri: "https://notjustdev-dummy.s3.us-east-2.amazonaws.com/avatars/vadim.jpg" }}
+                    source={{ uri: user.data.imageUri }}
                     style={{
-                        height: 30,
-                        width: 30,
-                        borderRadius: 30
+                        height: wp(12),
+                        width: wp(12),
+                        borderRadius: wp(10)
                     }} />
-                <Text style={{ ...flexChild, ...fs24BoldBlack2, marginLeft: 20 }}>{name}</Text>
-                <Feather onPress={handleGroupInfo} name="more-vertical" size={20} color={colorBlack._1} />
+                <Text style={{ ...flexChild, ...fs24BoldBlack2, marginLeft: wp(2) }}>{user.name}</Text>
+                <Feather onPress={handleGroupInfo} name="more-vertical" size={wp(6)} color={colorBlack._1} />
             </View>
                 <View style={borderBottomGray2} />
             </View>

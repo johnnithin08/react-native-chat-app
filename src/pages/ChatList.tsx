@@ -1,5 +1,6 @@
 import React, { Fragment, useEffect, useState } from 'react'
 import { Button, Image, Pressable, RefreshControl, Text, View, ViewStyle, useWindowDimensions } from 'react-native'
+import {widthPercentageToDP as wp, heightPercentageToDP as hp} from 'react-native-responsive-screen';
 import { SafeAreaView } from 'react-native-safe-area-context'
 import {
     Menu,
@@ -24,11 +25,9 @@ import { getUser } from '../graphql/queries';
 export const ChatList = () => {
     const navigation = useNavigation()
     const { width } = useWindowDimensions();
-    const { signOut } = useAuthenticator();
     const [user, setUser] = useState()
     const [chatRooms, setChatRooms] = useState([])
     const [loading, setLoading] = useState<boolean>(false)
-    const [showMenu, setShowMenu] = useState<boolean>(false)
     const client = generateClient()
     const { Popover } = renderers
 
@@ -80,8 +79,8 @@ export const ChatList = () => {
 
     const optionsStyles = {
         optionsContainer: {
-          width: 120,
-          padding: 5,
+          width: wp(35),
+          padding: wp(2),
           borderRadius: 12,
         },
       };
@@ -92,32 +91,32 @@ export const ChatList = () => {
                 <View style={{
                 ...flexRow,
                 width: width,
-                padding: 10,
+                padding: wp(2),
                 ...centerVertical,
             }}>
                 <Image
                     source={{ uri: user?.imageUri }}
                     style={{
-                        height: 40,
-                        width: 40,
-                        borderRadius: 30
+                        height: wp(12),
+                        width: wp(12),
+                        borderRadius: wp(10)
                     }} />
                 <Text style={{ ...fs24BoldBlack2, marginLeft: "30%" }}>Home</Text>
                 <View style={flexChild} />
                 <Menu renderer={Popover} rendererProps={{ placement: "bottom"}}>
                     <MenuTrigger>
-                        <Feather name="more-vertical" size={24} color={colorGray._5}/>
+                        <Feather name="more-vertical" size={wp(6)} color={colorGray._5}/>
                     </MenuTrigger>
                     <MenuOptions customStyles={optionsStyles}>
                         <MenuOption onSelect={handleUsers}>
                             <View style={{...flexRow, ...centerVertical, }}>
-                                <AntDesign name="adduser" size={20} style={{marginRight: "20%"}}/>
+                                <AntDesign name="adduser" size={wp(5)} style={{marginRight: "20%"}}/>
                                 <Text style={fs14BoldBlack2}>New Chat</Text>
                             </View>
                         </MenuOption>
                         <MenuOption onSelect={() => navigation.navigate("Profile")}>
                             <View style={{...flexRow, ...centerVertical, }}>
-                                <FontAwesome name="user" size={20} style={{marginRight: "26%"}}/>
+                                <FontAwesome name="user" size={wp(5)} style={{marginRight: "26%"}}/>
                                 <Text style={fs14BoldBlack2}>Profile</Text>
                             </View>
                         </MenuOption>

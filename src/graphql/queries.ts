@@ -571,6 +571,7 @@ export const getChatRoom = /* GraphQL */ `
                   name
                   imageUri
                   status
+                  phoneNo
                   createdAt
                   updatedAt
                   _version
@@ -668,6 +669,7 @@ export const getChatRoom = /* GraphQL */ `
                   name
                   imageUri
                   status
+                  phoneNo
                   createdAt
                   updatedAt
                   _version
@@ -686,6 +688,7 @@ export const getChatRoom = /* GraphQL */ `
               startedAt
               __typename
             }
+            phoneNo
             createdAt
             updatedAt
             _version
@@ -945,6 +948,7 @@ export const listChatRooms = /* GraphQL */ `
                 startedAt
                 __typename
               }
+              phoneNo
               createdAt
               updatedAt
               _version
@@ -1214,6 +1218,7 @@ export const syncChatRooms = /* GraphQL */ `
                 startedAt
                 __typename
               }
+              phoneNo
               createdAt
               updatedAt
               _version
@@ -1400,6 +1405,7 @@ export const getUser = /* GraphQL */ `
                   name
                   imageUri
                   status
+                  phoneNo
                   createdAt
                   updatedAt
                   _version
@@ -1497,6 +1503,7 @@ export const getUser = /* GraphQL */ `
                   name
                   imageUri
                   status
+                  phoneNo
                   createdAt
                   updatedAt
                   _version
@@ -1515,6 +1522,7 @@ export const getUser = /* GraphQL */ `
               startedAt
               __typename
             }
+            phoneNo
             createdAt
             updatedAt
             _version
@@ -1533,6 +1541,7 @@ export const getUser = /* GraphQL */ `
         startedAt
         __typename
       }
+      phoneNo
       createdAt
       updatedAt
       _version
@@ -1719,6 +1728,7 @@ export const listUsers = /* GraphQL */ `
                 startedAt
                 __typename
               }
+              phoneNo
               createdAt
               updatedAt
               _version
@@ -1737,6 +1747,7 @@ export const listUsers = /* GraphQL */ `
           startedAt
           __typename
         }
+        phoneNo
         createdAt
         updatedAt
         _version
@@ -1933,6 +1944,7 @@ export const syncUsers = /* GraphQL */ `
                 startedAt
                 __typename
               }
+              phoneNo
               createdAt
               updatedAt
               _version
@@ -1951,6 +1963,7 @@ export const syncUsers = /* GraphQL */ `
           startedAt
           __typename
         }
+        phoneNo
         createdAt
         updatedAt
         _version
@@ -2173,6 +2186,7 @@ export const getChatRoomUser = /* GraphQL */ `
                 startedAt
                 __typename
               }
+              phoneNo
               createdAt
               updatedAt
               _version
@@ -2390,6 +2404,7 @@ export const getChatRoomUser = /* GraphQL */ `
                 startedAt
                 __typename
               }
+              phoneNo
               createdAt
               updatedAt
               _version
@@ -2408,6 +2423,7 @@ export const getChatRoomUser = /* GraphQL */ `
           startedAt
           __typename
         }
+        phoneNo
         createdAt
         updatedAt
         _version
@@ -2571,6 +2587,7 @@ export const listChatRoomUsers = /* GraphQL */ `
                   startedAt
                   __typename
                 }
+                phoneNo
                 createdAt
                 updatedAt
                 _version
@@ -2721,6 +2738,7 @@ export const listChatRoomUsers = /* GraphQL */ `
                   startedAt
                   __typename
                 }
+                phoneNo
                 createdAt
                 updatedAt
                 _version
@@ -2739,6 +2757,7 @@ export const listChatRoomUsers = /* GraphQL */ `
             startedAt
             __typename
           }
+          phoneNo
           createdAt
           updatedAt
           _version
@@ -2912,6 +2931,7 @@ export const syncChatRoomUsers = /* GraphQL */ `
                   startedAt
                   __typename
                 }
+                phoneNo
                 createdAt
                 updatedAt
                 _version
@@ -3062,6 +3082,7 @@ export const syncChatRoomUsers = /* GraphQL */ `
                   startedAt
                   __typename
                 }
+                phoneNo
                 createdAt
                 updatedAt
                 _version
@@ -3080,6 +3101,7 @@ export const syncChatRoomUsers = /* GraphQL */ `
             startedAt
             __typename
           }
+          phoneNo
           createdAt
           updatedAt
           _version
@@ -3255,6 +3277,7 @@ export const chatRoomUsersByChatRoomId = /* GraphQL */ `
                   startedAt
                   __typename
                 }
+                phoneNo
                 createdAt
                 updatedAt
                 _version
@@ -3405,6 +3428,7 @@ export const chatRoomUsersByChatRoomId = /* GraphQL */ `
                   startedAt
                   __typename
                 }
+                phoneNo
                 createdAt
                 updatedAt
                 _version
@@ -3423,6 +3447,7 @@ export const chatRoomUsersByChatRoomId = /* GraphQL */ `
             startedAt
             __typename
           }
+          phoneNo
           createdAt
           updatedAt
           _version
@@ -3598,6 +3623,7 @@ export const chatRoomUsersByUserId = /* GraphQL */ `
                   startedAt
                   __typename
                 }
+                phoneNo
                 createdAt
                 updatedAt
                 _version
@@ -3748,6 +3774,7 @@ export const chatRoomUsersByUserId = /* GraphQL */ `
                   startedAt
                   __typename
                 }
+                phoneNo
                 createdAt
                 updatedAt
                 _version
@@ -3766,6 +3793,7 @@ export const chatRoomUsersByUserId = /* GraphQL */ `
             startedAt
             __typename
           }
+          phoneNo
           createdAt
           updatedAt
           _version

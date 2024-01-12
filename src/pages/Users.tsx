@@ -1,6 +1,7 @@
 import React, { Fragment, useEffect, useState } from 'react'
-import { Button, Image, Pressable, Text, View, ViewStyle, useWindowDimensions } from 'react-native'
+import { Button, Image, PermissionsAndroid, Platform, Pressable, Text, View, ViewStyle, useWindowDimensions } from 'react-native'
 import { SafeAreaView } from 'react-native-safe-area-context'
+import Contacts from 'react-native-contacts';
 import { UserItem } from "../components"
 import { ChatRoomData } from "../dummy-data/ChatRooms"
 import { borderBottomGray2, centerHorizontal, centerVertical, colorWhite, flexChild, flexRow, fs14BoldBlack2, fs16BoldBlack2, fs16BoldBlue1, fs16RegBlue1, fs16RegBlue5, fs24BoldBlack2, fullWidth } from '../styles'
@@ -21,6 +22,7 @@ MaterialIcons.loadFont();
 
 export const Users = () => {
     const { width } = useWindowDimensions();
+    const [contacts, setContacts] = useState([])
     const [users, setUsers] = useState<User[]>([])
     const navigation = useNavigation();
 
@@ -72,7 +74,21 @@ export const Users = () => {
             const fetchedUsers = await client.graphql({
                 query: listUsers
             })
-            setUsers(fetchedUsers.data?.listUsers?.items)
+            if(Platform.OS === "android")
+             {
+                await PermissionsAndroid.request(PermissionsAndroid.PERMISSIONS.READ_CONTACTS, {
+                    title: 'Contacts',
+                    message: 'This app would like to view your contacts.',
+                    buttonPositive: 'Please accept bare mortal',
+                })
+             }
+            const contacts = await Contacts.getAll();
+            const filteredContacts = fetchedUsers.data?.listUsers?.items.filter((eachUser) => {
+                return contacts.some((contactUser) => {
+                    return contactUser.phoneNumbers.some((eachPhoneNumber) => eachPhoneNumber.number.replace(/\s/g, "") === eachUser.phoneNo.replace(/\s/g,""))
+                })
+            })
+            setUsers(filteredContacts)
 
         }
         catch (err) {
@@ -81,7 +97,8 @@ export const Users = () => {
     }
 
     useEffect(() => {
-        fetchUsers()
+        fetchUsers();
+
     }, [])
 
     const headerStyle: ViewStyle = {

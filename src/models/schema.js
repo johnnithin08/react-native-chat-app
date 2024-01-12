@@ -438,6 +438,13 @@ export const schema = {
                         ]
                     }
                 },
+                "phoneNo": {
+                    "name": "phoneNo",
+                    "isArray": false,
+                    "type": "String",
+                    "isRequired": false,
+                    "attributes": []
+                },
                 "createdAt": {
                     "name": "createdAt",
                     "isArray": false,
@@ -590,5 +597,5 @@ export const schema = {
     },
     "nonModels": {},
     "codegenVersion": "3.4.4",
-    "version": "c205a7e25e49f505403b3c97efdb04c0"
+    "version": "1de7129452dd4bc1ca3ba6eb031054d6"
 };

@@ -61,7 +61,7 @@ export const MessageInput = ({ chatRoom }) => {
     };
 
     const handlePicker = async () => {
-        const result = await launchImageLibrary({ mediaType: "mixed", videoQuality: "medium", quality: 0.4, presentationStyle: "fullScreen" });
+        const result = await launchImageLibrary({ mediaType: "mixed", videoQuality: "medium", quality: 0.4, presentationStyle: "fullScreen", selectionLimit: 0 });
         handleImageResult(result)
         // imageOpenPicker(handleImageResult, { cropping: false, multiple: true });
     }

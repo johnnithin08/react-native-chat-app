@@ -1,5 +1,5 @@
 PODS:
-  - AmplifyRTNCore (1.0.10):
+  - AmplifyRTNCore (1.0.11):
     - React-Core
   - boost (1.76.0)
   - CocoaAsyncSocket (7.6.5)
@@ -730,7 +730,7 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native/ReactCommon/yoga"
 
 SPEC CHECKSUMS:
-  AmplifyRTNCore: 74fc06365f08cabb0fa2e22869fe62fd89bda2c5
+  AmplifyRTNCore: e5656206f1822edaa2864f73fdde25fa6834d88c
   boost: 57d2868c099736d80fcd648bf211b4431e51a558
   CocoaAsyncSocket: 065fd1e645c7abab64f7a6a2007a48038fdc6a99
   DoubleConversion: 5189b271737e1565bdce30deb4a08d647e3f5f54
@@ -797,6 +797,6 @@ SPEC CHECKSUMS:
   Yoga: 3efc43e0d48686ce2e8c60f99d4e6bd349aff981
   YogaKit: f782866e155069a2cca2517aafea43200b01fd5a
 
-PODFILE CHECKSUM: 150d00fefae423541c8e1cb40e86d0a4191bf87c
+PODFILE CHECKSUM: de7fc827b15160d18416176812d4ed3273fc4769
 
 COCOAPODS: 1.12.1
