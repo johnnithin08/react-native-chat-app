@@ -18,6 +18,7 @@ import { createChatRoom, createChatRoomUser } from '../graphql/mutations'
 import { getCommonChatRooms } from '../utilities/chatRoom'
 import { IconButton } from '@aws-amplify/ui-react-native/dist/primitives'
 import Ionicons from 'react-native-vector-icons/Ionicons'
+import { getUrl } from 'aws-amplify/storage';
 
 MaterialIcons.loadFont();
 
@@ -89,7 +90,19 @@ export const Users = () => {
                     return contactUser.phoneNumbers.some((eachPhoneNumber) => eachPhoneNumber.number.replace(/\s/g, "") === eachUser.phoneNo.replace(/\s/g,""))
                 })
             })
-            setUsers(filteredContacts)
+            const updatedContacts = await Promise.all(filteredContacts.map(async (eachContact) => {
+                const imageUrl = eachContact.imageUri !== null ? await getUrl({
+                    key: eachContact.imageUri,
+                    options: {
+                      expiresIn: 36000000000,
+                    },
+                }).then((urlResult) => urlResult.url.toString()) : null;
+                return {
+                    ...eachContact,
+                    imageUri: imageUrl
+                }
+            }))
+            setUsers(updatedContacts)
 
         }
         catch (err) {

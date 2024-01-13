@@ -21,6 +21,7 @@ import Feather from 'react-native-vector-icons/Feather'
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import { getUser } from '../graphql/queries';
+import { getUrl } from 'aws-amplify/storage';
 
 export const ChatList = () => {
     const navigation = useNavigation();
@@ -64,7 +65,13 @@ export const ChatList = () => {
                  query: getUser,
                  variables: { id: authUser.userId}
              })
-             setUser(userResponse.data.getUser);
+             const imageUrl = await getUrl({
+                key: userResponse.data.getUser.imageUri,
+                options: {
+                  expiresIn: 36000000000,
+                },
+            }).then((urlResult) => urlResult.url.toString());
+             setUser({...userResponse.data.getUser, imageUri: imageUrl});
          }
         catch(err)
          {
@@ -88,8 +95,6 @@ export const ChatList = () => {
           borderRadius: 12,
         },
       };
-
-    console.log("curr", user)
 
     return (
         <SafeAreaView style={{ ...flexChild, backgroundColor: colorWhite._1 }}>

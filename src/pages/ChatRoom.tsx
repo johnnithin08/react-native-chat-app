@@ -46,7 +46,6 @@ export const ChatRoom = () => {
                 query: getChatRoom,
                 variables: { id: chatRoomId }
             })
-            console.log("user", resp)
             const findUser = resp.data?.getChatRoom.users.items.find((eachItem) => eachItem.user.id !== authUser.userId)
             setUser({ type: resp.data.getChatRoom.name ? "group" : "single", data: findUser.user, name: resp.data.getChatRoom.name ? resp.data.getChatRoom.name : findUser.user.name})
             setData(resp.data?.getChatRoom)

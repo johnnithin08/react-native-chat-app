@@ -7,6 +7,8 @@ import { flexRow, px, py, absolutePosition, colorBlue, centerHV, colorWhite, fs1
 import { generateClient } from 'aws-amplify/api';
 import { getCurrentUser } from 'aws-amplify/auth';
 import { onUpdateChatRoom } from '../../graphql/subscriptions';
+import { LocalAssets } from '../../assets/images/LocalAssets';
+import { getUrl } from 'aws-amplify/storage';
 
 interface IChatRoomItem {
     data: IChatList;
@@ -24,7 +26,15 @@ export const ChatRoomItem: FunctionComponent<IChatRoomItem> = ({ data, handleFet
         const fetchUser = async () => {
             const authUser = await getCurrentUser();
             const userItem = chatRoom.users.items.find((eachItem) => eachItem.user.id !== authUser.userId);
-            setUser(userItem.user)
+            console.log("user", userItem)
+            const imageUrl = userItem.user.imageUri !== null ? await getUrl({
+                key: userItem.user.imageUri,
+                options: {
+                  expiresIn: 36000000000,
+                },
+            }).then((urlResult) => urlResult.url.toString()) : null;
+            console.log("ima", imageUrl)
+            setUser({...userItem.user, imageUri: imageUrl})
         }
         fetchUser();
     }, [])
@@ -64,7 +74,7 @@ export const ChatRoomItem: FunctionComponent<IChatRoomItem> = ({ data, handleFet
         height: wp(5), 
         width: wp(5), 
         borderRadius: wp(5), 
-        backgroundColor: colorBlue._8, 
+    backgroundColor: colorBlue._8, 
         right: wp(-3), 
         borderWidth: 1,
         borderColor: colorWhite._1 
@@ -76,11 +86,10 @@ export const ChatRoomItem: FunctionComponent<IChatRoomItem> = ({ data, handleFet
         ...centerHorizontal,
     }
 
-    console.log("user", user)
     return (
         <View style={{ ...flexRow, ...px(10), ...py(10) }}>
             <View>
-                <Image key={user?.imageUri} source={{ uri: user?.imageUri }} style={imageStyle} />
+                <Image key={user?.imageUri} source={user?.imageUri !== null ?  { uri: user?.imageUri } : LocalAssets.profile} style={imageStyle} />
                 {chatRoom?.newMessages && (
                     <View style={counterStyle}>
                         <Text style={{ ...fs12BoldWhite1, lineHeight: 0 }}>{chatRoom?.newMessages}</Text>
