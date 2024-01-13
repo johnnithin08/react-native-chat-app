@@ -124,38 +124,38 @@
     fast-xml-parser "^4.2.5"
     tslib "^2.5.0"
 
-"@aws-amplify/ui-react-core-notifications@2.0.6":
-  version "2.0.6"
-  resolved "https://registry.yarnpkg.com/@aws-amplify/ui-react-core-notifications/-/ui-react-core-notifications-2.0.6.tgz#4a01c2946926e87cc2386a1460fb0bf3bfba9ac8"
-  integrity sha512-f3aNaB4Z6Ac569TAOfU2Axf8yjoGMCfc+boRhT0vg0QwBLrZMHD9iPd/RhZqFoajcx5kOLgWZamM5mipdnziiw==
+"@aws-amplify/ui-react-core-notifications@2.0.7":
+  version "2.0.7"
+  resolved "https://registry.yarnpkg.com/@aws-amplify/ui-react-core-notifications/-/ui-react-core-notifications-2.0.7.tgz#7abb56550341ba9c069a1b2f8a92a67623f17de1"
+  integrity sha512-Ul8oRo9/Yebw0LRT77dAKTe7LcRvFsqa7+LV6X5of8jm7YgqjyMXUyA/P5iuEm9aa4yZ22qNrmkmns03C0kUTg==
   dependencies:
-    "@aws-amplify/ui" "6.0.6"
-    "@aws-amplify/ui-react-core" "3.0.6"
+    "@aws-amplify/ui" "6.0.7"
+    "@aws-amplify/ui-react-core" "3.0.7"
 
-"@aws-amplify/ui-react-core@3.0.6":
-  version "3.0.6"
-  resolved "https://registry.yarnpkg.com/@aws-amplify/ui-react-core/-/ui-react-core-3.0.6.tgz#1b9e1aca9d111d39ab0ecb5c74be31ad53df4a6a"
-  integrity sha512-kGkIwvHQLVP2jhDliHPYkXgdgyyKmfJczuFF9msW0Y4zF8uFItXRxgGplX9w47204m41yAvH5PLs87AHzbBMHg==
+"@aws-amplify/ui-react-core@3.0.7":
+  version "3.0.7"
+  resolved "https://registry.yarnpkg.com/@aws-amplify/ui-react-core/-/ui-react-core-3.0.7.tgz#3c993fe9b3f31b2d0d0439aba99f2ab8cb1223be"
+  integrity sha512-tsEn5vsL9cLAFsx5KNdRAhFLkdnr//6hshtbBWegmlfdI47NLeP/djexwSwloCSBm3ebJdO3D0eqd0YxLtcOvQ==
   dependencies:
-    "@aws-amplify/ui" "6.0.6"
+    "@aws-amplify/ui" "6.0.7"
     "@xstate/react" "^3.2.2"
     lodash "4.17.21"
     react-hook-form "^7.43.5"
     xstate "^4.33.6"
 
 "@aws-amplify/ui-react-native@^2.0.3":
-  version "2.0.7"
-  resolved "https://registry.yarnpkg.com/@aws-amplify/ui-react-native/-/ui-react-native-2.0.7.tgz#08b973cc42e09592a9b54728bcf3449a896d6c0f"
-  integrity sha512-skYuCuGAxA9MWHNMCT5u/2oB6avklKH4Hki29N/Gx9qXUl/wNREVaAn2WA9oq66uTdq9Pb1F1N73hxOC/OLP1w==
+  version "2.0.8"
+  resolved "https://registry.yarnpkg.com/@aws-amplify/ui-react-native/-/ui-react-native-2.0.8.tgz#8b8a3ace6d775487d42ddc2a37d6fb02b0203810"
+  integrity sha512-ztssQI9x5qBY3mOMAyeTdWZ+u/sff2gFKCiOOgHM/Yl3Pr1sKmHDqaBcAhxXu4T8VICEIHu11DBAp7QUyKN7Ow==
   dependencies:
-    "@aws-amplify/ui" "6.0.6"
-    "@aws-amplify/ui-react-core" "3.0.6"
-    "@aws-amplify/ui-react-core-notifications" "2.0.6"
+    "@aws-amplify/ui" "6.0.7"
+    "@aws-amplify/ui-react-core" "3.0.7"
+    "@aws-amplify/ui-react-core-notifications" "2.0.7"
 
-"@aws-amplify/ui@6.0.6":
-  version "6.0.6"
-  resolved "https://registry.yarnpkg.com/@aws-amplify/ui/-/ui-6.0.6.tgz#3342949b3c158c1e09223347d941fa9d7adfb198"
-  integrity sha512-icC2S+vIWr/5l25S7YHnakhuCW02ZK9c47Xug1b9KW8DzmE+1aCZeyessTC2yHGXt0MtbgSOT6CA/ougyLDtDA==
+"@aws-amplify/ui@6.0.7":
+  version "6.0.7"
+  resolved "https://registry.yarnpkg.com/@aws-amplify/ui/-/ui-6.0.7.tgz#24a3009d6122a88552c0d4be4842a7d6bf2323d3"
+  integrity sha512-uVdjHk4aS+5Q294Cy2ZcGQqMYnWu9qjabz7r2ygHeKWd9x2Qy3QeshYHE/In/Y/fJo8zsZ6xcoXw7gYyb7Wdsg==
   dependencies:
     csstype "^3.1.1"
     lodash "4.17.21"
@@ -3073,9 +3073,9 @@
   integrity sha512-dRLjCWHYg4oaA77cxO64oO+7JwCwnIzkZPdrrC71jQmQtlhM556pwKo5bUzqvZndkVbeFLIIi+9TC40JNF5hNQ==
 
 "@types/node@*":
-  version "20.10.8"
-  resolved "https://registry.yarnpkg.com/@types/node/-/node-20.10.8.tgz#f1e223cbde9e25696661d167a5b93a9b2a5d57c7"
-  integrity sha512-f8nQs3cLxbAFc00vEU59yf9UyGUftkPaLGfvbVOIDdx2i1b8epBqj2aNGyP19fiyXWvlmZ7qC1XLjAzw/OKIeA==
+  version "20.11.0"
+  resolved "https://registry.yarnpkg.com/@types/node/-/node-20.11.0.tgz#8e0b99e70c0c1ade1a86c4a282f7b7ef87c9552f"
+  integrity sha512-o9bjXmDNcF7GbM4CNQpmi+TutCgap/K3w1JyKgxAjqx41zp9qlIAVFi0IhCNsJcXolEqLWhbFbEeL0PvYm4pcQ==
   dependencies:
     undici-types "~5.26.4"
 
@@ -4387,9 +4387,9 @@ ee-first@1.1.1:
   integrity sha512-WMwm9LhRUo+WUaRN+vRuETqG89IgZphVSNkdFgeb6sS/E4OrDIN7t48CAewSHXc6C8lefD8KKfr5vY61brQlow==
 
 electron-to-chromium@^1.4.601:
-  version "1.4.627"
-  resolved "https://registry.yarnpkg.com/electron-to-chromium/-/electron-to-chromium-1.4.627.tgz#86e47c33138cf37e1a05b9f3c95ffff666763f5d"
-  integrity sha512-BPFdHKPzyGxYQpgiCoIGnkzlMlps3bRdnjeh3qd/Q2pSacL0YW81i4llqsTY/wNbN/Ztw++7HNfp8v4Rm8VDuA==
+  version "1.4.628"
+  resolved "https://registry.yarnpkg.com/electron-to-chromium/-/electron-to-chromium-1.4.628.tgz#97cefa4b2356d981875f19639885e4fc50ce6e82"
+  integrity sha512-2k7t5PHvLsufpP6Zwk0nof62yLOsCf032wZx7/q0mv8gwlXjhcxI3lz6f0jBr0GrnWKcm3burXzI3t5IrcdUxw==
 
 eme-encryption-scheme-polyfill@^2.0.1:
   version "2.1.1"
@@ -8207,9 +8207,9 @@ safe-buffer@~5.2.0:
   integrity sha512-rp3So07KcdmmKbGvgaNxQSJr7bGVSVk5S9Eq1F+ppbRo70+YeaDxkw5Dd8NPN+GD6bjnYm2VuPuCXmpuYvmCXQ==
 
 safe-regex-test@^1.0.0:
-  version "1.0.1"
-  resolved "https://registry.yarnpkg.com/safe-regex-test/-/safe-regex-test-1.0.1.tgz#207369b445fd007e534864635b28b2ae7b105783"
-  integrity sha512-Y5NejJTTliTyY4H7sipGqY+RX5P87i3F7c4Rcepy72nq+mNLhIsD0W4c7kEmduMDQCSqtPsXPlSTsFhh2LQv+g==
+  version "1.0.2"
+  resolved "https://registry.yarnpkg.com/safe-regex-test/-/safe-regex-test-1.0.2.tgz#3ba32bdb3ea35f940ee87e5087c60ee786c3f6c5"
+  integrity sha512-83S9w6eFq12BBIJYvjMux6/dkirb8+4zJRA9cxNBVb7Wq5fJBW+Xze48WqR8pxua7bDuAaaAxtVVd4Idjp1dBQ==
   dependencies:
     call-bind "^1.0.5"
     get-intrinsic "^1.2.2"

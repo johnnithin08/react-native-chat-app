@@ -360,6 +360,7 @@ export const createChatRoom = /* GraphQL */ `
                   name
                   imageUri
                   status
+                  phoneNo
                   createdAt
                   updatedAt
                   _version
@@ -457,6 +458,7 @@ export const createChatRoom = /* GraphQL */ `
                   name
                   imageUri
                   status
+                  phoneNo
                   createdAt
                   updatedAt
                   _version
@@ -475,6 +477,7 @@ export const createChatRoom = /* GraphQL */ `
               startedAt
               __typename
             }
+            phoneNo
             createdAt
             updatedAt
             _version
@@ -693,6 +696,7 @@ export const updateChatRoom = /* GraphQL */ `
                   name
                   imageUri
                   status
+                  phoneNo
                   createdAt
                   updatedAt
                   _version
@@ -790,6 +794,7 @@ export const updateChatRoom = /* GraphQL */ `
                   name
                   imageUri
                   status
+                  phoneNo
                   createdAt
                   updatedAt
                   _version
@@ -808,6 +813,7 @@ export const updateChatRoom = /* GraphQL */ `
               startedAt
               __typename
             }
+            phoneNo
             createdAt
             updatedAt
             _version
@@ -1026,6 +1032,7 @@ export const deleteChatRoom = /* GraphQL */ `
                   name
                   imageUri
                   status
+                  phoneNo
                   createdAt
                   updatedAt
                   _version
@@ -1123,6 +1130,7 @@ export const deleteChatRoom = /* GraphQL */ `
                   name
                   imageUri
                   status
+                  phoneNo
                   createdAt
                   updatedAt
                   _version
@@ -1141,6 +1149,7 @@ export const deleteChatRoom = /* GraphQL */ `
               startedAt
               __typename
             }
+            phoneNo
             createdAt
             updatedAt
             _version
@@ -1326,6 +1335,7 @@ export const createUser = /* GraphQL */ `
                   name
                   imageUri
                   status
+                  phoneNo
                   createdAt
                   updatedAt
                   _version
@@ -1423,6 +1433,7 @@ export const createUser = /* GraphQL */ `
                   name
                   imageUri
                   status
+                  phoneNo
                   createdAt
                   updatedAt
                   _version
@@ -1441,6 +1452,7 @@ export const createUser = /* GraphQL */ `
               startedAt
               __typename
             }
+            phoneNo
             createdAt
             updatedAt
             _version
@@ -1459,6 +1471,7 @@ export const createUser = /* GraphQL */ `
         startedAt
         __typename
       }
+      phoneNo
       createdAt
       updatedAt
       _version
@@ -1604,6 +1617,7 @@ export const updateUser = /* GraphQL */ `
                   name
                   imageUri
                   status
+                  phoneNo
                   createdAt
                   updatedAt
                   _version
@@ -1701,6 +1715,7 @@ export const updateUser = /* GraphQL */ `
                   name
                   imageUri
                   status
+                  phoneNo
                   createdAt
                   updatedAt
                   _version
@@ -1719,6 +1734,7 @@ export const updateUser = /* GraphQL */ `
               startedAt
               __typename
             }
+            phoneNo
             createdAt
             updatedAt
             _version
@@ -1737,6 +1753,7 @@ export const updateUser = /* GraphQL */ `
         startedAt
         __typename
       }
+      phoneNo
       createdAt
       updatedAt
       _version
@@ -1882,6 +1899,7 @@ export const deleteUser = /* GraphQL */ `
                   name
                   imageUri
                   status
+                  phoneNo
                   createdAt
                   updatedAt
                   _version
@@ -1979,6 +1997,7 @@ export const deleteUser = /* GraphQL */ `
                   name
                   imageUri
                   status
+                  phoneNo
                   createdAt
                   updatedAt
                   _version
@@ -1997,6 +2016,7 @@ export const deleteUser = /* GraphQL */ `
               startedAt
               __typename
             }
+            phoneNo
             createdAt
             updatedAt
             _version
@@ -2015,6 +2035,7 @@ export const deleteUser = /* GraphQL */ `
         startedAt
         __typename
       }
+      phoneNo
       createdAt
       updatedAt
       _version
@@ -2236,6 +2257,7 @@ export const createChatRoomUser = /* GraphQL */ `
                 startedAt
                 __typename
               }
+              phoneNo
               createdAt
               updatedAt
               _version
@@ -2453,6 +2475,7 @@ export const createChatRoomUser = /* GraphQL */ `
                 startedAt
                 __typename
               }
+              phoneNo
               createdAt
               updatedAt
               _version
@@ -2471,6 +2494,7 @@ export const createChatRoomUser = /* GraphQL */ `
           startedAt
           __typename
         }
+        phoneNo
         createdAt
         updatedAt
         _version
@@ -2699,6 +2723,7 @@ export const updateChatRoomUser = /* GraphQL */ `
                 startedAt
                 __typename
               }
+              phoneNo
               createdAt
               updatedAt
               _version
@@ -2916,6 +2941,7 @@ export const updateChatRoomUser = /* GraphQL */ `
                 startedAt
                 __typename
               }
+              phoneNo
               createdAt
               updatedAt
               _version
@@ -2934,6 +2960,7 @@ export const updateChatRoomUser = /* GraphQL */ `
           startedAt
           __typename
         }
+        phoneNo
         createdAt
         updatedAt
         _version
@@ -3162,6 +3189,7 @@ export const deleteChatRoomUser = /* GraphQL */ `
                 startedAt
                 __typename
               }
+              phoneNo
               createdAt
               updatedAt
               _version
@@ -3379,6 +3407,7 @@ export const deleteChatRoomUser = /* GraphQL */ `
                 startedAt
                 __typename
               }
+              phoneNo
               createdAt
               updatedAt
               _version
@@ -3397,6 +3426,7 @@ export const deleteChatRoomUser = /* GraphQL */ `
           startedAt
           __typename
         }
+        phoneNo
         createdAt
         updatedAt
         _version

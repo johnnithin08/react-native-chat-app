@@ -1,5 +1,6 @@
 import React, { useState } from 'react'
 import { View, Text, ViewStyle, TextInput, Pressable, Image, ImageStyle, Platform } from 'react-native'
+import {widthPercentageToDP as wp, heightPercentageToDP as hp} from 'react-native-responsive-screen';
 import { generateClient } from 'aws-amplify/api';
 import { getCurrentUser } from 'aws-amplify/auth';
 import { uploadData } from 'aws-amplify/storage';
@@ -61,7 +62,7 @@ export const MessageInput = ({ chatRoom }) => {
     };
 
     const handlePicker = async () => {
-        const result = await launchImageLibrary({ mediaType: "mixed", videoQuality: "medium", quality: 0.4, presentationStyle: "fullScreen" });
+        const result = await launchImageLibrary({ mediaType: "mixed", videoQuality: "medium", quality: 0.4, presentationStyle: "fullScreen", selectionLimit: 0 });
         handleImageResult(result)
         // imageOpenPicker(handleImageResult, { cropping: false, multiple: true });
     }
@@ -139,9 +140,9 @@ export const MessageInput = ({ chatRoom }) => {
     const buttonContainer: ViewStyle = {
         ...centerHV,
         backgroundColor: colorBlue._8,
-        height: 40,
-        width: 40,
-        borderRadius: 25,
+        height: wp(10),
+        width: wp(10),
+        borderRadius: wp(10),
 
     }
     const inputContainer: ViewStyle = {
@@ -149,44 +150,45 @@ export const MessageInput = ({ chatRoom }) => {
         ...flexRow,
         ...centerVertical,
         backgroundColor: colorGray._3,
-        borderRadius: 24,
-        marginRight: 10,
-        padding: 5,
+        borderRadius: 36,
+        marginRight: wp(2),
+        padding: wp(2),
 
     }
     const container: ViewStyle = {
         ...flexRow,
-        padding: 10,
+        ...centerVertical,
+        padding: wp(2),
 
     }
 
     const icon: ViewStyle = {
-        marginHorizontal: 5,
+        marginHorizontal: wp(1),
     }
 
     const input: ViewStyle = {
         ...flexChild,
-        marginHorizontal: 5
+        marginHorizontal: wp(2)
     }
 
     const addIconStyle: ViewStyle = {
         backgroundColor: colorGray._1,
-        borderRadius: 100,
-        padding: 2,
+        borderRadius: wp(10),
+        padding: wp(1),
     }
 
     const selectedImage: ImageStyle = {
-        height: 100,
-        width: 200,
+        height: hp(12),
+        width: wp(30),
 
     }
 
     const removeSelectedImage: ViewStyle = {
         ...absolutePosition,
-        right: 10,
-        top: -5,
+        right: wp(0.25),
+        top: hp(-0.5),
         backgroundColor: colorWhite._1,
-        borderRadius: 10,
+        borderRadius: wp(2),
         overflow: "hidden"
     }
 
@@ -194,7 +196,7 @@ export const MessageInput = ({ chatRoom }) => {
         <View>
 
             {attachments.length > 0 && (
-                <View style={{ ...alignItemsEnd }}>
+                <View style={{ ...alignItemsEnd, marginRight: wp(2) }}>
                     <FlatList
                         data={attachments}
                         horizontal={true}
@@ -218,7 +220,7 @@ export const MessageInput = ({ chatRoom }) => {
                                                 showOnStart={false}
                                             />
                                             {progresses[item.url] ? (
-                                                <View style={{ ...absolutePosition, top: "40%", left: "40%", backgroundColor: colorGray._2, padding: 10, borderRadius: 50, }}>
+                                                <View style={{ ...absolutePosition, top: "40%", left: "40%", backgroundColor: colorGray._2, padding: wp(2), borderRadius: wp(5) }}>
                                                     <Text style={fs12RegBlack2}>{(progresses[item.url] * 100).toFixed(2)} %</Text>
                                                 </View>
                                             ) : null}
@@ -227,15 +229,15 @@ export const MessageInput = ({ chatRoom }) => {
                                         <>
                                             <Image source={{ uri: item.url }} style={selectedImage} resizeMode="contain" />
                                             {progresses[item.url] ? (
-                                                <View style={{ ...absolutePosition, top: "40%", left: "40%", backgroundColor: colorGray._2, padding: 10, borderRadius: 50, }}>
+                                                <View style={{ ...absolutePosition, top: "40%", left: "40%", backgroundColor: colorGray._2, padding: wp(2), borderRadius: wp(5) }}>
                                                     <Text style={fs12RegBlack2}>{(progresses[item.url] * 100).toFixed(2)} %</Text>
                                                 </View>
-                                            ) : null}
+                                            ) : null} 
                                         </>
                                     )}
                                     <MaterialCommunityIcons name="close-circle-outline" onPress={() => setAttachments((existingAttachments) => {
                                         return existingAttachments.filter((currentAttachment) => currentAttachment !== item)
-                                    })} size={20} color={colorBlack._1} style={removeSelectedImage} />
+                                    })} size={wp(5)} color={colorBlack._1} style={removeSelectedImage} />
                                 </>
                             )
                         }}
@@ -245,7 +247,7 @@ export const MessageInput = ({ chatRoom }) => {
             <View style={container}>
                 <View style={inputContainer}>
                     <Pressable style={addIconStyle}>
-                        <AntDesign name="plus" onPress={handlePicker} size={24} color={colorGray._5} />
+                        <AntDesign name="plus" onPress={handlePicker} size={wp(6)} color={colorGray._5} />
                     </Pressable>
                     <TextInput
                         onChangeText={handleInput}
@@ -253,11 +255,11 @@ export const MessageInput = ({ chatRoom }) => {
                         style={input}
                         value={message}
                     />
-                    <Feather name="camera" size={24} color={colorGray._5} style={icon} />
-                    <MaterialCommunityIcons name="microphone-outline" size={24} color={colorGray._5} style={icon} />
+                    {/* <Feather name="camera" size={24} color={colorGray._5} style={icon} />
+                    <MaterialCommunityIcons name="microphone-outline" size={24} color={colorGray._5} style={icon} /> */}
                 </View>
                 <Pressable disabled={message === "" && attachments.length > 0} onPress={handleSend} style={buttonContainer}>
-                    <Ionicons name="send" onPress={handleSend} size={20} color={colorWhite._1} />
+                    <Ionicons name="send" onPress={handleSend} size={wp(5)} color={colorWhite._1} />
                 </Pressable>
             </View>
         </View>

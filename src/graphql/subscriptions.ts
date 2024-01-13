@@ -345,6 +345,7 @@ export const onCreateChatRoom = /* GraphQL */ `
                   name
                   imageUri
                   status
+                  phoneNo
                   createdAt
                   updatedAt
                   _version
@@ -442,6 +443,7 @@ export const onCreateChatRoom = /* GraphQL */ `
                   name
                   imageUri
                   status
+                  phoneNo
                   createdAt
                   updatedAt
                   _version
@@ -460,6 +462,7 @@ export const onCreateChatRoom = /* GraphQL */ `
               startedAt
               __typename
             }
+            phoneNo
             createdAt
             updatedAt
             _version
@@ -675,6 +678,7 @@ export const onUpdateChatRoom = /* GraphQL */ `
                   name
                   imageUri
                   status
+                  phoneNo
                   createdAt
                   updatedAt
                   _version
@@ -772,6 +776,7 @@ export const onUpdateChatRoom = /* GraphQL */ `
                   name
                   imageUri
                   status
+                  phoneNo
                   createdAt
                   updatedAt
                   _version
@@ -790,6 +795,7 @@ export const onUpdateChatRoom = /* GraphQL */ `
               startedAt
               __typename
             }
+            phoneNo
             createdAt
             updatedAt
             _version
@@ -1005,6 +1011,7 @@ export const onDeleteChatRoom = /* GraphQL */ `
                   name
                   imageUri
                   status
+                  phoneNo
                   createdAt
                   updatedAt
                   _version
@@ -1102,6 +1109,7 @@ export const onDeleteChatRoom = /* GraphQL */ `
                   name
                   imageUri
                   status
+                  phoneNo
                   createdAt
                   updatedAt
                   _version
@@ -1120,6 +1128,7 @@ export const onDeleteChatRoom = /* GraphQL */ `
               startedAt
               __typename
             }
+            phoneNo
             createdAt
             updatedAt
             _version
@@ -1302,6 +1311,7 @@ export const onCreateUser = /* GraphQL */ `
                   name
                   imageUri
                   status
+                  phoneNo
                   createdAt
                   updatedAt
                   _version
@@ -1399,6 +1409,7 @@ export const onCreateUser = /* GraphQL */ `
                   name
                   imageUri
                   status
+                  phoneNo
                   createdAt
                   updatedAt
                   _version
@@ -1417,6 +1428,7 @@ export const onCreateUser = /* GraphQL */ `
               startedAt
               __typename
             }
+            phoneNo
             createdAt
             updatedAt
             _version
@@ -1435,6 +1447,7 @@ export const onCreateUser = /* GraphQL */ `
         startedAt
         __typename
       }
+      phoneNo
       createdAt
       updatedAt
       _version
@@ -1577,6 +1590,7 @@ export const onUpdateUser = /* GraphQL */ `
                   name
                   imageUri
                   status
+                  phoneNo
                   createdAt
                   updatedAt
                   _version
@@ -1674,6 +1688,7 @@ export const onUpdateUser = /* GraphQL */ `
                   name
                   imageUri
                   status
+                  phoneNo
                   createdAt
                   updatedAt
                   _version
@@ -1692,6 +1707,7 @@ export const onUpdateUser = /* GraphQL */ `
               startedAt
               __typename
             }
+            phoneNo
             createdAt
             updatedAt
             _version
@@ -1710,6 +1726,7 @@ export const onUpdateUser = /* GraphQL */ `
         startedAt
         __typename
       }
+      phoneNo
       createdAt
       updatedAt
       _version
@@ -1852,6 +1869,7 @@ export const onDeleteUser = /* GraphQL */ `
                   name
                   imageUri
                   status
+                  phoneNo
                   createdAt
                   updatedAt
                   _version
@@ -1949,6 +1967,7 @@ export const onDeleteUser = /* GraphQL */ `
                   name
                   imageUri
                   status
+                  phoneNo
                   createdAt
                   updatedAt
                   _version
@@ -1967,6 +1986,7 @@ export const onDeleteUser = /* GraphQL */ `
               startedAt
               __typename
             }
+            phoneNo
             createdAt
             updatedAt
             _version
@@ -1985,6 +2005,7 @@ export const onDeleteUser = /* GraphQL */ `
         startedAt
         __typename
       }
+      phoneNo
       createdAt
       updatedAt
       _version
@@ -2205,6 +2226,7 @@ export const onCreateChatRoomUser = /* GraphQL */ `
                 startedAt
                 __typename
               }
+              phoneNo
               createdAt
               updatedAt
               _version
@@ -2422,6 +2444,7 @@ export const onCreateChatRoomUser = /* GraphQL */ `
                 startedAt
                 __typename
               }
+              phoneNo
               createdAt
               updatedAt
               _version
@@ -2440,6 +2463,7 @@ export const onCreateChatRoomUser = /* GraphQL */ `
           startedAt
           __typename
         }
+        phoneNo
         createdAt
         updatedAt
         _version
@@ -2667,6 +2691,7 @@ export const onUpdateChatRoomUser = /* GraphQL */ `
                 startedAt
                 __typename
               }
+              phoneNo
               createdAt
               updatedAt
               _version
@@ -2884,6 +2909,7 @@ export const onUpdateChatRoomUser = /* GraphQL */ `
                 startedAt
                 __typename
               }
+              phoneNo
               createdAt
               updatedAt
               _version
@@ -2902,6 +2928,7 @@ export const onUpdateChatRoomUser = /* GraphQL */ `
           startedAt
           __typename
         }
+        phoneNo
         createdAt
         updatedAt
         _version
@@ -3129,6 +3156,7 @@ export const onDeleteChatRoomUser = /* GraphQL */ `
                 startedAt
                 __typename
               }
+              phoneNo
               createdAt
               updatedAt
               _version
@@ -3346,6 +3374,7 @@ export const onDeleteChatRoomUser = /* GraphQL */ `
                 startedAt
                 __typename
               }
+              phoneNo
               createdAt
               updatedAt
               _version
@@ -3364,6 +3393,7 @@ export const onDeleteChatRoomUser = /* GraphQL */ `
           startedAt
           __typename
         }
+        phoneNo
         createdAt
         updatedAt
         _version

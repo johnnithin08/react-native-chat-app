@@ -1,9 +1,11 @@
 import React, { Fragment, useEffect, useState } from 'react'
-import { Button, Image, Pressable, Text, View, ViewStyle, useWindowDimensions } from 'react-native'
+import { Button, Image, PermissionsAndroid, Platform, Pressable, Text, View, ViewStyle, useWindowDimensions } from 'react-native'
 import { SafeAreaView } from 'react-native-safe-area-context'
+import {widthPercentageToDP as wp, heightPercentageToDP as hp} from 'react-native-responsive-screen';
+import Contacts from 'react-native-contacts';
 import { UserItem } from "../components"
 import { ChatRoomData } from "../dummy-data/ChatRooms"
-import { borderBottomGray2, centerHorizontal, centerVertical, colorWhite, flexChild, flexRow, fs14BoldBlack2, fs16BoldBlack2, fs16BoldBlue1, fs16RegBlue1, fs16RegBlue5, fs24BoldBlack2, fullWidth } from '../styles'
+import { borderBottomGray2, centerHorizontal, centerVertical, colorBlack, colorWhite, flexChild, flexRow, fs14BoldBlack2, fs16BoldBlack2, fs16BoldBlue1, fs16RegBlue1, fs16RegBlue5, fs24BoldBlack2, fullWidth } from '../styles'
 import { FlatList } from 'react-native-gesture-handler'
 import { useNavigation } from '@react-navigation/native'
 import MaterialIcons from "react-native-vector-icons/MaterialIcons"
@@ -16,11 +18,13 @@ import { createChatRoom, createChatRoomUser } from '../graphql/mutations'
 import { getCommonChatRooms } from '../utilities/chatRoom'
 import { IconButton } from '@aws-amplify/ui-react-native/dist/primitives'
 import Ionicons from 'react-native-vector-icons/Ionicons'
+import { getUrl } from 'aws-amplify/storage';
 
 MaterialIcons.loadFont();
 
 export const Users = () => {
     const { width } = useWindowDimensions();
+    const [contacts, setContacts] = useState([])
     const [users, setUsers] = useState<User[]>([])
     const navigation = useNavigation();
 
@@ -72,7 +76,33 @@ export const Users = () => {
             const fetchedUsers = await client.graphql({
                 query: listUsers
             })
-            setUsers(fetchedUsers.data?.listUsers?.items)
+            if(Platform.OS === "android")
+             {
+                await PermissionsAndroid.request(PermissionsAndroid.PERMISSIONS.READ_CONTACTS, {
+                    title: 'Contacts',
+                    message: 'This app would like to view your contacts.',
+                    buttonPositive: 'Please accept bare mortal',
+                })
+             }
+            const contacts = await Contacts.getAll();
+            const filteredContacts = fetchedUsers.data?.listUsers?.items.filter((eachUser) => {
+                return contacts.some((contactUser) => {
+                    return contactUser.phoneNumbers.some((eachPhoneNumber) => eachPhoneNumber.number.replace(/\s/g, "") === eachUser.phoneNo.replace(/\s/g,""))
+                })
+            })
+            const updatedContacts = await Promise.all(filteredContacts.map(async (eachContact) => {
+                const imageUrl = eachContact.imageUri !== null ? await getUrl({
+                    key: eachContact.imageUri,
+                    options: {
+                      expiresIn: 36000000000,
+                    },
+                }).then((urlResult) => urlResult.url.toString()) : null;
+                return {
+                    ...eachContact,
+                    imageUri: imageUrl
+                }
+            }))
+            setUsers(updatedContacts)
 
         }
         catch (err) {
@@ -81,22 +111,21 @@ export const Users = () => {
     }
 
     useEffect(() => {
-        fetchUsers()
+        fetchUsers();
+
     }, [])
 
     const headerStyle: ViewStyle = {
         ...flexRow,
         ...centerVertical,
-        padding: 15,
-        paddingHorizontal: 15
-
+        padding: wp(3),
     }
 
     const iconStyle: ViewStyle = {
-        marginRight: 20,
+        marginRight: wp(2),
         backgroundColor: "gainsboro",
-        padding: 7,
-        borderRadius: 15,
+        padding: wp(2),
+        borderRadius: wp(5),
         overflow: 'hidden',
 
     }
@@ -116,11 +145,11 @@ export const Users = () => {
                 <View style={{
                 ...flexRow,
                 ...fullWidth,
-                padding: 10,
+                padding: wp(2),
                 ...centerVertical,
             }}>
                 <Pressable onPress={handleBack} style={flexRow}>
-                    <Ionicons name="arrow-back" size={20} style={{ marginRight: "35%" }} />
+                    <Ionicons color={colorBlack._1} name="arrow-back" size={wp(6)} style={{ marginRight: "35%" }} />
                 </Pressable>
                 <Text style={fs24BoldBlack2}>Users</Text>
             </View>

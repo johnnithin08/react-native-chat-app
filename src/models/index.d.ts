@@ -136,6 +136,7 @@ type EagerUser = {
   readonly status?: string | null;
   readonly messages?: (Message | null)[] | null;
   readonly chatrooms?: (ChatRoomUser | null)[] | null;
+  readonly phoneNo?: string | null;
   readonly createdAt?: string | null;
   readonly updatedAt?: string | null;
 }
@@ -151,6 +152,7 @@ type LazyUser = {
   readonly status?: string | null;
   readonly messages: AsyncCollection<Message>;
   readonly chatrooms: AsyncCollection<ChatRoomUser>;
+  readonly phoneNo?: string | null;
   readonly createdAt?: string | null;
   readonly updatedAt?: string | null;
 }

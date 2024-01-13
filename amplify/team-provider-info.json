@@ -19,7 +19,7 @@
       "function": {
         "chatappPostConfirmation": {
           "deploymentBucketName": "amplify-chatapp-staging-203024-deployment",
-          "s3Key": "amplify-builds/chatappPostConfirmation-64794333654747387264-build.zip"
+          "s3Key": "amplify-builds/chatappPostConfirmation-6645616a75386c6d6164-build.zip"
         }
       },
       "api": {

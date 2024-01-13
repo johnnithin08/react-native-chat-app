@@ -65,6 +65,7 @@ export const Profile = () => {
                 key: key,
                 data: blob,
                 options: {
+                    accessLevel: "guest",
                     contentType: file?.type,
                     // onProgress: (progress) => {
                     //     setProgresses((currentProgress) => ({ ...currentProgress, [file.url]: progress.transferredBytes / progress.totalBytes }))
@@ -82,15 +83,9 @@ export const Profile = () => {
         try
          {
             const imageKey = await handleUpload(attachments[0])
-            const imageUrl = await getUrl({
-                key: imageKey,
-                options: {
-                  expiresIn: 3600,
-                },
-            }).then((urlResult) => urlResult.url.toString());
-            const updateResponse = await client.graphql({
+            await client.graphql({
                 query: updateUser,
-                variables: { input: { id: user.id, imageUri: imageUrl, _version: user._version }}
+                variables: { input: { id: user.id, imageUri: imageKey, _version: user._version }}
             });
             setAttachments([])
             await fetchUser();
@@ -110,7 +105,13 @@ export const Profile = () => {
                  query: getUser,
                  variables: { id: authUser.userId}
              })
-             setUser(userResponse.data.getUser);
+             const imageUrl = await getUrl({
+                key: userResponse.data.getUser.imageUri,
+                options: {
+                  expiresIn: 36000000000,
+                },
+            }).then((urlResult) => urlResult.url.toString());
+             setUser({...userResponse.data.getUser, imageUri: imageUrl});
          }
         catch(err)
          {

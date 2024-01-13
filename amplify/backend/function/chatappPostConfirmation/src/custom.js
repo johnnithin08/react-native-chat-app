@@ -26,6 +26,7 @@ exports.handler = async (event) => {
     updatedAt: { S: now.toISOString() },
     id: { S: event?.request?.userAttributes.sub },
     name: { S: event?.request?.userAttributes.name },
+    phoneNo: { S: event?.request?.userAttributes.phone_number },
     status: { S: "Hey, I am using Chat App." }
   }
 

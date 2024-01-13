@@ -1,5 +1,6 @@
 import React, { Fragment, useEffect, useState } from 'react'
 import { Button, Image, Pressable, RefreshControl, Text, View, ViewStyle, useWindowDimensions } from 'react-native'
+import {widthPercentageToDP as wp, heightPercentageToDP as hp} from 'react-native-responsive-screen';
 import { SafeAreaView } from 'react-native-safe-area-context'
 import {
     Menu,
@@ -11,7 +12,7 @@ import {
 import { ChatRoomItem } from "../components"
 import { absolutePosition, borderBottomBlue5, borderBottomGray2, borderBottomGray4, borderBottomGray6, centerVertical, colorGray, colorWhite, flexChild, flexRow, flexRowCC, fs14BoldBlack2, fs24BoldBlack2, spaceBetweenHorizontal } from '../styles'
 import { FlatList } from 'react-native-gesture-handler'
-import { useNavigation } from '@react-navigation/native'
+import { useIsFocused, useNavigation } from '@react-navigation/native'
 import { useAuthenticator } from '@aws-amplify/ui-react-native'
 import { generateClient } from 'aws-amplify/api';
 import { getCurrentUser } from 'aws-amplify/auth';
@@ -20,15 +21,15 @@ import Feather from 'react-native-vector-icons/Feather'
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import { getUser } from '../graphql/queries';
+import { getUrl } from 'aws-amplify/storage';
 
 export const ChatList = () => {
-    const navigation = useNavigation()
+    const navigation = useNavigation();
+    const isFocused = useIsFocused();
     const { width } = useWindowDimensions();
-    const { signOut } = useAuthenticator();
     const [user, setUser] = useState()
     const [chatRooms, setChatRooms] = useState([])
     const [loading, setLoading] = useState<boolean>(false)
-    const [showMenu, setShowMenu] = useState<boolean>(false)
     const client = generateClient()
     const { Popover } = renderers
 
@@ -64,7 +65,13 @@ export const ChatList = () => {
                  query: getUser,
                  variables: { id: authUser.userId}
              })
-             setUser(userResponse.data.getUser);
+             const imageUrl = await getUrl({
+                key: userResponse.data.getUser.imageUri,
+                options: {
+                  expiresIn: 36000000000,
+                },
+            }).then((urlResult) => urlResult.url.toString());
+             setUser({...userResponse.data.getUser, imageUri: imageUrl});
          }
         catch(err)
          {
@@ -74,14 +81,17 @@ export const ChatList = () => {
     }
 
     useEffect(() => {
-        fetchChatRooms();
-        fetchUser()
-    }, [])
+        if(isFocused)
+         {
+             fetchChatRooms();
+             fetchUser()
+         }
+    }, [isFocused])
 
     const optionsStyles = {
         optionsContainer: {
-          width: 120,
-          padding: 5,
+          width: wp(35),
+          padding: wp(2),
           borderRadius: 12,
         },
       };
@@ -92,32 +102,33 @@ export const ChatList = () => {
                 <View style={{
                 ...flexRow,
                 width: width,
-                padding: 10,
+                padding: wp(2),
                 ...centerVertical,
             }}>
                 <Image
+                    key={user?.imageUri}
                     source={{ uri: user?.imageUri }}
                     style={{
-                        height: 40,
-                        width: 40,
-                        borderRadius: 30
+                        height: wp(12),
+                        width: wp(12),
+                        borderRadius: wp(10)
                     }} />
                 <Text style={{ ...fs24BoldBlack2, marginLeft: "30%" }}>Home</Text>
                 <View style={flexChild} />
                 <Menu renderer={Popover} rendererProps={{ placement: "bottom"}}>
                     <MenuTrigger>
-                        <Feather name="more-vertical" size={24} color={colorGray._5}/>
+                        <Feather name="more-vertical" size={wp(6)} color={colorGray._5}/>
                     </MenuTrigger>
                     <MenuOptions customStyles={optionsStyles}>
                         <MenuOption onSelect={handleUsers}>
                             <View style={{...flexRow, ...centerVertical, }}>
-                                <AntDesign name="adduser" size={20} style={{marginRight: "20%"}}/>
+                                <AntDesign name="adduser" size={wp(5)} style={{marginRight: "20%"}}/>
                                 <Text style={fs14BoldBlack2}>New Chat</Text>
                             </View>
                         </MenuOption>
                         <MenuOption onSelect={() => navigation.navigate("Profile")}>
                             <View style={{...flexRow, ...centerVertical, }}>
-                                <FontAwesome name="user" size={20} style={{marginRight: "26%"}}/>
+                                <FontAwesome name="user" size={wp(5)} style={{marginRight: "26%"}}/>
                                 <Text style={fs14BoldBlack2}>Profile</Text>
                             </View>
                         </MenuOption>

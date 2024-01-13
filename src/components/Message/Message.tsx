@@ -1,5 +1,6 @@
 import React, { FunctionComponent, useEffect, useState } from "react";
 import { View, Text, ViewStyle, TextStyle, ImageStyle, Image, Pressable, useWindowDimensions, Platform, Modal } from "react-native";
+import {widthPercentageToDP as wp, heightPercentageToDP as hp} from 'react-native-responsive-screen';
 import { getCurrentUser } from "aws-amplify/auth";
 import { getUrl } from "aws-amplify/storage";
 import dayjs from "dayjs";
@@ -58,18 +59,18 @@ export const Message: FunctionComponent<IMessageProps> = ({ message }: IMessageP
   const { height, width } = useWindowDimensions();
   const container: ViewStyle = {
     backgroundColor: isOwn ? colorGray._3 : colorBlue._8,
-    padding: 10,
-    margin: 10,
-    borderRadius: 10,
+    padding: wp(3),
+    margin: wp(2),
+    borderRadius: wp(2),
     maxWidth: "70%",
-    marginLeft: isOwn ? "auto" : 10,
-    marginRight: isOwn ? 10 : "auto",
+    marginLeft: isOwn ? "auto" : wp(3),
+    marginRight: isOwn ? wp(3) : "auto",
   };
   const imageStyle: ImageStyle = {
     flex: 1,
     borderColor: colorWhite._1,
     borderWidth: 1,
-    borderRadius: 5,
+    borderRadius: wp(2),
   };
   const imageContainer: ViewStyle = {
     width: "45%",
@@ -88,14 +89,14 @@ export const Message: FunctionComponent<IMessageProps> = ({ message }: IMessageP
     ...flexRow,
     ...justifyContentEnd,
     ...centerVertical,
-    marginRight: 50,
-    marginTop: 25,
+    marginRight: wp(20),
+    marginTop: hp(4),
   }
 
   return (
     <View style={container}>
       {message.attachments.items !== null && message.attachments.items.length > 0 ? (
-        <View style={{ width: width * 0.8 - 30 }}>
+        <View style={{ width: wp(70) }}>
           <View style={{ ...flexRow, ...flexWrap }}>
             {attachments.map((eachAttachment, index) => { 
             
@@ -110,7 +111,7 @@ export const Message: FunctionComponent<IMessageProps> = ({ message }: IMessageP
                 }}>
                 {eachAttachment.type === "IMAGE" ? (
                     <>
-                  <Image source={{ uri: eachAttachment.uri }} style={imageStyle} />
+                      <Image key={eachAttachment.uri} source={{ uri: eachAttachment.uri }} style={imageStyle} resizeMethod="resize" />
                     </>
                 ) : (
                   <>
@@ -132,7 +133,6 @@ export const Message: FunctionComponent<IMessageProps> = ({ message }: IMessageP
                           <View style={flexChild}>
                                 <View style={{backgroundColor: colorBlack._1}} >
                                     <Pressable onPress={() => {
-                                      console.log("enter")
                                       setFullScreen(false)
                                     }}>
                                       <View style={closeContainer}>
