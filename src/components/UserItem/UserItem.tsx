@@ -1,5 +1,6 @@
 import React, { FunctionComponent } from 'react'
 import { View, Image, Text, ViewStyle, ImageStyle, Pressable } from 'react-native'
+import {widthPercentageToDP as wp, heightPercentageToDP as hp} from 'react-native-responsive-screen';
 
 import { flexRow, px, py, absolutePosition, colorBlue, centerHV, colorWhite, fs12BoldWhite1, flexChild, centerHorizontal, spaceBetweenHorizontal, fs18BoldBlack2, fs14RegGray6 } from '../../styles'
 import { User } from '../../models';
@@ -23,14 +24,14 @@ export const UserItem: FunctionComponent<IUserItem> = ({ user, handlePress, sele
     const navigation = useNavigation();
 
     const imageStyle: ImageStyle = {
-        height: 50,
-        width: 50,
-        borderRadius: 30
+        height: wp(12),
+        width: wp(12),
+        borderRadius: wp(12)
     }
 
     const containerStyle: ViewStyle = {
         ...flexChild,
-        ...px(16),
+        ...px(wp(4)),
         ...centerHorizontal,
     }
 
@@ -40,10 +41,10 @@ export const UserItem: FunctionComponent<IUserItem> = ({ user, handlePress, sele
 
 
     return (
-        <Pressable onPress={handleItemPress} style={{ ...flexRow, ...px(10), ...py(10) }}>
-            <Image source={{ uri: user.imageUri }} style={imageStyle} />
+        <Pressable onPress={handleItemPress} style={{ ...flexRow, ...px(wp(3)), ...py(hp(1.5)) }}>
+            <Image key={user.imageUri} source={{ uri: user.imageUri }} style={imageStyle} />
             <View style={containerStyle}>
-                <View style={{ ...flexRow, ...spaceBetweenHorizontal, marginBottom: 5 }}>
+                <View style={{ ...flexRow, ...spaceBetweenHorizontal, marginBottom: hp(1) }}>
                     <Text style={fs18BoldBlack2}>{user.name}</Text>
                 </View>
                 <Text style={fs18BoldBlack2}>{user.status}</Text>
@@ -51,9 +52,9 @@ export const UserItem: FunctionComponent<IUserItem> = ({ user, handlePress, sele
             {selectable && (
                 <View style={centerHorizontal}>
                     {isSelected ? (
-                        <AntDesign name="checkcircle" color="royalblue" size={20} />
+                        <AntDesign name="checkcircle" color="royalblue" size={wp(6)} />
                     ) : (
-                        <FontAwesome name="circle-thin" color="lightgray" size={20} />
+                        <FontAwesome name="circle-thin" color="lightgray" size={wp(6)} />
                     )}
                 </View>
             )}

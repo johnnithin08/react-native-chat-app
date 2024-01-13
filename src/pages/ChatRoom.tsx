@@ -130,7 +130,7 @@ export const ChatRoom = () => {
                 ...centerVertical
             }}>
                 <Pressable onPress={handleBack} style={flexRow}>
-                    <Ionicons name="arrow-back" size={wp(6)} style={{ marginRight: 4 }} />
+                    <Ionicons color={colorBlack._1} name="arrow-back" size={wp(6)} style={{ marginRight: 4 }} />
                 </Pressable>
                 <Image
                     source={{ uri: user.data.imageUri }}

@@ -1,9 +1,10 @@
 import React, { Fragment, useEffect, useState } from 'react'
 import { Button, Image, PermissionsAndroid, Platform, Pressable, Text, TextInput, View, ViewStyle } from 'react-native'
 import { SafeAreaView } from 'react-native-safe-area-context'
+import {widthPercentageToDP as wp, heightPercentageToDP as hp} from 'react-native-responsive-screen';
 import { UserItem } from "../components"
 import { ChatRoomData } from "../dummy-data/ChatRooms"
-import { borderBottomGray2, centerVertical, colorWhite, flexChild, flexRow, fs16BoldBlack2, fs16BoldBlue1, fs16RegBlue1, fs16RegBlue5, fs24BoldBlack2, fullWidth } from '../styles'
+import { borderBottomGray2, centerVertical, colorBlack, colorWhite, flexChild, flexRow, fs16BoldBlack2, fs16BoldBlue1, fs16RegBlue1, fs16RegBlue5, fs24BoldBlack2, fullWidth } from '../styles'
 import { FlatList } from 'react-native-gesture-handler'
 import { useNavigation } from '@react-navigation/native'
 import MaterialIcons from "react-native-vector-icons/MaterialIcons"
@@ -34,7 +35,7 @@ export const NewGroup = () => {
             })
             if(Platform.OS === "android")
              {
-                const permission = await PermissionsAndroid.request(PermissionsAndroid.PERMISSIONS.READ_CONTACTS, {
+                await PermissionsAndroid.request(PermissionsAndroid.PERMISSIONS.READ_CONTACTS, {
                     title: 'Contacts',
                     message: 'This app would like to view your contacts.',
                     buttonPositive: 'Please accept bare mortal',
@@ -118,8 +119,8 @@ export const NewGroup = () => {
 
     const inputStyle: ViewStyle = {
         borderColor: "lightgray",
-        padding: 10,
-        margin: 10,
+        padding: wp(3),
+        margin: wp(3),
 
     }
 
@@ -129,11 +130,11 @@ export const NewGroup = () => {
                 <View style={{
                 ...flexRow,
                 ...fullWidth,
-                padding: 10,
+                padding: wp(2),
                 ...centerVertical,
             }}>
                 <Pressable onPress={handleBack} style={flexRow}>
-                    <Ionicons name="arrow-back" size={20} style={{ marginRight: "35%" }} />
+                    <Ionicons color={colorBlack._1} name="arrow-back" size={20} style={{ marginRight: "35%" }} />
                 </Pressable>
                 <Text style={{ ...fs24BoldBlack2, marginRight: "25%"}}>Group</Text>
                 <Button

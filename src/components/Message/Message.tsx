@@ -45,7 +45,6 @@ export const Message: FunctionComponent<IMessageProps> = ({ message }: IMessageP
         }).then((urlResult) => ({ ...eachAttachment, uri: urlResult.url.toString() })),
       ),
     );
-    console.log("all", allAttachments)
     setAttachments(allAttachments)
   };
 
@@ -112,7 +111,7 @@ export const Message: FunctionComponent<IMessageProps> = ({ message }: IMessageP
                 }}>
                 {eachAttachment.type === "IMAGE" ? (
                     <>
-                  <Image source={{ uri: eachAttachment.uri }} style={imageStyle} />
+                      <Image key={eachAttachment.uri} source={{ uri: eachAttachment.uri }} style={imageStyle} resizeMethod="resize" />
                     </>
                 ) : (
                   <>
@@ -134,7 +133,6 @@ export const Message: FunctionComponent<IMessageProps> = ({ message }: IMessageP
                           <View style={flexChild}>
                                 <View style={{backgroundColor: colorBlack._1}} >
                                     <Pressable onPress={() => {
-                                      console.log("enter")
                                       setFullScreen(false)
                                     }}>
                                       <View style={closeContainer}>

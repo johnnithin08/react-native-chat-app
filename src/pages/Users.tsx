@@ -1,10 +1,11 @@
 import React, { Fragment, useEffect, useState } from 'react'
 import { Button, Image, PermissionsAndroid, Platform, Pressable, Text, View, ViewStyle, useWindowDimensions } from 'react-native'
 import { SafeAreaView } from 'react-native-safe-area-context'
+import {widthPercentageToDP as wp, heightPercentageToDP as hp} from 'react-native-responsive-screen';
 import Contacts from 'react-native-contacts';
 import { UserItem } from "../components"
 import { ChatRoomData } from "../dummy-data/ChatRooms"
-import { borderBottomGray2, centerHorizontal, centerVertical, colorWhite, flexChild, flexRow, fs14BoldBlack2, fs16BoldBlack2, fs16BoldBlue1, fs16RegBlue1, fs16RegBlue5, fs24BoldBlack2, fullWidth } from '../styles'
+import { borderBottomGray2, centerHorizontal, centerVertical, colorBlack, colorWhite, flexChild, flexRow, fs14BoldBlack2, fs16BoldBlack2, fs16BoldBlue1, fs16RegBlue1, fs16RegBlue5, fs24BoldBlack2, fullWidth } from '../styles'
 import { FlatList } from 'react-native-gesture-handler'
 import { useNavigation } from '@react-navigation/native'
 import MaterialIcons from "react-native-vector-icons/MaterialIcons"
@@ -104,16 +105,14 @@ export const Users = () => {
     const headerStyle: ViewStyle = {
         ...flexRow,
         ...centerVertical,
-        padding: 15,
-        paddingHorizontal: 15
-
+        padding: wp(3),
     }
 
     const iconStyle: ViewStyle = {
-        marginRight: 20,
+        marginRight: wp(2),
         backgroundColor: "gainsboro",
-        padding: 7,
-        borderRadius: 15,
+        padding: wp(2),
+        borderRadius: wp(5),
         overflow: 'hidden',
 
     }
@@ -133,11 +132,11 @@ export const Users = () => {
                 <View style={{
                 ...flexRow,
                 ...fullWidth,
-                padding: 10,
+                padding: wp(2),
                 ...centerVertical,
             }}>
                 <Pressable onPress={handleBack} style={flexRow}>
-                    <Ionicons name="arrow-back" size={20} style={{ marginRight: "35%" }} />
+                    <Ionicons color={colorBlack._1} name="arrow-back" size={wp(6)} style={{ marginRight: "35%" }} />
                 </Pressable>
                 <Text style={fs24BoldBlack2}>Users</Text>
             </View>

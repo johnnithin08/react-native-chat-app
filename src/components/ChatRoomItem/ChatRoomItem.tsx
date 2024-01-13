@@ -75,10 +75,12 @@ export const ChatRoomItem: FunctionComponent<IChatRoomItem> = ({ data, handleFet
         ...px(wp(4)),
         ...centerHorizontal,
     }
+
+    console.log("user", user)
     return (
         <View style={{ ...flexRow, ...px(10), ...py(10) }}>
             <View>
-                <Image source={{ uri: user?.imageUri }} style={imageStyle} />
+                <Image key={user?.imageUri} source={{ uri: user?.imageUri }} style={imageStyle} />
                 {chatRoom?.newMessages && (
                     <View style={counterStyle}>
                         <Text style={{ ...fs12BoldWhite1, lineHeight: 0 }}>{chatRoom?.newMessages}</Text>

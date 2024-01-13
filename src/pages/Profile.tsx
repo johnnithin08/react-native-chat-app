@@ -65,6 +65,7 @@ export const Profile = () => {
                 key: key,
                 data: blob,
                 options: {
+                    accessLevel: "guest",
                     contentType: file?.type,
                     // onProgress: (progress) => {
                     //     setProgresses((currentProgress) => ({ ...currentProgress, [file.url]: progress.transferredBytes / progress.totalBytes }))

@@ -8,8 +8,11 @@ import {
     Alert,
     RefreshControl,
     Pressable,
+    ViewStyle,
+    TextStyle,
 } from "react-native";
 import { useRoute, useNavigation } from "@react-navigation/native";
+import {widthPercentageToDP as wp, heightPercentageToDP as hp} from 'react-native-responsive-screen';
 
 import { generateClient } from 'aws-amplify/api';
 import { getCurrentUser } from 'aws-amplify/auth';
@@ -17,7 +20,7 @@ import { onUpdateChatRoom } from "../graphql/subscriptions";
 import { deleteChatRoomUser } from "../graphql/mutations";
 import { UserItem } from "../components";
 import Ionicons from "react-native-vector-icons/Ionicons";
-import { flexRow, fullWidth, centerVertical, fs24BoldBlack2, borderBottomGray2, colorWhite, flexChild } from "../styles";
+import { flexRow, fullWidth, centerVertical, fs24BoldBlack2, borderBottomGray2, colorWhite, flexChild, fs18BoldBlack2, fs18BoldBlue1, colorBlue, colorBlack } from "../styles";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 export const GroupInfo = () => {
@@ -99,6 +102,18 @@ export const GroupInfo = () => {
 
     const users = chatRoom.users.items.filter((item) => !item._deleted);
 
+    const container: ViewStyle = {
+        padding: wp(3),
+        flex: 1,
+    }
+    const title: TextStyle = {
+        ...fs24BoldBlack2
+    }
+    const sectionTitle: TextStyle = {
+        ...fs18BoldBlack2,
+        marginTop: hp(2),
+    }
+
     return (
         <SafeAreaView style={{ ...flexChild, backgroundColor: colorWhite._1 }}>
 
@@ -107,19 +122,19 @@ export const GroupInfo = () => {
                     <View style={{
                     ...flexRow,
                     ...fullWidth,
-                    padding: 10,
+                    padding: wp(2),
                     ...centerVertical,
                     backgroundColor: colorWhite._1
                 }}>
                     <Pressable onPress={handleBack} style={flexRow}>
-                        <Ionicons name="arrow-back" size={20} style={{ marginRight: "30%" }} />
+                        <Ionicons color={colorBlack._1} name="arrow-back" size={20} style={{ marginRight: "30%" }} />
                     </Pressable>
                     <Text style={{ ...fs24BoldBlack2}}>Group Info</Text>
                 </View>
                     <View style={borderBottomGray2} />
                 </View>
-            <View style={styles.container}>
-                <Text style={styles.title}>{chatRoom.name}</Text>
+            <View style={container}>
+                <Text style={title}>{chatRoom.name}</Text>
                 <View
                     style={{
                         flexDirection: "row",
@@ -127,15 +142,15 @@ export const GroupInfo = () => {
                         alignItems: "center",
                     }}
                 >
-                    <Text style={styles.sectionTitle}>{users.length} Participants</Text>
+                    <Text style={sectionTitle}>{users.length} Participants</Text>
                     <Text
                         onPress={() => navigation.navigate("AddContact", { chatRoom })}
-                        style={{ fontWeight: "bold", color: "royalblue" }}
+                        style={{...fs18BoldBlue1,color: colorBlue._8 , marginTop: hp(2)}}
                     >
                         Invite friends
                     </Text>
                 </View>
-                <View style={styles.section}>
+                <View>
                     <FlatList
                         data={users}
                         renderItem={({ item }) => (
@@ -152,27 +167,6 @@ export const GroupInfo = () => {
         </SafeAreaView>
     );
 };
-
-const styles = StyleSheet.create({
-    container: {
-        padding: 10,
-        flex: 1,
-    },
-    title: {
-        fontWeight: "bold",
-        fontSize: 30,
-    },
-    sectionTitle: {
-        fontWeight: "bold",
-        fontSize: 18,
-        marginTop: 20,
-    },
-    section: {
-        backgroundColor: "white",
-        borderRadius: 5,
-        marginVertical: 10,
-    },
-});
 
 export const getChatRoom = /* GraphQL */ `
   query GetChatRoom($id: ID!) {

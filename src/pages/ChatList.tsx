@@ -12,7 +12,7 @@ import {
 import { ChatRoomItem } from "../components"
 import { absolutePosition, borderBottomBlue5, borderBottomGray2, borderBottomGray4, borderBottomGray6, centerVertical, colorGray, colorWhite, flexChild, flexRow, flexRowCC, fs14BoldBlack2, fs24BoldBlack2, spaceBetweenHorizontal } from '../styles'
 import { FlatList } from 'react-native-gesture-handler'
-import { useNavigation } from '@react-navigation/native'
+import { useIsFocused, useNavigation } from '@react-navigation/native'
 import { useAuthenticator } from '@aws-amplify/ui-react-native'
 import { generateClient } from 'aws-amplify/api';
 import { getCurrentUser } from 'aws-amplify/auth';
@@ -23,7 +23,8 @@ import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import { getUser } from '../graphql/queries';
 
 export const ChatList = () => {
-    const navigation = useNavigation()
+    const navigation = useNavigation();
+    const isFocused = useIsFocused();
     const { width } = useWindowDimensions();
     const [user, setUser] = useState()
     const [chatRooms, setChatRooms] = useState([])
@@ -73,9 +74,12 @@ export const ChatList = () => {
     }
 
     useEffect(() => {
-        fetchChatRooms();
-        fetchUser()
-    }, [])
+        if(isFocused)
+         {
+             fetchChatRooms();
+             fetchUser()
+         }
+    }, [isFocused])
 
     const optionsStyles = {
         optionsContainer: {
@@ -84,6 +88,8 @@ export const ChatList = () => {
           borderRadius: 12,
         },
       };
+
+    console.log("curr", user)
 
     return (
         <SafeAreaView style={{ ...flexChild, backgroundColor: colorWhite._1 }}>
@@ -95,6 +101,7 @@ export const ChatList = () => {
                 ...centerVertical,
             }}>
                 <Image
+                    key={user?.imageUri}
                     source={{ uri: user?.imageUri }}
                     style={{
                         height: wp(12),
