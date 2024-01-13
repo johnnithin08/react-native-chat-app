@@ -1,0 +1,33 @@
+{
+  "staging": {
+    "awscloudformation": {
+      "AuthRoleName": "amplify-chatapp-staging-203024-authRole",
+      "UnauthRoleArn": "arn:aws:iam::407465214555:role/amplify-chatapp-staging-203024-unauthRole",
+      "AuthRoleArn": "arn:aws:iam::407465214555:role/amplify-chatapp-staging-203024-authRole",
+      "Region": "eu-west-2",
+      "DeploymentBucketName": "amplify-chatapp-staging-203024-deployment",
+      "UnauthRoleName": "amplify-chatapp-staging-203024-unauthRole",
+      "StackName": "amplify-chatapp-staging-203024",
+      "StackId": "arn:aws:cloudformation:eu-west-2:407465214555:stack/amplify-chatapp-staging-203024/872241b0-57f4-11ee-81a6-066ca38273b8",
+      "AmplifyAppId": "d2lsjk3zw0sbb3",
+      "AuthTriggerTemplateURL": "https://s3.amazonaws.com/amplify-chatapp-staging-203024-deployment/amplify-cfn-templates/auth/auth-trigger-cloudformation-template.json"
+    },
+    "categories": {
+      "auth": {
+        "chatapp": {}
+      },
+      "function": {
+        "chatappPostConfirmation": {
+          "deploymentBucketName": "amplify-chatapp-staging-203024-deployment",
+          "s3Key": "amplify-builds/chatappPostConfirmation-6645616a75386c6d6164-build.zip"
+        }
+      },
+      "api": {
+        "chatapp": {}
+      },
+      "storage": {
+        "s3chatappstorage66f31c68": {}
+      }
+    }
+  }
+}
