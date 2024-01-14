@@ -26,14 +26,12 @@ export const ChatRoomItem: FunctionComponent<IChatRoomItem> = ({ data, handleFet
         const fetchUser = async () => {
             const authUser = await getCurrentUser();
             const userItem = chatRoom.users.items.find((eachItem) => eachItem.user.id !== authUser.userId);
-            console.log("user", userItem)
             const imageUrl = userItem.user.imageUri !== null ? await getUrl({
                 key: userItem.user.imageUri,
                 options: {
                   expiresIn: 36000000000,
                 },
             }).then((urlResult) => urlResult.url.toString()) : null;
-            console.log("ima", imageUrl)
             setUser({...userItem.user, imageUri: imageUrl})
         }
         fetchUser();

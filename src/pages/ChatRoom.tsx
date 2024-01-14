@@ -19,6 +19,7 @@ import Ionicons from 'react-native-vector-icons/Ionicons'
 Feather.loadFont();
 
 export const ChatRoom = () => {
+    const [loading, setLoading] = useState<boolean>(false)
     const [user, setUser] = useState()
     const [data, setData] = useState();
     const [name, setName] = useState<string>("")
@@ -41,14 +42,23 @@ export const ChatRoom = () => {
 
     useEffect(() => {
         const fetchChatRooms = async () => {
-            const authUser = await getCurrentUser();
-            const resp = await client.graphql({
-                query: getChatRoom,
-                variables: { id: chatRoomId }
-            })
-            const findUser = resp.data?.getChatRoom.users.items.find((eachItem) => eachItem.user.id !== authUser.userId)
-            setUser({ type: resp.data.getChatRoom.name ? "group" : "single", data: findUser.user, name: resp.data.getChatRoom.name ? resp.data.getChatRoom.name : findUser.user.name})
-            setData(resp.data?.getChatRoom)
+            try 
+             {
+                 setLoading(true)
+                 const authUser = await getCurrentUser();
+                 const resp = await client.graphql({
+                     query: getChatRoom,
+                     variables: { id: chatRoomId }
+                 })
+                 const findUser = resp.data?.getChatRoom.users.items.find((eachItem) => eachItem.user.id !== authUser.userId)
+                 setUser({ type: resp.data.getChatRoom.name ? "group" : "single", data: findUser.user, name: resp.data.getChatRoom.name ? resp.data.getChatRoom.name : findUser.user.name})
+                 setData(resp.data?.getChatRoom)
+                 setLoading(false)
+             }
+            catch(err)
+             {
+                console.log("err", err)
+             }
         }
         const subscribeChatRoom =
             client.graphql({
@@ -114,7 +124,7 @@ export const ChatRoom = () => {
 
 
 
-    if (data === undefined) {
+    if (loading === true || data === undefined) {
         return <ActivityIndicator />
     }
 

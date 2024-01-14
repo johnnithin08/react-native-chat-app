@@ -9,6 +9,7 @@ import { useNavigation } from '@react-navigation/native';
 import { getCommonChatRooms } from '../../utilities/chatRoom';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
+import { LocalAssets } from '../../assets/images/LocalAssets';
 
 AntDesign.loadFont();
 FontAwesome.loadFont();
@@ -42,7 +43,7 @@ export const UserItem: FunctionComponent<IUserItem> = ({ user, handlePress, sele
 
     return (
         <Pressable onPress={handleItemPress} style={{ ...flexRow, ...px(wp(3)), ...py(hp(1.5)) }}>
-            <Image key={user.imageUri} source={{ uri: user.imageUri }} style={imageStyle} />
+            <Image key={user.imageUri} source={ user?.imageUri !==  null ? { uri: user.imageUri  } : LocalAssets.profile} style={imageStyle} />
             <View style={containerStyle}>
                 <View style={{ ...flexRow, ...spaceBetweenHorizontal, marginBottom: hp(1) }}>
                     <Text style={fs18BoldBlack2}>{user.name}</Text>

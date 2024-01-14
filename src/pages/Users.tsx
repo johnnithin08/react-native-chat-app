@@ -4,7 +4,6 @@ import { SafeAreaView } from 'react-native-safe-area-context'
 import {widthPercentageToDP as wp, heightPercentageToDP as hp} from 'react-native-responsive-screen';
 import Contacts from 'react-native-contacts';
 import { UserItem } from "../components"
-import { ChatRoomData } from "../dummy-data/ChatRooms"
 import { borderBottomGray2, centerHorizontal, centerVertical, colorBlack, colorWhite, flexChild, flexRow, fs14BoldBlack2, fs16BoldBlack2, fs16BoldBlue1, fs16RegBlue1, fs16RegBlue5, fs24BoldBlack2, fullWidth } from '../styles'
 import { FlatList } from 'react-native-gesture-handler'
 import { useNavigation } from '@react-navigation/native'

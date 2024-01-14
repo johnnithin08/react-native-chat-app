@@ -13,6 +13,7 @@ import {
 } from "react-native";
 import { useRoute, useNavigation } from "@react-navigation/native";
 import {widthPercentageToDP as wp, heightPercentageToDP as hp} from 'react-native-responsive-screen';
+import { getUrl } from 'aws-amplify/storage';
 
 import { generateClient } from 'aws-amplify/api';
 import { getCurrentUser } from 'aws-amplify/auth';
@@ -42,7 +43,23 @@ export const GroupInfo = () => {
             query: getChatRoom,
             variables: { id: chatroomID }
         });
-        setChatRoom(result.data?.getChatRoom);
+        const users = result.data?.getChatRoom.users.items.filter((item) => !item._deleted);
+        const updatedUsers = await Promise.all(users.map(async (eachUser) => {
+            const imageUrl = eachUser.imageUri !== null ? await getUrl({
+                key: eachUser.user.imageUri,
+                options: {
+                    expiresIn: 36000000000,
+                },
+            }).then((urlResult) => urlResult.url.toString()) : null;
+            return {
+                ...eachUser,
+                user: {
+                    ...eachUser.user,
+                    imageUri: imageUrl
+                }
+            }
+        }))
+        setChatRoom({...result.data?.getChatRoom, users: { items: updatedUsers}});
         setLoading(false);
     };
 
@@ -100,8 +117,6 @@ export const GroupInfo = () => {
         return <ActivityIndicator />;
     }
 
-    const users = chatRoom.users.items.filter((item) => !item._deleted);
-
     const container: ViewStyle = {
         padding: wp(3),
         flex: 1,
@@ -142,7 +157,7 @@ export const GroupInfo = () => {
                         alignItems: "center",
                     }}
                 >
-                    <Text style={sectionTitle}>{users.length} Participants</Text>
+                    <Text style={sectionTitle}>{chatRoom.users.length} Participants</Text>
                     <Text
                         onPress={() => navigation.navigate("AddContact", { chatRoom })}
                         style={{...fs18BoldBlue1,color: colorBlue._8 , marginTop: hp(2)}}
@@ -152,7 +167,7 @@ export const GroupInfo = () => {
                 </View>
                 <View>
                     <FlatList
-                        data={users}
+                        data={chatRoom?.users.items}
                         renderItem={({ item }) => (
                             <UserItem
                                 user={item.user}
