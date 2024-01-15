@@ -5,7 +5,7 @@
 	<key>CFBundleDevelopmentRegion</key>
 	<string>en</string>
 	<key>CFBundleDisplayName</key>
-	<string>Chat On</string>
+	<string>ChatOn</string>
 	<key>CFBundleExecutable</key>
 	<string>$(EXECUTABLE_NAME)</string>
 	<key>CFBundleIdentifier</key>
@@ -36,9 +36,9 @@
 		</dict>
 	</dict>
 	<key>NSContactsUsageDescription</key>
-	<string></string>
+	<string/>
 	<key>NSLocationWhenInUseUsageDescription</key>
-	<string></string>
+	<string/>
 	<key>NSPhotoLibraryUsageDescription</key>
 	<string>NSCameraUsageDescription</string>
 	<key>UIAppFonts</key>
